@@ -40,6 +40,9 @@
 
     <!-- ===================== HERO ===================== -->
     <section class="hero">
+      <!-- Lila Kreis hinter dem Namen (nur Dekoration, darum aria-hidden) -->
+      <div class="hero-circle" aria-hidden="true"></div>
+
       <div class="hero-label">
         <!-- Stern als SVG-Grafik -->
         <svg class="star" viewBox="0 0 100 100" aria-hidden="true">
@@ -52,6 +55,16 @@
 
       <p class="hero-claim">Ich erzähle Geschichten<br>in Bild, Ton &amp; Raum.</p>
     </section>
+
+    <!-- ===================== LAUFBAND ===================== -->
+    <!-- Der Text steht zweimal drin, damit das Band ohne Lücke endlos weiterläuft.
+         Für Screenreader ausgeblendet, weil es nur Dekoration ist. -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>Video * TV * Radio * Podcast * Design * Reportage * Moderation *&nbsp;</span>
+        <span>Video * TV * Radio * Podcast * Design * Reportage * Moderation *&nbsp;</span>
+      </div>
+    </div>
 
     <!-- ===================== PROJEKTE ===================== -->
     <section class="work" id="projekte">

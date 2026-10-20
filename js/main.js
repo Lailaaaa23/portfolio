@@ -3,6 +3,8 @@
    1. Mobile Navigation (Hamburger)
    2. Projekt-Karussell mit Pfeil-Buttons
    3. Animation des Namens im Hero
+   4. Aus dem Punkt wird der Kreis
+   5. Lila Kreis folgt der Maus
    ========================================================= */
 
 
@@ -80,3 +82,90 @@ wordSpans.forEach((wordSpan, index) => {
   if (index > 0) heroName.append(" ");
   heroName.append(wordSpan);
 });
+
+// Lila Punkt hinter dem Namen anhängen (wird später zum grossen Kreis)
+const dot = document.createElement("span");
+dot.className = "dot";
+dot.setAttribute("aria-hidden", "true");
+heroName.append(dot);
+
+
+/* ---------- 4. AUS DEM PUNKT WIRD DER KREIS ---------- */
+const hero = document.querySelector(".hero");
+const circle = document.querySelector(".hero-circle");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if (!reduceMotion) {
+  // Der Kreis ist am Anfang unsichtbar, nur der kleine Punkt ploppt auf
+  circle.style.opacity = "0";
+
+  // Sobald der Punkt fertig aufgeploppt ist (Ende seiner CSS-Animation) ...
+  dot.addEventListener("animationend", () => {
+    // ... messen wir, wo Punkt und Kreis gerade auf dem Bildschirm sind
+    const dotBox = dot.getBoundingClientRect();
+    const circleBox = circle.getBoundingClientRect();
+
+    // Abstand von der Kreismitte zur Punktmitte
+    const dx = dotBox.left + dotBox.width / 2 - (circleBox.left + circleBox.width / 2);
+    const dy = dotBox.top + dotBox.height / 2 - (circleBox.top + circleBox.height / 2);
+
+    // Wie viel kleiner der Punkt ist als der Kreis (z. B. 0.07 = 7 %)
+    const startScale = dotBox.width / circleBox.width;
+
+    // Punkt ausblenden und den Kreis genau an seine Stelle setzen.
+    // Für das Auge sieht das so aus, als wäre es derselbe Punkt.
+    dot.style.visibility = "hidden";
+    circle.style.opacity = "1";
+
+    // Web Animations API: wie @keyframes in CSS, aber mit Werten,
+    // die JavaScript eben erst ausgerechnet hat
+    circle.animate(
+      [
+        // 1. Start: klein, genau dort, wo der Punkt war
+        { transform: `translate(${dx}px, ${dy}px) scale(${startScale})` },
+        // 2. Löst sich: schwebt nach rechts oben weg und wird etwas grösser
+        {
+          transform: `translate(${dx + 60}px, ${dy - 90}px) scale(${startScale * 2})`,
+          offset: 0.35,
+        },
+        // 3. Ziel: volle Grösse an seinem Platz
+        { transform: "translate(0px, 0px) scale(1)" },
+      ],
+      { duration: 1600, easing: "cubic-bezier(0.65, 0, 0.35, 1)" }
+    );
+  });
+} else {
+  // Ohne Animation gibt es keinen Punkt, nur den fertigen Kreis
+  dot.remove();
+}
+
+
+/* ---------- 5. LILA KREIS FOLGT DER MAUS ---------- */
+// Nur auf Geräten mit Maus (nicht auf dem Handy)
+const hasMouse = window.matchMedia("(hover: hover)").matches;
+
+if (hasMouse && !reduceMotion) {
+  hero.addEventListener("mousemove", (event) => {
+    const box = hero.getBoundingClientRect();
+
+    // Wo ist die Maus im Hero? (in Pixeln, 0/0 = obere linke Ecke des Hero)
+    const mouseX = event.clientX - box.left;
+    const mouseY = event.clientY - box.top;
+
+    // Wo ist die Mitte des Kreises an seinem normalen Platz?
+    // offsetLeft/offsetTop ignorieren die Verschiebung, liefern also immer den Ausgangspunkt.
+    const homeX = circle.offsetLeft + circle.offsetWidth / 2;
+    const homeY = circle.offsetTop + circle.offsetHeight / 2;
+
+    // Kreis so weit verschieben, dass seine Mitte bei der Maus liegt.
+    // Das transition in der CSS lässt ihn weich hinterhergleiten.
+    circle.style.setProperty("--mx", `${mouseX - homeX}px`);
+    circle.style.setProperty("--my", `${mouseY - homeY}px`);
+  });
+
+  // Maus verlässt den Hero: Kreis gleitet zurück an seinen Platz
+  hero.addEventListener("mouseleave", () => {
+    circle.style.setProperty("--mx", "0px");
+    circle.style.setProperty("--my", "0px");
+  });
+}
