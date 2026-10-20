@@ -57,6 +57,12 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Kontaktlinks:** Der LinkedIn-Link funktionierte nicht, weil `https://` fehlte. Ohne Protokoll interpretiert der Browser die Adresse als Datei im eigenen Projekt.
 - **Projektordner verschoben:** Der Ordner lag auf dem iCloud-synchronisierten Schreibtisch. Bei vollem Speicher hat iCloud die Dateien ausgelagert, sodass weder VS Code noch Git sie lesen konnten. Das Projekt wurde deshalb frisch von GitHub nach `~/Developer/portfolio` geklont, einen Ordner ohne iCloud-Sync. Das MAMP-Stammverzeichnis zeigt jetzt dorthin.
 - **Header:** Logo von „MP“ auf meine Initialen „LK“ geändert. Die Navigation stand nicht genau in der Mitte, weil `justify-content: space-between` den Platz nur *zwischen* die Elemente verteilt und Logo und Status unterschiedlich breit sind. Gelöst mit einem CSS-Grid mit drei Spalten (`1fr auto 1fr`): Die äusseren Spalten sind immer gleich breit, die Navigation steht dadurch exakt mittig. Auf dem Handy bleibt der Header bei Flexbox (Logo links, Hamburger rechts).
+- **Hero ohne Foto:** Ein bildschirmfüllendes Porträt direkt beim Einstieg wirkte zu dominant, und das Foto ist mit 1280 px Breite für grosse Bildschirme zu klein. Der Hero zeigt jetzt nur Typografie (Name, Stern, Claim) auf dunklem Grund. Das Porträt ist kleiner im Teil „Über mich“ eingebunden, dort reicht die Auflösung gut aus.
+- **Porträt bei „Über mich“:** Im Hochformat 4:5 zugeschnitten mit `object-fit: cover`, schwarz-weiss per `filter: grayscale(1)`, beim Darüberfahren farbig. Die Datei heisst jetzt `portrait.jpg` (Kleinbuchstaben, passender Name statt `hero.JPG`). Das Sternchen sitzt neu unter der Headline, weil es rechts daneben ins Foto geragt hätte.
+- **Echte Projekte im Karussell:** Die vier Platzhalterkarten mit Grafiken wurden durch sechs echte Projekte ersetzt: Amygdala, Somedia, Berlin, Multitalk, Podcast Chäller und Nulltoleranz. Jede Karte zeigt Kategorie, meine Rolle, den Rahmen (Modul bzw. Auftraggeberin) und ein Vorschaubild. Die Bilder sind schwarz-weiss und werden beim Darüberfahren farbig.
+- **Vorschaubilder fürs Web aufbereitet:** Die Originale hatten verschiedene Formate (PNG, JPG, PDF) und bis zu 3000 px Breite. Mit dem Mac-Werkzeug `sips` wurden sie auf 1600 px Breite verkleinert und als JPG gespeichert (`images/projekte/`). Das PDF der Nulltoleranz-Kampagne wurde dabei in ein JPG umgewandelt, weil ein `<img>`-Element keine PDFs anzeigen kann. Zusammen sind die Bilder jetzt rund 1 MB statt 4 MB gross. Im Browser haben alle Karten dasselbe Format 3:2 (`aspect-ratio` und `object-fit: cover`).
+- **3D entfernt:** Die Karte „3D & Motion“ und der Skill Blender wurden gestrichen, weil es dazu keine Projekte gibt.
+- **Fehler auf dem Handy:** Die Karte „Nulltoleranz“ war breiter als die anderen, weil das lange Wort nicht umbrechen konnte und die Karte deshalb mitwuchs. Gelöst mit `min-width: 0` auf der Karte und `hyphens: auto` beim Titel (Silbentrennung).
 
 ## Learnings und Schwierigkeiten
 
@@ -65,6 +71,8 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Gross-/Kleinschreibung:** macOS unterscheidet bei Dateinamen nicht zwischen `hero.jpg` und `hero.JPG`, der Linux-Server bei Hostpoint schon. Dateinamen im Code müssen deshalb exakt stimmen.
 - **Externe Links** brauchen immer `https://` am Anfang.
 - **Git und iCloud vertragen sich nicht:** iCloud kann Dateien jederzeit auslagern oder gleichzeitig synchronisieren, während Git sie bearbeitet. Code-Projekte gehören deshalb in einen Ordner ohne Cloud-Sync. Als Backup dient GitHub.
+- **Bilder fürs Web:** Bilder direkt aus der Kamera oder aus InDesign sind oft viel zu gross. Für eine Webseite reichen etwa 1600 px Breite, sonst lädt die Seite unnötig lange. PDFs können nicht als Bild eingebunden werden.
+- **Flex-Elemente wachsen mit dem Inhalt:** Ein Element in einem Flexbox ist standardmässig mindestens so breit wie sein längstes Wort. `min-width: 0` hebt das auf.
 - **Elemente mittig ausrichten:** `space-between` zentriert das mittlere Element nur, wenn die äusseren gleich breit sind. Ein Grid mit `1fr auto 1fr` zentriert zuverlässig.
 
 ## Ressourcen und Hilfsmittel

@@ -191,47 +191,17 @@ button {
 
 
 /* ---------- 5. HERO ---------- */
+/* Der Hero kommt ohne Foto aus: Nur Typografie auf dunklem Grund.
+   Das Porträt ist kleiner im Teil "Über mich" eingebunden. */
 .hero {
   position: relative;
-  /* Die Sektion hat dasselbe Seitenverhältnis wie das Foto (3:2).
-     So wird das Bild nicht unnötig vergrössert oder beschnitten. */
-  aspect-ratio: 3 / 2;
-  max-height: 120vh;
+  min-height: 75vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--gutter);
   overflow: hidden;
   background: var(--color-dark);
-}
-
-/* Das Foto liegt in einer eigenen Ebene hinter dem Text,
-   damit nur das Bild schwarz-weiss wird, nicht die Schrift.
-   Das Foto liegt unter images/hero.JPG.
-   Solange es fehlt, bleibt der Hintergrund einfach dunkel. */
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  /* Achtung: Auf dem Server zählt Gross-/Kleinschreibung.
-     Der Dateiname muss exakt so geschrieben sein wie hier. */
-  background: url("../images/hero.JPG") center 30% / cover no-repeat;
-  filter: grayscale(1);
-  z-index: 0;
-}
-
-/* Leichter dunkler Verlauf unten, damit der Text gut lesbar bleibt */
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, transparent 55%, rgba(18, 18, 18, 0.75));
-  z-index: 0;
-}
-
-.hero > * {
-  position: relative;
-  z-index: 1;
 }
 
 .hero-name {
@@ -342,7 +312,7 @@ button {
   background: var(--color-card);
   color: var(--color-dark);
   scroll-snap-align: start;
-  min-height: 820px;
+  min-width: 0;   /* Karte wird nie breiter als vorgesehen, auch bei langen Wörtern */
 }
 
 .card-top {
@@ -356,41 +326,30 @@ button {
   text-transform: uppercase;
 }
 
-/* Grafik bzw. später das Projektbild */
+/* Vorschaubild des Projekts.
+   Alle Bilder bekommen dasselbe Format (3:2), auch wenn die Originale
+   unterschiedlich sind. object-fit: cover schneidet den Rest ab. */
 .card-visual {
-  flex: 1;
-  display: flex;
-  align-items: center;
+  aspect-ratio: 3 / 2;
   margin: 40px 0;
+  overflow: hidden;
+  background: var(--color-dark);
 }
 
-.card-visual svg {
+.card-visual img {
+  display: block;
   width: 100%;
   height: 100%;
-  min-height: 300px;
-  overflow: visible;
+  object-fit: cover;
+  filter: grayscale(1);
+  transition: filter 0.4s, transform 0.6s;
 }
 
-.card-visual svg * {
-  fill: none;
-  stroke: var(--color-dark);
-  stroke-width: 1.5;
-  vector-effect: non-scaling-stroke;
-  transition: fill 0.4s, stroke 0.4s;
-}
-
-.card-visual .filled {
-  fill: var(--color-dark);
-}
-
-.card-visual .hole {
-  fill: var(--color-card);
-}
-
-/* "Hover to reveal color": beim Darüberfahren wird es farbig */
-.card:hover .card-visual svg :is(circle, rect, polygon):not(.hole) {
-  fill: var(--color-accent);
-  stroke: var(--color-accent);
+/* "Hover to reveal color": beim Darüberfahren wird das Bild farbig
+   und zoomt ganz leicht heran */
+.card:hover .card-visual img {
+  filter: grayscale(0);
+  transform: scale(1.03);
 }
 
 .card-client {
@@ -434,15 +393,38 @@ button {
 }
 
 .about .headline {
-  position: relative;
+  align-self: start;
 }
 
+/* Sternchen unter der Headline (rechts daneben wäre es ins Porträt geragt) */
 .asterisk {
-  position: absolute;
-  left: 105%;
-  bottom: 0.1em;
-  width: 0.8em;
+  display: block;
+  margin-top: 0.2em;
+  width: 0.6em;
   fill: var(--color-accent);
+}
+
+/* Porträt: wie die Projektbilder schwarz-weiss, beim Darüberfahren farbig */
+.about-photo {
+  max-width: 420px;
+  aspect-ratio: 4 / 5;          /* Hochformat, passt besser zu einem Porträt */
+  margin-bottom: 56px;
+  overflow: hidden;
+  background: var(--color-card);
+}
+
+.about-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;            /* Bild füllt den Rahmen, ohne verzerrt zu werden */
+  object-position: center 30%;  /* Ausschnitt etwas nach oben, aufs Gesicht */
+  filter: grayscale(1);
+  transition: filter 0.4s;
+}
+
+.about-photo:hover img {
+  filter: grayscale(0);
 }
 
 .about-text .lead {
@@ -630,12 +612,8 @@ button {
     font-size: 12px;
   }
 
-  /* Auf dem Handy ist der Bildschirm hochformatig:
-     hier lieber höher machen und auf das Gesicht ausrichten. */
   .hero {
-    aspect-ratio: auto;
-    max-height: none;
-    min-height: 80vh;
+    min-height: 70vh;
   }
 
   .hero-name {
@@ -666,24 +644,32 @@ button {
 
   .card {
     flex-basis: 85vw;
-    min-height: 520px;
     padding: 24px;
   }
 
-  .card-visual svg {
-    min-height: 180px;
+  /* Kategorie und Rolle untereinander statt nebeneinander */
+  .card-top {
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+  }
+
+  /* Lange Titel wie "Nulltoleranz" dürfen mit Bindestrich umbrechen,
+     sonst wird die ganze Karte breiter als die anderen */
+  .card h3 {
+    font-size: 26px;
+    hyphens: auto;
+    overflow-wrap: break-word;
+    min-width: 0;
+  }
+
+  .card-visual {
+    margin: 24px 0;
   }
 
   .round-btn.dark {
     width: 56px;
     height: 56px;
-  }
-
-  .asterisk {
-    position: static;
-    display: block;
-    margin-top: 0.2em;
-    width: 0.6em;
   }
 
   .about-grid {
