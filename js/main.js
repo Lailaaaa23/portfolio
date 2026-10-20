@@ -5,6 +5,7 @@
    3. Animation des Namens im Hero
    4. Aus dem Punkt wird der Kreis
    5. Lila Kreis folgt der Maus
+   6. Projekte aus der Datenbank laden
    ========================================================= */
 
 
@@ -169,3 +170,64 @@ if (hasMouse && !reduceMotion) {
     circle.style.setProperty("--my", "0px");
   });
 }
+
+
+/* ---------- 6. PROJEKTE AUS DER DATENBANK LADEN ---------- */
+// "async" heisst: Diese Funktion darf auf etwas warten (hier: auf die Antwort
+// des Servers), ohne dass die restliche Seite in der Zeit einfriert.
+async function ladeProjekte() {
+  const vorlage = document.querySelector("#karten-vorlage");
+
+  try {
+    // 1. Schnittstelle aufrufen und auf die Antwort warten
+    const antwort = await fetch("api/projekte.php");
+
+    // 2. Hat der Server einen Fehler gemeldet (z. B. 500)? Dann abbrechen.
+    if (!antwort.ok) {
+      throw new Error(`Server antwortet mit ${antwort.status}`);
+    }
+
+    // 3. JSON-Text in ein JavaScript-Array umwandeln
+    const projekte = await antwort.json();
+
+    // 4. Für jedes Projekt eine Karte aus der Vorlage bauen
+    projekte.forEach((projekt, index) => {
+      // Vorlage kopieren (true = mit allem, was darin steckt)
+      const karte = vorlage.content.cloneNode(true);
+
+      // Laufnummer mit führender Null: 1 -> "01"
+      const nummer = String(index + 1).padStart(2, "0");
+
+      // Texte einsetzen. textContent statt innerHTML: So wird alles als
+      // reiner Text behandelt, auch wenn jemand im CMS HTML-Code eintippt.
+      karte.querySelector(".card-kategorie").textContent = `${nummer} / ${projekt.kategorie}`;
+      karte.querySelector(".card-rolle").textContent = projekt.rolle;
+      karte.querySelector(".card-client").textContent = projekt.rahmen;
+      karte.querySelector("h3").textContent = projekt.titel;
+
+      // Bild einsetzen
+      const bild = karte.querySelector("img");
+      bild.src = projekt.bild;
+      bild.alt = `Vorschaubild zum Projekt ${projekt.titel}`;
+
+      // Pfeil-Link führt zur Detailseite, z. B. projekt.html?id=3
+      const link = karte.querySelector("a");
+      link.href = `projekt.html?id=${projekt.id}`;
+      link.setAttribute("aria-label", `Projekt ${projekt.titel} ansehen`);
+
+      // Fertige Karte ins Karussell einfügen
+      track.append(karte);
+    });
+
+  } catch (fehler) {
+    // Etwas ging schief (Server nicht erreichbar, Datenbankfehler …):
+    // Statt einer leeren Fläche einen Hinweis anzeigen.
+    console.error("Projekte konnten nicht geladen werden:", fehler);
+    const hinweis = document.createElement("p");
+    hinweis.className = "work-error";
+    hinweis.textContent = "Die Projekte konnten gerade nicht geladen werden. Bitte später nochmals versuchen.";
+    track.append(hinweis);
+  }
+}
+
+ladeProjekte();

@@ -482,6 +482,12 @@ button {
   transition: filter 0.4s, transform 0.6s;
 }
 
+/* Hinweis, falls die Projekte nicht aus der Datenbank geladen werden konnten */
+.work-error {
+  color: var(--color-accent);
+  font-size: 18px;
+}
+
 /* "Hover to reveal color": beim Darüberfahren wird das Bild farbig
    und zoomt ganz leicht heran */
 .card:hover .card-visual img {

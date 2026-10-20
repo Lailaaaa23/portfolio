@@ -94,6 +94,14 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **HTTP-Statuscodes:** Die Schnittstelle antwortet mit 200 (OK), 400 (ungültige ID), 404 (Projekt nicht gefunden) oder 500 (Datenbankfehler). So kann das Frontend später unterscheiden, was schiefging.
 - **Getestet** im Browser unter `localhost:8888/api/projekte.php` und mit `?id=5`, `?id=99` und `?id=abc`.
 
+### 20.10.2026 – Projektkarten per fetch aus der Datenbank
+- Die sechs Projektkarten stehen nicht mehr fest im HTML. `js/main.js` holt sie beim Laden der Seite mit `fetch("api/projekte.php")` ab und baut daraus die Karten.
+- **Vorlage mit `<template>`:** Der Aufbau einer Karte steht einmal als `<template id="karten-vorlage">` im HTML. Der Browser zeigt ein Template nicht an. JavaScript kopiert es für jedes Projekt (`cloneNode`) und setzt Titel, Kategorie, Rolle, Rahmen und Bild ein. So bleibt das HTML-Gerüst im HTML und muss nicht als Text im JavaScript stehen.
+- **`textContent` statt `innerHTML`:** Inhalte aus der Datenbank werden immer als reiner Text eingesetzt. Würde im CMS jemand HTML- oder Script-Code in ein Feld schreiben, erscheint er nur als Text und wird nicht ausgeführt.
+- **`async` / `await`:** Die Funktion `ladeProjekte()` wartet auf die Antwort des Servers, ohne die restliche Seite zu blockieren. Die Animationen im Hero laufen also weiter, während die Projekte laden.
+- **Fehlerfall:** Antwortet der Server mit einem Fehler oder ist er nicht erreichbar, erscheint ein Hinweis statt einer leeren Fläche (`try` / `catch`).
+- Die Pfeil-Links der Karten zeigen jetzt auf `projekt.html?id=…`. Die Detailseite folgt im nächsten Schritt.
+
 ## Learnings und Schwierigkeiten
 
 - **PHP braucht einen Server:** HTML, CSS und JavaScript laufen direkt im Browser, PHP dagegen nur auf einem Server. Deshalb braucht es lokal MAMP.
@@ -104,6 +112,7 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Bilder fürs Web:** Bilder direkt aus der Kamera oder aus InDesign sind oft viel zu gross. Für eine Webseite reichen etwa 1600 px Breite, sonst lädt die Seite unnötig lange. PDFs können nicht als Bild eingebunden werden.
 - **Flex-Elemente wachsen mit dem Inhalt:** Ein Element in einem Flexbox ist standardmässig mindestens so breit wie sein längstes Wort. `min-width: 0` hebt das auf.
 - **Browser-Cache:** Nach einer Änderung an JavaScript oder CSS zeigt der Browser manchmal noch die alte Version an, weil er die Datei zwischengespeichert hat. Abhilfe schafft ein harter Reload mit cmd + shift + R.
+- **fetch braucht einen Server:** Öffnet man `index.html` direkt als Datei (Doppelklick), kann `fetch()` die Schnittstelle nicht erreichen und die Projekte fehlen. Die Seite muss über `localhost:8888` (MAMP) oder online aufgerufen werden.
 - **SQL-Injection:** Werte, die von aussen kommen (z. B. aus der Adresse), dürfen nie direkt in einen SQL-Befehl geklebt werden. Prepared Statements mit Platzhaltern (`?`) trennen Befehl und Daten sauber.
 - **Elemente mittig ausrichten:** `space-between` zentriert das mittlere Element nur, wenn die äusseren gleich breit sind. Ein Grid mit `1fr auto 1fr` zentriert zuverlässig.
 

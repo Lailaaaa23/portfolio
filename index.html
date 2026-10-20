@@ -80,102 +80,29 @@
         </div>
       </div>
 
-      <!-- Diese Karten sind vorerst fix im HTML.
-           Später lädt JavaScript sie aus dem CMS (Datenbank).
-           Die Pfeil-Links führen dann zur Detailseite des Projekts. -->
-      <div class="work-track">
+      <!-- Die Projektkarten kommen aus der Datenbank:
+           main.js holt sie über api/projekte.php und füllt sie hier ein. -->
+      <div class="work-track"></div>
 
+      <!-- Vorlage für EINE Projektkarte.
+           Ein <template> wird vom Browser nicht angezeigt. JavaScript kopiert es
+           für jedes Projekt und setzt Titel, Bild usw. ein. -->
+      <template id="karten-vorlage">
         <article class="card">
           <div class="card-top">
-            <span>01 / Video &amp; Reportage</span>
-            <span>Co-Projektleitung · Host</span>
+            <span class="card-kategorie"></span>
+            <span class="card-rolle"></span>
           </div>
           <figure class="card-visual">
-            <img src="images/projekte/amygdala.jpg" alt="Logo der Videoreportage-Reihe Amygdala" loading="lazy">
+            <img src="" alt="" loading="lazy">
           </figure>
-          <p class="card-client">Major Journalismus Multimedial · FHGR</p>
+          <p class="card-client"></p>
           <div class="card-bottom">
-            <h3>Amygdala</h3>
-            <a href="#" class="round-btn dark" aria-label="Projekt Amygdala ansehen">&rarr;</a>
+            <h3></h3>
+            <a href="" class="round-btn dark">&rarr;</a>
           </div>
         </article>
-
-        <article class="card">
-          <div class="card-top">
-            <span>02 / TV</span>
-            <span>Konzept · Moderation</span>
-          </div>
-          <figure class="card-visual">
-            <img src="images/projekte/somedia.jpg" alt="Laila Keller moderiert im Studio von TV Südostschweiz" loading="lazy">
-          </figure>
-          <p class="card-client">Modul Digezz · TV Südostschweiz</p>
-          <div class="card-bottom">
-            <h3>Somedia</h3>
-            <a href="#" class="round-btn dark" aria-label="Projekt Somedia ansehen">&rarr;</a>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-top">
-            <span>03 / Video &amp; Reportage</span>
-            <span>Reporterin · Interviews · Planung</span>
-          </div>
-          <figure class="card-visual">
-            <img src="images/projekte/berlin.jpg" alt="Dreh eines Interviews in einer Berliner Wohnung" loading="lazy">
-          </figure>
-          <p class="card-client">Modul Audiovisuelles Erzählen · FHGR</p>
-          <div class="card-bottom">
-            <h3>Berlin</h3>
-            <a href="#" class="round-btn dark" aria-label="Projekt Berlin ansehen">&rarr;</a>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-top">
-            <span>04 / Radio</span>
-            <span>Moderation · Studiotechnik · Ablauf</span>
-          </div>
-          <figure class="card-visual">
-            <img src="images/projekte/multitalk.jpg" alt="Das Moderationsteam von Multitalk" loading="lazy">
-          </figure>
-          <p class="card-client">Campusradio der FHGR</p>
-          <div class="card-bottom">
-            <h3>Multitalk</h3>
-            <a href="#" class="round-btn dark" aria-label="Projekt Multitalk ansehen">&rarr;</a>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-top">
-            <span>05 / Podcast</span>
-            <span>Konzept · Aufnahme · Schnitt · Design</span>
-          </div>
-          <figure class="card-visual">
-            <img src="images/projekte/podcast-chaeller.jpg" alt="Logo von Podcast Chäller" loading="lazy">
-          </figure>
-          <p class="card-client">Modul Digezz · auf Spotify</p>
-          <div class="card-bottom">
-            <h3>Podcast Chäller</h3>
-            <a href="#" class="round-btn dark" aria-label="Projekt Podcast Chäller ansehen">&rarr;</a>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-top">
-            <span>06 / Design &amp; Kampagne</span>
-            <span>Design · Wording · Pitch</span>
-          </div>
-          <figure class="card-visual">
-            <img src="images/projekte/nulltoleranz.jpg" alt="Plakat der Kampagne Nulltoleranz" loading="lazy">
-          </figure>
-          <p class="card-client">Kampagne im Auftrag der FHGR</p>
-          <div class="card-bottom">
-            <h3>Nulltoleranz</h3>
-            <a href="#" class="round-btn dark" aria-label="Projekt Nulltoleranz ansehen">&rarr;</a>
-          </div>
-        </article>
-
-      </div>
+      </template>
     </section>
 
     <!-- ===================== ABOUT & SKILLS ===================== -->
