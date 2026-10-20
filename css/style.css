@@ -191,7 +191,8 @@ button {
 
 
 /* ---------- 5. HERO ---------- */
-/* Der Hero kommt ohne Foto aus: Nur Typografie auf dunklem Grund.
+/* Der Hero kommt ohne Foto aus: nur Typografie auf hellem Grund.
+   So entsteht ein klarer Wechsel zum dunklen Teil "Selected Work".
    Das Porträt ist kleiner im Teil "Über mich" eingebunden. */
 .hero {
   position: relative;
@@ -201,7 +202,7 @@ button {
   justify-content: center;
   padding: var(--gutter);
   overflow: hidden;
-  background: var(--color-dark);
+  background: var(--color-light);
 }
 
 .hero-name {
@@ -209,12 +210,63 @@ button {
   font-weight: 900;
   font-stretch: 125%;
   font-variation-settings: "wdth" 125;
-  color: var(--color-accent);
+  color: var(--color-dark);
   font-size: clamp(56px, 11vw, 220px);
   line-height: 1;
   letter-spacing: -0.02em;
   text-align: center;
   white-space: nowrap;
+}
+
+/* --- Animation des Namens ---
+   JavaScript (main.js) verpackt jedes Wort und jeden Buchstaben in ein <span>.
+   Das Wort ist wie ein Fenster (overflow: hidden): Die Buchstaben starten
+   unterhalb davon und gleiten nacheinander nach oben ins Bild. */
+.hero-name .word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.06em;   /* etwas Luft, damit nichts abgeschnitten wird */
+}
+
+.hero-name .letter {
+  display: inline-block;
+  transform: translateY(110%);   /* Start: unsichtbar unter dem Fenster */
+  animation: rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  /* --i ist die Nummer des Buchstabens (setzt main.js).
+     Jeder Buchstabe startet 60 ms nach dem vorherigen. */
+  animation-delay: calc(var(--i) * 60ms);
+}
+
+@keyframes rise {
+  to { transform: translateY(0); }
+}
+
+/* Stern und Claim erscheinen, nachdem der Name fertig ist */
+.hero-label,
+.hero-claim {
+  opacity: 0;
+  animation: fade-up 0.8s ease-out forwards;
+}
+
+.hero-label { animation-delay: 0.9s; }
+.hero-claim { animation-delay: 1.2s; }
+
+@keyframes fade-up {
+  from { opacity: 0; translate: 0 20px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+/* Wer im Betriebssystem "Bewegung reduzieren" eingestellt hat,
+   bekommt alles sofort und ohne Animation zu sehen. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-name .letter,
+  .hero-label,
+  .hero-claim {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
 }
 
 .hero-label {
@@ -224,10 +276,10 @@ button {
   display: flex;
   align-items: center;
   gap: 24px;
-  color: var(--color-accent);
+  color: var(--color-dark);
   font-weight: 700;
   font-size: clamp(20px, 2.2vw, 34px);
-  transform: rotate(-6deg);
+  rotate: -6deg;   /* eigene Eigenschaft, damit sie sich nicht mit der Animation beisst */
 }
 
 .star {
@@ -247,7 +299,7 @@ button {
   max-width: 280px;
   padding-top: 24px;
   border-top: 3px solid var(--color-accent);
-  color: var(--color-accent);
+  color: var(--color-dark);
   font-size: 20px;
   line-height: 1.5;
 }

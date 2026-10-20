@@ -63,6 +63,8 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Vorschaubilder fürs Web aufbereitet:** Die Originale hatten verschiedene Formate (PNG, JPG, PDF) und bis zu 3000 px Breite. Mit dem Mac-Werkzeug `sips` wurden sie auf 1600 px Breite verkleinert und als JPG gespeichert (`images/projekte/`). Das PDF der Nulltoleranz-Kampagne wurde dabei in ein JPG umgewandelt, weil ein `<img>`-Element keine PDFs anzeigen kann. Zusammen sind die Bilder jetzt rund 1 MB statt 4 MB gross. Im Browser haben alle Karten dasselbe Format 3:2 (`aspect-ratio` und `object-fit: cover`).
 - **3D entfernt:** Die Karte „3D & Motion“ und der Skill Blender wurden gestrichen, weil es dazu keine Projekte gibt.
 - **Fehler auf dem Handy:** Die Karte „Nulltoleranz“ war breiter als die anderen, weil das lange Wort nicht umbrechen konnte und die Karte deshalb mitwuchs. Gelöst mit `min-width: 0` auf der Karte und `hyphens: auto` beim Titel (Silbentrennung).
+- **Heller Hero:** Ohne Foto war der Hero eine grosse schwarze Fläche, die nahtlos in den ebenfalls dunklen Teil „Selected Work“ überging. Der Hero ist jetzt hell mit dunkler Schrift, so wechseln sich helle und dunkle Bereiche auf der ganzen Seite ab.
+- **Animation des Namens:** Beim Laden gleiten die Buchstaben von „Laila Keller“ nacheinander von unten ins Bild, danach erscheinen Stern und Claim. JavaScript verpackt dafür jeden Buchstaben in ein eigenes `<span>` und gibt ihm eine Nummer (`--i`). Die CSS-Animation startet jeden Buchstaben um diese Nummer × 60 ms verzögert. Jedes Wort wirkt wie ein Fenster (`overflow: hidden`), deshalb sind die Buchstaben vorher unsichtbar. Für Screenreader bleibt der Name über `aria-label` normal lesbar. Wer im Betriebssystem „Bewegung reduzieren“ eingestellt hat, sieht den Namen sofort ohne Animation (`prefers-reduced-motion`).
 
 ## Learnings und Schwierigkeiten
 
@@ -73,6 +75,7 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Git und iCloud vertragen sich nicht:** iCloud kann Dateien jederzeit auslagern oder gleichzeitig synchronisieren, während Git sie bearbeitet. Code-Projekte gehören deshalb in einen Ordner ohne Cloud-Sync. Als Backup dient GitHub.
 - **Bilder fürs Web:** Bilder direkt aus der Kamera oder aus InDesign sind oft viel zu gross. Für eine Webseite reichen etwa 1600 px Breite, sonst lädt die Seite unnötig lange. PDFs können nicht als Bild eingebunden werden.
 - **Flex-Elemente wachsen mit dem Inhalt:** Ein Element in einem Flexbox ist standardmässig mindestens so breit wie sein längstes Wort. `min-width: 0` hebt das auf.
+- **Browser-Cache:** Nach einer Änderung an JavaScript oder CSS zeigt der Browser manchmal noch die alte Version an, weil er die Datei zwischengespeichert hat. Abhilfe schafft ein harter Reload mit cmd + shift + R.
 - **Elemente mittig ausrichten:** `space-between` zentriert das mittlere Element nur, wenn die äusseren gleich breit sind. Ein Grid mit `1fr auto 1fr` zentriert zuverlässig.
 
 ## Ressourcen und Hilfsmittel
