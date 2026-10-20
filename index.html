@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laila Keller – Multimedia Production & Journalism</title>
+  <meta name="description" content="Portfolio von Laila Keller: Video, Audio, Editorial Design und 3D.">
+
+  <!-- Schriften von Google Fonts: Archivo (Headlines) und DM Sans (Fliesstext) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header">
+    <div class="header-bar">
+      <a href="#top" class="logo" aria-label="Zur Startseite">MP<span>.</span></a>
+
+      <!-- Hamburger-Button: nur auf dem Handy sichtbar -->
+      <button class="nav-toggle" aria-label="Menü öffnen" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+
+      <nav class="main-nav">
+        <a href="#projekte">Projekte</a>
+        <a href="#about">Über mich</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+
+      <p class="status"><span class="status-dot"></span>Available for projects</p>
+    </div>
+    <p class="header-subline">Multimedia Production &amp; Journalism</p>
+  </header>
+
+  <main id="top">
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero">
+      <div class="hero-label">
+        <!-- Stern als SVG-Grafik -->
+        <svg class="star" viewBox="0 0 100 100" aria-hidden="true">
+          <polygon points="50,0 57,38 95,20 64,46 100,55 62,60 75,98 50,68 25,98 38,60 0,55 36,46 5,20 43,38" />
+        </svg>
+        <span>Mein Portfolio</span>
+      </div>
+
+      <h1 class="hero-name">Laila Keller</h1>
+
+      <p class="hero-claim">Ich erzähle Geschichten<br>in Bild, Ton &amp; Raum.</p>
+    </section>
+
+    <!-- ===================== PROJEKTE ===================== -->
+    <section class="work" id="projekte">
+      <div class="work-head">
+        <div>
+          <p class="eyebrow">01 / Selected Work</p>
+          <h2 class="headline">Stories across<br>formats.</h2>
+        </div>
+        <div class="work-controls">
+          <p class="hint">Hover to<br>reveal color</p>
+          <button class="round-btn" data-dir="-1" aria-label="Vorheriges Projekt">&larr;</button>
+          <button class="round-btn" data-dir="1" aria-label="Nächstes Projekt">&rarr;</button>
+        </div>
+      </div>
+
+      <!-- Diese Karten sind vorerst fix im HTML.
+           Später lädt JavaScript sie aus dem CMS (Datenbank). -->
+      <div class="work-track">
+
+        <article class="card">
+          <div class="card-top">
+            <span>01</span>
+            <span>Direction · Camera · Edit</span>
+          </div>
+          <div class="card-visual">
+            <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <line x1="0" y1="180" x2="400" y2="40" />
+              <circle cx="200" cy="110" r="48" />
+            </svg>
+          </div>
+          <p class="card-client">Amygdala / Medienmacher:innen</p>
+          <div class="card-bottom">
+            <h3>Video Reportage &amp; TV</h3>
+            <a href="#" class="round-btn dark" aria-label="Projekt ansehen">&rarr;</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <span>02</span>
+            <span>Concept · Recording · Mix</span>
+          </div>
+          <div class="card-visual">
+            <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <line x1="0" y1="180" x2="400" y2="60" />
+              <circle cx="300" cy="100" r="60" class="filled" />
+              <circle cx="300" cy="100" r="24" class="hole" />
+            </svg>
+          </div>
+          <p class="card-client">Track Trace / Radio Features</p>
+          <div class="card-bottom">
+            <h3>Audio &amp; Podcast</h3>
+            <a href="#" class="round-btn dark" aria-label="Projekt ansehen">&rarr;</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <span>03</span>
+            <span>Layout · Typography</span>
+          </div>
+          <div class="card-visual">
+            <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <rect x="120" y="30" width="160" height="140" />
+              <line x1="0" y1="100" x2="400" y2="100" />
+            </svg>
+          </div>
+          <p class="card-client">Platzhalter / Magazin</p>
+          <div class="card-bottom">
+            <h3>Editorial Design</h3>
+            <a href="#" class="round-btn dark" aria-label="Projekt ansehen">&rarr;</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <span>04</span>
+            <span>Modeling · Render</span>
+          </div>
+          <div class="card-visual">
+            <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <polygon points="200,20 300,170 100,170" />
+              <line x1="0" y1="150" x2="400" y2="50" />
+            </svg>
+          </div>
+          <p class="card-client">Platzhalter / Blender</p>
+          <div class="card-bottom">
+            <h3>3D &amp; Motion</h3>
+            <a href="#" class="round-btn dark" aria-label="Projekt ansehen">&rarr;</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ===================== ABOUT & SKILLS ===================== -->
+    <section class="about" id="about">
+      <p class="eyebrow">02 / About &amp; Skills</p>
+
+      <div class="about-grid">
+        <h2 class="headline">
+          Curious<br>mind.<br>Clear<br>stories.
+          <svg class="asterisk" viewBox="0 0 100 100" aria-hidden="true">
+            <rect x="40" y="0" width="20" height="100" rx="3" />
+            <rect x="40" y="0" width="20" height="100" rx="3" transform="rotate(60 50 50)" />
+            <rect x="40" y="0" width="20" height="100" rx="3" transform="rotate(-60 50 50)" />
+          </svg>
+        </h2>
+
+        <div class="about-text">
+          <p class="lead">Ich bin Multimedia Producerin und Journalistin mit einem Blick für starke Bilder und einem Ohr für gute Geschichten.</p>
+          <p>Von der ersten Recherche bis zum finalen Schnitt verbinde ich journalistische Präzision mit visueller Neugier. Ich arbeite gern nah an Menschen, Themen und den Details, die eine Geschichte unverwechselbar machen.</p>
+        </div>
+      </div>
+
+      <ul class="skills">
+        <li><span class="skill-nr">01</span><span class="skill-name">Video Editing</span><span class="skill-tool">Premiere Pro</span></li>
+        <li><span class="skill-nr">02</span><span class="skill-name">Audio</span><span class="skill-tool">Audition</span></li>
+        <li><span class="skill-nr">03</span><span class="skill-name">Editorial Design</span><span class="skill-tool">InDesign</span></li>
+        <li><span class="skill-nr">04</span><span class="skill-name">3D</span><span class="skill-tool">Blender</span></li>
+      </ul>
+    </section>
+
+  </main>
+
+  <!-- ===================== KONTAKT / FOOTER ===================== -->
+  <footer class="contact" id="kontakt">
+    <div class="contact-top">
+      <p class="eyebrow">03 / Let's collaborate</p>
+      <p class="eyebrow">Have a story in mind?</p>
+    </div>
+
+    <a href="mailto:laila.keller@stud.fhgr.ch" class="contact-cta">
+      <span class="contact-title">Get in<br>touch</span>
+      <span class="contact-arrow" aria-hidden="true">&rarr;</span>
+    </a>
+
+    <div class="contact-bottom">
+      <p>Based in Switzerland · Working everywhere</p>
+      <div class="contact-links">
+        <a href="mailto:laila.keller@stud.fhgr.ch">Email ↗</a>
+        <a href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

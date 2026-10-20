@@ -1,0 +1,697 @@
+/* =========================================================
+   PORTFOLIO – Laila Keller
+   Aufbau dieser Datei:
+   1. Variablen (Farben, Schriften, Abstände)
+   2. Grundeinstellungen
+   3. Wiederverwendbare Elemente
+   4. Header
+   5. Hero
+   6. Projekte
+   7. About & Skills
+   8. Kontakt / Footer
+   9. Mobile Anpassungen
+   ========================================================= */
+
+
+/* ---------- 1. VARIABLEN ----------
+   Hier änderst du Farben und Schriften zentral für die ganze Seite. */
+:root {
+  --color-light: #f6f6f2;      /* heller Hintergrund */
+  --color-card: #e8e8e4;       /* Hintergrund der Projektkarten */
+  --color-dark: #121212;       /* dunkler Hintergrund und Text */
+  --color-accent: #b4a5f5;     /* Lavendel */
+  --color-line: #121212;
+
+  --font-display: "Archivo", "Arial Black", sans-serif;
+  --font-body: "DM Sans", Arial, sans-serif;
+
+  --gutter: clamp(16px, 2.5vw, 48px);   /* Seitenrand links und rechts */
+  --section-space: clamp(80px, 10vw, 180px);
+}
+
+
+/* ---------- 2. GRUNDEINSTELLUNGEN ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-light);
+  color: var(--color-dark);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+
+/* ---------- 3. WIEDERVERWENDBARE ELEMENTE ---------- */
+
+/* Kleine Überschrift über den Sektionen, z. B. "01 / SELECTED WORK" */
+.eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Grosse, breite Headline */
+.headline {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  font-size: clamp(48px, 7.5vw, 140px);
+}
+
+/* Runder Pfeil-Button */
+.round-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  font-size: 22px;
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+
+.round-btn:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-dark);
+}
+
+
+/* ---------- 4. HEADER ---------- */
+.site-header {
+  padding: 0 var(--gutter);
+  background: var(--color-light);
+}
+
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 40px 0;
+  border-bottom: 1.5px solid var(--color-line);
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 32px;
+  letter-spacing: -0.04em;
+}
+
+.logo span {
+  color: var(--color-accent);
+}
+
+.main-nav {
+  display: flex;
+  gap: 52px;
+}
+
+.main-nav a,
+.status,
+.header-subline {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.main-nav a:hover {
+  color: var(--color-accent);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Kleiner, pulsierender Punkt vor "Available for projects" */
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-dark);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(180, 165, 245, 0.5);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  50% { box-shadow: 0 0 0 7px rgba(180, 165, 245, 0.15); }
+}
+
+.header-subline {
+  text-align: center;
+  padding: 56px 0;
+}
+
+/* Hamburger nur auf dem Handy (siehe Teil 9) */
+.nav-toggle {
+  display: none;
+}
+
+
+/* ---------- 5. HERO ---------- */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gutter);
+  overflow: hidden;
+  background: var(--color-dark);
+}
+
+/* Das Foto liegt in einer eigenen Ebene hinter dem Text,
+   damit nur das Bild schwarz-weiss wird, nicht die Schrift.
+   Lege dein Foto als images/hero.jpg ab.
+   Solange es fehlt, bleibt der Hintergrund einfach dunkel. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../images/hero.jpg") center top / cover no-repeat;
+  filter: grayscale(1);
+  z-index: 0;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  color: var(--color-accent);
+  font-size: clamp(56px, 11vw, 220px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.hero-label {
+  position: absolute;
+  top: 18%;
+  left: 10%;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  color: var(--color-accent);
+  font-weight: 700;
+  font-size: clamp(20px, 2.2vw, 34px);
+  transform: rotate(-6deg);
+}
+
+.star {
+  width: clamp(48px, 5vw, 80px);
+  fill: var(--color-accent);
+  animation: spin 18s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.hero-claim {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 10%;
+  max-width: 280px;
+  padding-top: 24px;
+  border-top: 3px solid var(--color-accent);
+  color: var(--color-accent);
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+
+/* ---------- 6. PROJEKTE ---------- */
+.work {
+  background: var(--color-dark);
+  color: var(--color-light);
+  padding: var(--section-space) 0;
+}
+
+.work-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 0 var(--gutter);
+  margin-bottom: 80px;
+}
+
+.work-head .eyebrow {
+  margin-bottom: 48px;
+}
+
+.work-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hint {
+  color: var(--color-accent);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  margin-right: 24px;
+}
+
+/* Horizontale Reihe mit Karten, die man seitlich scrollt */
+.work-track {
+  display: flex;
+  gap: 32px;
+  padding: 0 var(--gutter);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 var(--gutter);
+  scrollbar-width: none;              /* Scrollbalken verstecken (Firefox) */
+}
+
+.work-track::-webkit-scrollbar {
+  display: none;                      /* Scrollbalken verstecken (Chrome, Safari) */
+}
+
+.card {
+  flex: 0 0 min(64vw, 1080px);
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  background: var(--color-card);
+  color: var(--color-dark);
+  scroll-snap-align: start;
+  min-height: 820px;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 24px;
+  border-bottom: 1.5px solid var(--color-line);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Grafik bzw. später das Projektbild */
+.card-visual {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  margin: 40px 0;
+}
+
+.card-visual svg {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  overflow: visible;
+}
+
+.card-visual svg * {
+  fill: none;
+  stroke: var(--color-dark);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  transition: fill 0.4s, stroke 0.4s;
+}
+
+.card-visual .filled {
+  fill: var(--color-dark);
+}
+
+.card-visual .hole {
+  fill: var(--color-card);
+}
+
+/* "Hover to reveal color": beim Darüberfahren wird es farbig */
+.card:hover .card-visual svg :is(circle, rect, polygon):not(.hole) {
+  fill: var(--color-accent);
+  stroke: var(--color-accent);
+}
+
+.card-client {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.card-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.card h3 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  text-transform: uppercase;
+  font-size: clamp(32px, 4vw, 68px);
+  line-height: 0.95;
+}
+
+.round-btn.dark {
+  width: 84px;
+  height: 84px;
+}
+
+
+/* ---------- 7. ABOUT & SKILLS ---------- */
+.about {
+  padding: var(--section-space) var(--gutter);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin: 120px 0 160px;
+}
+
+.about .headline {
+  position: relative;
+}
+
+.asterisk {
+  position: absolute;
+  left: 105%;
+  bottom: 0.1em;
+  width: 0.8em;
+  fill: var(--color-accent);
+}
+
+.about-text .lead {
+  font-size: clamp(22px, 2.2vw, 34px);
+  font-weight: 500;
+  line-height: 1.4;
+  margin-bottom: 56px;
+}
+
+.about-text p:not(.lead) {
+  font-size: 20px;
+  line-height: 2;
+}
+
+.skills {
+  border-top: 2px solid var(--color-line);
+}
+
+.skills li {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  align-items: center;
+  padding: 36px 0;
+  border-bottom: 1.5px solid var(--color-line);
+  transition: padding 0.3s;
+}
+
+.skills li:hover {
+  padding-left: 16px;
+}
+
+.skills li:hover .skill-name {
+  color: var(--color-accent);
+}
+
+.skill-nr {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.skill-name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  text-transform: uppercase;
+  font-size: clamp(28px, 3.6vw, 60px);
+  line-height: 1;
+  transition: color 0.3s;
+}
+
+.skill-tool {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+
+/* ---------- 8. KONTAKT / FOOTER ---------- */
+.contact {
+  background: var(--color-dark);
+  color: var(--color-light);
+  padding: var(--section-space) var(--gutter) 48px;
+}
+
+.contact-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.contact-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 120px 0 150px;
+  color: var(--color-accent);
+}
+
+.contact-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  text-transform: uppercase;
+  font-size: clamp(64px, 12vw, 220px);
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+}
+
+.contact-arrow {
+  font-size: clamp(48px, 6vw, 110px);
+  transition: transform 0.3s;
+}
+
+.contact-cta:hover .contact-arrow {
+  transform: translateX(16px);
+}
+
+.contact-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding-top: 48px;
+  border-top: 1px solid rgba(246, 246, 242, 0.4);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.contact-links {
+  display: flex;
+  gap: 48px;
+}
+
+.contact-bottom a:hover {
+  color: var(--color-accent);
+}
+
+
+/* ---------- 9. MOBILE ANPASSUNGEN ----------
+   Alles hier drin gilt nur für Bildschirme bis 900px Breite. */
+@media (max-width: 900px) {
+
+  body {
+    font-size: 16px;
+  }
+
+  .header-bar {
+    padding: 24px 0;
+    flex-wrap: wrap;
+  }
+
+  /* Hamburger anzeigen */
+  .nav-toggle {
+    display: grid;
+    gap: 6px;
+    order: 2;
+    padding: 8px;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--color-dark);
+    transition: transform 0.3s;
+  }
+
+  .nav-toggle[aria-expanded="true"] span:first-child {
+    transform: translateY(4px) rotate(45deg);
+  }
+
+  .nav-toggle[aria-expanded="true"] span:last-child {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+
+  /* Navigation ist zugeklappt, bis man auf den Hamburger tippt */
+  .main-nav {
+    order: 3;
+    width: 100%;
+    flex-direction: column;
+    gap: 20px;
+    display: none;
+    padding-top: 16px;
+  }
+
+  .main-nav.open {
+    display: flex;
+  }
+
+  .status {
+    display: none;
+  }
+
+  .header-subline {
+    padding: 28px 0;
+    font-size: 12px;
+  }
+
+  .hero {
+    min-height: 80vh;
+  }
+
+  .hero-name {
+    white-space: normal;
+    line-height: 0.95;
+  }
+
+  .hero-label {
+    top: 12%;
+    left: var(--gutter);
+  }
+
+  .hero-claim {
+    font-size: 16px;
+    left: var(--gutter);
+    right: auto;
+  }
+
+  .work-head {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 48px;
+  }
+
+  .hint {
+    display: none;
+  }
+
+  .card {
+    flex-basis: 85vw;
+    min-height: 520px;
+    padding: 24px;
+  }
+
+  .card-visual svg {
+    min-height: 180px;
+  }
+
+  .round-btn.dark {
+    width: 56px;
+    height: 56px;
+  }
+
+  .asterisk {
+    position: static;
+    display: block;
+    margin-top: 0.2em;
+    width: 0.6em;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    margin: 56px 0 80px;
+  }
+
+  .about-text p:not(.lead) {
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  .skills li {
+    grid-template-columns: 40px 1fr;
+    padding: 24px 0;
+  }
+
+  .skill-tool {
+    grid-column: 2;
+    font-size: 15px;
+    margin-top: 6px;
+  }
+
+  .contact-top {
+    flex-direction: column;
+  }
+
+  .contact-cta {
+    margin: 64px 0 80px;
+  }
+
+  .contact-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

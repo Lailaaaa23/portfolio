@@ -1,0 +1,9 @@
+# Zugangsdaten zur Datenbank – NIE auf GitHub hochladen!
+config.php
+
+# Hochgeladene Bilder aus dem CMS (nur den leeren Ordner behalten)
+uploads/*
+!uploads/.gitkeep
+
+# Systemdateien vom Mac
+.DS_Store
