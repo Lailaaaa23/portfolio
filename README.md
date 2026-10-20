@@ -23,8 +23,10 @@ portfolio/
 ├── js/main.js           Interaktionen
 ├── images/              Bilder der Webseite
 ├── api/                 Schnittstelle: liefert Inhalte als JSON
+├── includes/db.php      Verbindung zur Datenbank (von api/ und admin/ genutzt)
 ├── admin/               CMS (Login, Inhalte verwalten)
 ├── uploads/             Bilder aus dem CMS (nicht im Repo)
+├── datenbank/           SQL-Datei: Tabellen und Startinhalte
 └── config.example.php   Vorlage für die Zugangsdaten
 ```
 
@@ -32,8 +34,9 @@ portfolio/
 
 1. Repository klonen
 2. MAMP installieren und das Stammverzeichnis auf den Projektordner setzen
-3. `config.example.php` kopieren, in `config.php` umbenennen und Zugangsdaten eintragen
-4. `http://localhost:8888` öffnen
+3. In phpMyAdmin (`http://localhost:8888/phpMyAdmin5/`) eine leere Datenbank `efanahiw_portfolio` mit Kollation `utf8mb4_unicode_ci` anlegen und `datenbank/portfolio.sql` importieren
+4. `config.example.php` kopieren, in `config.php` umbenennen und Zugangsdaten eintragen
+5. `http://localhost:8888` öffnen
 
 ## Umsetzungsprozess
 
@@ -70,6 +73,27 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
   - Danach **folgt der Kreis der Maus** über den ganzen Hero. JavaScript rechnet aus, wie weit die Maus von der Mitte des Kreises an seinem Ausgangsplatz entfernt ist (`offsetLeft`/`offsetTop`), und verschiebt ihn um genau diesen Abstand. Die Werte gehen als CSS-Variablen (`--mx`, `--my`) an die CSS, wo ein `transition` den Kreis weich hinterhergleiten lässt. Auf dem Handy (keine Maus) und bei „Bewegung reduzieren“ bleibt der Kreis still.
   - Ein **Laufband** zwischen Hero und Projekten zeigt meine Formate (Video, TV, Radio …) und trennt den hellen Hero vom dunklen Projektteil. Der Text steht zweimal hintereinander. Die Animation verschiebt ihn um genau die Hälfte, dann beginnt sie unbemerkt von vorn, so wirkt das Band endlos.
 
+### 20.10.2026 – Datenbank
+- **Tabellen geplant und angelegt** (`datenbank/portfolio.sql`):
+  - `projekte`: alles, was eine Projektkarte und die Detailseite brauchen (Titel, Kategorie, Rolle, Rahmen, Beschreibung, Bild, optionaler Link). Dazu `reihenfolge`, um die Projekte im CMS sortieren zu können, und `sichtbar`, um ein Projekt zu verstecken, ohne es zu löschen.
+  - `skills`: die Liste bei „Über mich“.
+  - `einstellungen`: einzelne Werte nach dem Muster „Name → Wert“, z. B. der Status „Available for projects“. Neue Einstellungen brauchen so keine neue Spalte.
+  - `benutzer`: Login fürs CMS. Gespeichert wird nur ein Hash des Passworts, nie das Passwort selbst.
+- **Entscheid Kategorie:** Die Kategorie ist vorerst ein einfaches Textfeld statt einer eigenen Tabelle. Bei sechs Projekten und wenigen Kategorien reicht das und hält die Abfragen einfach.
+- **Zeichensatz `utf8mb4`:** damit Umlaute wie in „Chäller“ und Sonderzeichen wie „·“ korrekt gespeichert werden.
+- **Startinhalte:** Die sechs Projekte, drei Skills und der Status sind direkt in der SQL-Datei eingetragen. Die Projektbeschreibungen sind erste Entwürfe aus meinen Stichworten und werden später im CMS überarbeitet.
+- Die Datei enthält keine Zugangsdaten und darf deshalb auf GitHub.
+
+### 20.10.2026 – PHP-Verbindung und erste Schnittstelle
+- **`config.php`** lokal aus der Vorlage erstellt (MAMP: root/root). Sie ist per `.gitignore` vom Repository ausgeschlossen und gibt im Browser nichts aus, weil sie nur ein Array zurückgibt.
+- **`includes/db.php`** enthält die Funktion `verbindeDatenbank()`. Sie liest die Zugangsdaten aus `config.php` und baut mit **PDO** (PHPs eingebaute Datenbank-Schnittstelle) die Verbindung auf. Weil alle PHP-Dateien diese eine Funktion nutzen, steht der Verbindungscode nur an einer Stelle.
+- **`api/projekte.php`** ist die erste eigene Schnittstelle. Sie liefert die Projekte als JSON:
+  - ohne Parameter alle sichtbaren Projekte, sortiert nach `reihenfolge` (für das Karussell)
+  - mit `?id=3` ein einzelnes Projekt inkl. Beschreibung (für die Detailseite)
+- **Sicherheit:** Die `id` aus der Adresse wird geprüft (nur ganze Zahlen) und über ein **Prepared Statement** an die Datenbank übergeben. So kann niemand über die Adresse eigenen SQL-Code einschleusen. Datenbankfehler werden nicht im Detail angezeigt, weil sie Informationen über den Server verraten könnten.
+- **HTTP-Statuscodes:** Die Schnittstelle antwortet mit 200 (OK), 400 (ungültige ID), 404 (Projekt nicht gefunden) oder 500 (Datenbankfehler). So kann das Frontend später unterscheiden, was schiefging.
+- **Getestet** im Browser unter `localhost:8888/api/projekte.php` und mit `?id=5`, `?id=99` und `?id=abc`.
+
 ## Learnings und Schwierigkeiten
 
 - **PHP braucht einen Server:** HTML, CSS und JavaScript laufen direkt im Browser, PHP dagegen nur auf einem Server. Deshalb braucht es lokal MAMP.
@@ -80,6 +104,7 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Bilder fürs Web:** Bilder direkt aus der Kamera oder aus InDesign sind oft viel zu gross. Für eine Webseite reichen etwa 1600 px Breite, sonst lädt die Seite unnötig lange. PDFs können nicht als Bild eingebunden werden.
 - **Flex-Elemente wachsen mit dem Inhalt:** Ein Element in einem Flexbox ist standardmässig mindestens so breit wie sein längstes Wort. `min-width: 0` hebt das auf.
 - **Browser-Cache:** Nach einer Änderung an JavaScript oder CSS zeigt der Browser manchmal noch die alte Version an, weil er die Datei zwischengespeichert hat. Abhilfe schafft ein harter Reload mit cmd + shift + R.
+- **SQL-Injection:** Werte, die von aussen kommen (z. B. aus der Adresse), dürfen nie direkt in einen SQL-Befehl geklebt werden. Prepared Statements mit Platzhaltern (`?`) trennen Befehl und Daten sauber.
 - **Elemente mittig ausrichten:** `space-between` zentriert das mittlere Element nur, wenn die äusseren gleich breit sind. Ein Grid mit `1fr auto 1fr` zentriert zuverlässig.
 
 ## Ressourcen und Hilfsmittel
