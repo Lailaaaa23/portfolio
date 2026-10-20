@@ -190,7 +190,10 @@ button {
 /* ---------- 5. HERO ---------- */
 .hero {
   position: relative;
-  min-height: 100vh;
+  /* Die Sektion hat dasselbe Seitenverhältnis wie das Foto (3:2).
+     So wird das Bild nicht unnötig vergrössert oder beschnitten. */
+  aspect-ratio: 3 / 2;
+  max-height: 120vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -201,14 +204,25 @@ button {
 
 /* Das Foto liegt in einer eigenen Ebene hinter dem Text,
    damit nur das Bild schwarz-weiss wird, nicht die Schrift.
-   Lege dein Foto als images/hero.jpg ab.
+   Das Foto liegt unter images/hero.JPG.
    Solange es fehlt, bleibt der Hintergrund einfach dunkel. */
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("../images/hero.jpg") center top / cover no-repeat;
+  /* Achtung: Auf dem Server zählt Gross-/Kleinschreibung.
+     Der Dateiname muss exakt so geschrieben sein wie hier. */
+  background: url("../images/hero.JPG") center 30% / cover no-repeat;
   filter: grayscale(1);
+  z-index: 0;
+}
+
+/* Leichter dunkler Verlauf unten, damit der Text gut lesbar bleibt */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 55%, rgba(18, 18, 18, 0.75));
   z-index: 0;
 }
 
@@ -609,7 +623,11 @@ button {
     font-size: 12px;
   }
 
+  /* Auf dem Handy ist der Bildschirm hochformatig:
+     hier lieber höher machen und auf das Gesicht ausrichten. */
   .hero {
+    aspect-ratio: auto;
+    max-height: none;
     min-height: 80vh;
   }
 
