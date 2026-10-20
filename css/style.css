@@ -118,10 +118,12 @@ button {
   background: var(--color-light);
 }
 
+/* Drei Spalten: links und rechts gleich breit (1fr), die Mitte so breit wie nötig (auto).
+   So steht die Navigation genau in der Mitte, egal wie breit Logo und Status sind. */
 .header-bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 24px;
   padding: 40px 0;
   border-bottom: 1.5px solid var(--color-line);
@@ -160,6 +162,7 @@ button {
   display: flex;
   align-items: center;
   gap: 12px;
+  justify-self: end;   /* in der rechten Spalte ganz nach rechts schieben */
 }
 
 /* Kleiner, pulsierender Punkt vor "Available for projects" */
@@ -571,7 +574,11 @@ button {
     font-size: 16px;
   }
 
+  /* Auf dem Handy zurück zu Flexbox: Logo links, Hamburger rechts,
+     das aufgeklappte Menü darunter */
   .header-bar {
+    display: flex;
+    justify-content: space-between;
     padding: 24px 0;
     flex-wrap: wrap;
   }

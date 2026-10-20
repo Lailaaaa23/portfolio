@@ -55,6 +55,8 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Interaktionen (JavaScript):** Menü auf- und zuklappen; Projektkarten per Pfeil-Buttons durchblättern.
 - **Hero-Bild:** Die Sektion war zunächst immer so hoch wie das Browserfenster, wodurch das Foto stark vergrössert und beschnitten wurde. Gelöst mit `aspect-ratio: 3 / 2`, also dem Seitenverhältnis des Fotos. Auf dem Handy wird die Sektion höher und das Bild auf das Gesicht ausgerichtet. Ein dunkler Verlauf am unteren Rand sorgt für lesbaren Text.
 - **Kontaktlinks:** Der LinkedIn-Link funktionierte nicht, weil `https://` fehlte. Ohne Protokoll interpretiert der Browser die Adresse als Datei im eigenen Projekt.
+- **Projektordner verschoben:** Der Ordner lag auf dem iCloud-synchronisierten Schreibtisch. Bei vollem Speicher hat iCloud die Dateien ausgelagert, sodass weder VS Code noch Git sie lesen konnten. Das Projekt wurde deshalb frisch von GitHub nach `~/Developer/portfolio` geklont, einen Ordner ohne iCloud-Sync. Das MAMP-Stammverzeichnis zeigt jetzt dorthin.
+- **Header:** Logo von „MP“ auf meine Initialen „LK“ geändert. Die Navigation stand nicht genau in der Mitte, weil `justify-content: space-between` den Platz nur *zwischen* die Elemente verteilt und Logo und Status unterschiedlich breit sind. Gelöst mit einem CSS-Grid mit drei Spalten (`1fr auto 1fr`): Die äusseren Spalten sind immer gleich breit, die Navigation steht dadurch exakt mittig. Auf dem Handy bleibt der Header bei Flexbox (Logo links, Hamburger rechts).
 
 ## Learnings und Schwierigkeiten
 
@@ -62,6 +64,8 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Datenbank-Host:** Der Host `efanahiw.mysql.db.internal` ist nur vom Hostpoint-Server aus erreichbar. Lokal und online gelten deshalb unterschiedliche Zugangsdaten. Genau dafür ist die `config.php` da.
 - **Gross-/Kleinschreibung:** macOS unterscheidet bei Dateinamen nicht zwischen `hero.jpg` und `hero.JPG`, der Linux-Server bei Hostpoint schon. Dateinamen im Code müssen deshalb exakt stimmen.
 - **Externe Links** brauchen immer `https://` am Anfang.
+- **Git und iCloud vertragen sich nicht:** iCloud kann Dateien jederzeit auslagern oder gleichzeitig synchronisieren, während Git sie bearbeitet. Code-Projekte gehören deshalb in einen Ordner ohne Cloud-Sync. Als Backup dient GitHub.
+- **Elemente mittig ausrichten:** `space-between` zentriert das mittlere Element nur, wenn die äusseren gleich breit sind. Ein Grid mit `1fr auto 1fr` zentriert zuverlässig.
 
 ## Ressourcen und Hilfsmittel
 
