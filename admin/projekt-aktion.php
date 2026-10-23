@@ -13,6 +13,7 @@
  */
 
 require __DIR__ . '/../includes/admin.php';
+require __DIR__ . '/../includes/bild-upload.php';
 loginErforderlich();
 
 // Aktionen, die etwas verändern, nur per Formular (POST) und mit gültigem Token
@@ -27,7 +28,7 @@ $aktion = $_POST['aktion'] ?? '';
 $id     = filter_var($_POST['id'] ?? '', FILTER_VALIDATE_INT);
 
 // Gibt es das Projekt überhaupt?
-$abfrage = $db->prepare('SELECT id, titel, sichtbar, reihenfolge FROM projekte WHERE id = ?');
+$abfrage = $db->prepare('SELECT id, titel, bild, sichtbar, reihenfolge FROM projekte WHERE id = ?');
 $abfrage->execute([$id]);
 $projekt = $abfrage->fetch();
 
@@ -83,9 +84,23 @@ elseif ($aktion === 'hoch' || $aktion === 'runter') {
 
 // ---------- Löschen ----------
 elseif ($aktion === 'loeschen') {
+    // Vor dem Löschen merken, welche weiteren Bilder (BTS) zum Projekt gehören
+    $bilderAbfrage = $db->prepare('SELECT pfad FROM projekt_bilder WHERE projekt_id = ?');
+    $bilderAbfrage->execute([$id]);
+    $btsBilder = $bilderAbfrage->fetchAll(PDO::FETCH_COLUMN);
+
     // Dank ON DELETE CASCADE (siehe datenbank/update_01) werden die
     // Einträge der weiteren Bilder in projekt_bilder automatisch mitgelöscht.
+    // Die Bild-DATEIEN kennt die Datenbank aber nicht, die löschen wir selbst.
     $db->prepare('DELETE FROM projekte WHERE id = ?')->execute([$id]);
+
+    // Hochgeladenes Vorschaubild und BTS-Bilder als Dateien löschen
+    // (Bilder in images/ bleiben stehen, siehe bild-upload.php)
+    loescheHochgeladenesBild($projekt['bild']);
+    foreach ($btsBilder as $pfad) {
+        loescheHochgeladenesBild($pfad);
+    }
+
     meldungSetzen("„{$projekt['titel']}“ wurde gelöscht.");
 }
 

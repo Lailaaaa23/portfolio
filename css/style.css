@@ -515,6 +515,9 @@ button {
 }
 
 .card h3 {
+  min-width: 0;              /* darf schmaler werden als das längste Wort */
+  hyphens: auto;             /* lange Wörter bei Bedarf mit Bindestrich trennen */
+  overflow-wrap: break-word; /* Notlösung, falls keine Trennung möglich ist */
   font-family: var(--font-display);
   font-weight: 900;
   font-stretch: 125%;
@@ -722,6 +725,12 @@ button {
   margin-bottom: 24px;
 }
 
+/* Lange Titel umbrechen statt aus dem Bildschirm ragen (siehe auch .card h3) */
+.project-head .headline {
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
 /* Rolle und Rahmen nebeneinander, mit Linie darüber */
 .project-facts {
   display: grid;
@@ -744,23 +753,27 @@ button {
   font-size: 20px;
 }
 
-/* Grosses Bild oder Video über die ganze Breite */
+/* Grosses Bild oder Video */
 .project-media {
   margin: 0 var(--gutter);
-  background: var(--color-dark);
 }
 
+/* Bild in seinem echten Format (hoch oder quer), nichts wird abgeschnitten:
+   - höchstens so breit wie die Seite (max-width: 100%)
+   - höchstens 85 % der Bildschirmhöhe, damit ein Hochformat nicht riesig wird
+   - width und height auf auto: der Browser rechnet die andere Seite passend aus */
 .project-media img {
   display: block;
-  width: 100%;
-  aspect-ratio: 3 / 2;
+  width: auto;
+  height: auto;
+  max-width: 100%;
   max-height: 85vh;
-  object-fit: cover;
 }
 
-/* Video-Player im Format 16:9 */
+/* Video-Player im Format 16:9, dunkler Hintergrund während er lädt */
 .project-media.is-video {
   aspect-ratio: 16 / 9;
+  background: var(--color-dark);
 }
 
 .project-media iframe {
@@ -811,17 +824,48 @@ button {
   border-top: 1.5px solid var(--color-line);
 }
 
+/* Galerie wie ein Kontaktabzug: Alle Bilder einer Reihe sind gleich hoch,
+   Querformate werden breit, Hochformate schmal, und zusammen füllen sie
+   die Reihe genau aus. So wirken Hoch- und Querformate nicht durcheinander.
+
+   So funktioniert es:
+   - flex-wrap: Die Bilder stehen nebeneinander und brechen in neue Reihen um.
+   - flex-basis: Jedes Bild startet mit der Breite, die es bei --zeile Höhe hätte
+     (Seitenverhältnis × Höhe). --verhaeltnis setzt projekt.js, sobald das Bild geladen ist.
+   - flex-grow: Bleibt in einer Reihe Platz übrig, wird er im Verhältnis der
+     Seitenverhältnisse verteilt. Alle Bilder wachsen dadurch gleich stark in der Höhe. */
 .gallery-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  --zeile: 260px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
-.gallery-grid img {
+/* Unsichtbarer Platzhalter am Ende: verhindert, dass ein einzelnes Bild
+   in der letzten Reihe riesig auf die ganze Breite gezogen wird */
+.gallery-grid::after {
+  content: "";
+  flex-grow: 999999;
+}
+
+.gallery-grid figure {
+  --verhaeltnis: 1.5;   /* Annahme, bis das Bild geladen ist */
+  flex-grow: calc(var(--verhaeltnis) * 100);
+  flex-basis: calc(var(--verhaeltnis) * var(--zeile));
+}
+
+.gallery-grid img,
+.gallery-grid video {
   display: block;
   width: 100%;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
+  height: auto;
+  aspect-ratio: var(--verhaeltnis);
+  object-fit: cover;   /* schneidet nichts ab, weil das Verhältnis genau stimmt */
+  background: var(--color-card);
+}
+
+/* Bilder schwarz-weiss, beim Darüberfahren farbig (Videos bleiben farbig) */
+.gallery-grid img {
   filter: grayscale(1);
   transition: filter 0.4s;
 }
@@ -1017,9 +1061,14 @@ button {
     overflow-wrap: break-word;
   }
 
-  .project-facts,
-  .gallery-grid {
+  .project-facts {
     grid-template-columns: 1fr;
+  }
+
+  /* Auf dem Handy niedrigere Reihen, damit zwei Bilder nebeneinander passen */
+  .gallery-grid {
+    --zeile: 150px;
+    gap: 8px;
   }
 
   .project-text {

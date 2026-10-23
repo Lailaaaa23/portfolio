@@ -4,6 +4,7 @@ config.php
 # Hochgeladene Bilder aus dem CMS (nur den leeren Ordner behalten)
 uploads/*
 !uploads/.gitkeep
+!uploads/.htaccess
 
 # Systemdateien vom Mac
 .DS_Store

@@ -183,7 +183,8 @@ async function ladeProjekte() {
       karte.querySelector(".card-kategorie").textContent = `${nummer} / ${projekt.kategorie}`;
       karte.querySelector(".card-rolle").textContent = projekt.rolle;
       karte.querySelector(".card-client").textContent = projekt.rahmen;
-      karte.querySelector("h3").textContent = projekt.titel;
+      // Titel mit erlaubten Umbruchstellen (Funktion steht in main.js)
+      setzeTitel(karte.querySelector("h3"), projekt.titel);
 
       // Bild einsetzen
       const bild = karte.querySelector("img");

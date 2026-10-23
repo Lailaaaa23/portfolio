@@ -1,0 +1,5 @@
+# Hochgeladene Dateien dürfen nie als Programm ausgeführt werden,
+# nur als Bild ausgeliefert. (Zusätzlicher Schutz: PHP speichert ohnehin nur .jpg)
+<FilesMatch "\.(php|phtml|phar|cgi|pl|py|sh)$">
+  Require all denied
+</FilesMatch>

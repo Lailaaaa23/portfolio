@@ -30,6 +30,7 @@ portfolio/
 ├── includes/db.php      Verbindung zur Datenbank (von api/ und admin/ genutzt)
 ├── includes/admin.php   CMS-Grundlagen: Session, Login-Prüfung, CSRF-Schutz, Meldungen
 ├── includes/admin-kopf.php / admin-fuss.php   gemeinsamer Rahmen aller CMS-Seiten
+├── includes/bild-upload.php   Bilder und Videos prüfen und speichern
 ├── admin/               CMS (Login, Inhalte verwalten)
 ├── .htaccess            sperrt config.php für den Browser
 ├── uploads/             Bilder aus dem CMS (nicht im Repo)
@@ -146,6 +147,48 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Sicherheitslücke beim eigenen Code gefunden:** Der Projekttitel stand zuerst direkt im JavaScript der Lösch-Rückfrage. Ein Titel mit Apostroph (z. B. „O'Brien“) hätte den Code kaputt gemacht oder sogar fremden Code einschleusen können, weil der Browser `&#039;` vor dem Ausführen wieder in `'` zurückverwandelt. Gelöst, indem der Titel über ein `data-titel`-Attribut übergeben und in JavaScript mit `this.dataset.titel` gelesen wird.
 - **Getestet** mit einem vorübergehenden Test-Zugang und Test-Projekt (danach gelöscht): Reihenfolge hoch/runter, erstes Projekt kann nicht weiter nach oben, Verstecken (API liefert dann ein Projekt weniger), Zeigen, Löschen, Aktion ohne Token (400), Aktion ohne Login (Umleitung zum Login), Titel mit Sonderzeichen wird sicher angezeigt.
 
+### 23.10.2026 – CMS: Projekte bearbeiten und neu anlegen
+- **`admin/projekt-bearbeiten.php`** ist ein einziges Formular für beides: ohne `?id=` legt es ein neues Projekt an, mit `?id=3` bearbeitet es Projekt 3. Felder: Titel, Kategorie, Rolle, Rahmen, Beschreibung, Vorschaubild, Video-Link, externer Link, Sichtbarkeit.
+- **Prüfung der Eingaben auf dem Server:** Pflichtfelder, maximale Längen (passend zu den Spalten der Datenbank), Links müssen mit `https://` beginnen, Video-Links nur von YouTube oder Vimeo. Fehler erscheinen direkt beim betroffenen Feld, und alles bereits Eingetippte bleibt stehen.
+- **Kategorie mit Vorschlägen:** Ein `<datalist>` schlägt beim Tippen die bisher verwendeten Kategorien vor, damit nicht „Video & Reportage“ und „Video und Reportage“ entstehen.
+- **Bild-Upload (`includes/bild-upload.php`):**
+  - Der Dateityp wird mit `finfo` am Inhalt der Datei erkannt, nicht am Dateinamen. Eine umbenannte Textdatei „bild.jpg“ wird abgelehnt.
+  - Mit der PHP-Bibliothek GD wird das Bild auf höchstens 1600 px Breite verkleinert und als JPG (Qualität 82) gespeichert, wie vorher von Hand mit `sips`. Getestet: Ein PNG mit 3200 px wurde zu einem JPG mit 1600 px und 140 KB.
+  - Der Dateiname wird neu und zufällig vergeben (Datum + Zufallszeichen). So überschreiben sich keine Bilder, und über den Dateinamen lässt sich nichts einschmuggeln.
+  - Wird ein Bild ersetzt oder ein Projekt gelöscht, wird die alte Datei in `uploads/` mitgelöscht. Bilder in `images/` gehören zum Code und bleiben immer stehen.
+  - `uploads/.htaccess` verhindert, dass im Upload-Ordner jemals ein Skript ausgeführt wird.
+- **Neue Projekte** kommen ans Ende des Karussells (`MAX(reihenfolge) + 1`).
+- **Getestet:** leeres Formular, ungültige Links, gefälschtes Bild, gültiges neues Projekt mit grossem PNG, Bearbeiten ohne neues Bild, Bild ersetzen (alte Datei gelöscht), Projekt löschen (Bild-Datei gelöscht), Aufruf ohne Login, unbekannte ID.
+
+### 23.10.2026 – Lange Titel umbrechen
+- **Problem:** Der neue Titel „Medienmacher:innen“ ragte aus der Projektkarte. Für den Browser ist ein Wort mit Gender-Doppelpunkt ein einziges Wort ohne Leerzeichen, und das bricht er nie von sich aus um. Im CMS lässt sich in einem einzeiligen Feld auch kein Zeilenumbruch eingeben.
+- **Lösung ohne Zusatzaufwand im CMS:** Die neue Funktion `setzeTitel()` in `js/main.js` setzt den Titel ein und fügt nach jedem Doppelpunkt ein `<wbr>` ein. Das ist eine unsichtbare, erlaubte Umbruchstelle: Passt der Titel nicht in die Zeile, wird daraus „Medienmacher:“ / „innen“. Startseite und Detailseite nutzen dieselbe Funktion. Der Text wird dabei weiterhin als reiner Text eingefügt, nie als HTML.
+- **Sicherheitsnetz für andere lange Wörter** (z. B. „Selbstständig“): `hyphens: auto` trennt bei Bedarf mit Bindestrich, `overflow-wrap: break-word` verhindert im Notfall, dass etwas aus dem Bildschirm ragt. Bisher galt das nur auf dem Handy, jetzt auch am Desktop.
+- **Getestet** mit allen aktuellen Titeln, am Desktop und auf dem Handy, auf der Startseite und auf der Detailseite.
+
+### 23.10.2026 – CMS: Weitere Bilder (Behind the scenes)
+- **Abschnitt „Weitere Bilder“** auf der Bearbeiten-Seite jedes Projekts: mehrere Bilder auf einmal hochladen (`<input type="file" multiple>`), Bildunterschrift ändern, Reihenfolge mit ← / → ändern, einzelne Bilder löschen. Bei einem neuen Projekt erscheint der Hinweis, zuerst das Projekt zu speichern, weil die Bilder über die Projekt-ID verknüpft werden.
+- **`admin/bilder-aktion.php`** führt alle Bild-Aktionen aus, nach demselben Muster wie `projekt-aktion.php` (POST, CSRF-Token, Weiterleitung mit Meldung). Die Bilder werden mit derselben Funktion wie das Vorschaubild geprüft und verkleinert (`includes/bild-upload.php`), Ordner `uploads/bts/`.
+- **Mehrere Dateien auf einmal:** PHP liefert sie in `$_FILES` nach Eigenschaften sortiert (alle Namen, alle Grössen …). Sie werden zuerst wieder pro Bild zusammengesetzt. Jedes Bild wird einzeln gespeichert: Ist eines ungültig, werden die anderen trotzdem übernommen, und die Meldung nennt das Problem.
+- **Bildunterschrift = Alt-Text:** Sie erscheint auf der Detailseite unter dem Bild und wird gleichzeitig Screenreadern vorgelesen. Bilder ohne Unterschrift sind im CMS lila gestrichelt umrandet, als Erinnerung.
+- **Schutz:** Jede Aktion prüft, dass das Bild wirklich zum angegebenen Projekt gehört. Über eine veränderte Nummer kann man also kein Bild eines anderen Projekts bearbeiten. Ist ein Upload grösser als der Server erlaubt, verwirft PHP alle Formulardaten. Dieser Fall wird erkannt und mit einer verständlichen Meldung beantwortet.
+- **Aufräumen beim Löschen:** Wird ein Projekt gelöscht, entfernt die Datenbank die BTS-Einträge automatisch (`ON DELETE CASCADE`). Die Bild-Dateien kennt die Datenbank aber nicht, darum löscht `projekt-aktion.php` sie zusätzlich selbst.
+- **Getestet:** drei Dateien auf einmal (eine davon gefälscht), Verkleinerung auf 1600 px, Bildunterschrift, Reihenfolge, Ausgabe über die Schnittstelle, Löschversuch über ein fremdes Projekt (abgewiesen), Upload ohne Datei, Bild löschen, Projekt löschen inklusive aller Bild-Dateien, Aufruf ohne Login.
+
+### 23.10.2026 – Hoch- und Querformate, gedrehte Handyfotos
+- **Problem 1, beschnittene Bilder:** Auf der Detailseite wurden Vorschaubild und BTS-Bilder in ein festes Querformat 3:2 gezwängt (`aspect-ratio` + `object-fit: cover`). Hochformate wie die Nulltoleranz-Plakate wurden dadurch stark beschnitten.
+- **Lösung:** Auf der Detailseite zeigen alle Bilder ihr echtes Format: `width: auto; height: auto;` mit `max-width: 100%` und `max-height: 85vh`. So wird ein Hochformat nie höher als der Bildschirm und ein Querformat nie breiter als die Seite. In der Galerie sorgt `align-items: start` dafür, dass ein Querformat neben einem Hochformat nicht in die Länge gezogen wird. Die Karten im Karussell bleiben bewusst einheitlich 3:2, damit das Karussell ruhig wirkt. Im CMS zeigen die BTS-Kacheln das ganze Bild (`object-fit: contain`).
+- **Problem 2, gedrehtes Handyfoto:** Handys speichern Hochformat-Fotos oft technisch quer und vermerken nur in der Datei, wie sie gedreht werden müssen (**EXIF-Orientierung**, Werte 1–8). Browser beachten diesen Vermerk, die Bildbibliothek GD beim Verkleinern nicht, und im gespeicherten JPG fehlt er danach.
+- **Lösung:** Die neue Funktion `richtigDrehen()` in `includes/bild-upload.php` liest den Vermerk mit `exif_read_data` und dreht bzw. spiegelt das Bild vor dem Speichern. **Getestet** mit acht Testbildern, je eines pro EXIF-Wert: Das Ergebnis stimmt in allen acht Fällen mit der Anzeige im Browser überein. Das bereits falsch gespeicherte Podcast-Bild wurde einmalig von Hand gedreht.
+- **Verkleinern nach der längeren Seite:** Bisher wurde nur die Breite auf 1600 px begrenzt, Hochformate blieben bis zu 2304 px hoch. Neu wird die längere Seite auf 1600 px begrenzt.
+
+### 23.10.2026 – Videos in der Galerie, ruhigere Anordnung
+- **Entscheid Berlin-Film:** Kein MP4-Upload für das Hauptvideo. Die fertigen Filme sind als YouTube-Links eingebettet, das hält die Dateien auf dem Server klein.
+- **Videos bei den BTS:** Im CMS lassen sich neben Bildern auch MP4-Videos hochladen, im selben Feld und auch gemischt. Die neue Funktion `speichereVideo()` prüft den Inhalt (`video/mp4`) und die Grösse (höchstens 40 MB) und speichert das Video unter einem neuen, zufälligen Namen. Videos werden nicht umgerechnet, darum vorher als H.264-MP4 exportieren. Ob ein Eintrag ein Video ist, erkennen CMS und Detailseite an der Endung `.mp4`, eine neue Datenbank-Spalte braucht es dafür nicht.
+- **Detailseite:** Videos erscheinen in der Galerie mit Play-Leiste (`<video controls>`). `preload="metadata"` lädt zuerst nur Grösse und Länge, das ganze Video erst beim Abspielen. Anstelle von `alt` bekommen Videos ein `aria-label` aus der Bildunterschrift.
+- **Galerie kleiner und ruhiger:** Hoch- und Querformate in zwei grossen Spalten wirkten unruhig (z. B. beim Berlin-Film). Neu ist die Galerie wie ein Kontaktabzug aufgebaut: Alle Bilder einer Reihe sind gleich hoch (260 px, auf dem Handy 150 px), Querformate werden breit und Hochformate schmal. Umsetzung mit Flexbox: Jedes Bild bekommt als Startbreite „Seitenverhältnis × Reihenhöhe“, übrig bleibender Platz wird im Verhältnis der Seitenverhältnisse verteilt (`flex-grow`). Das Seitenverhältnis setzt `projekt.js` als CSS-Variable `--verhaeltnis`, sobald ein Bild oder Video geladen ist. Ein unsichtbarer Platzhalter am Ende verhindert, dass ein einzelnes Bild in der letzten Reihe riesig wird.
+- **Getestet:** Bilder und Video gemischt hochladen, gefälschte und zu grosse MP4 (verständliche Meldung), Video im Browser abspielbar und vorspulbar, Galerie mit 3, 5 und gemischten Einträgen am Desktop und auf dem Handy.
+
 ## Learnings und Schwierigkeiten
 
 - **PHP braucht einen Server:** HTML, CSS und JavaScript laufen direkt im Browser, PHP dagegen nur auf einem Server. Deshalb braucht es lokal MAMP.
@@ -161,6 +204,9 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Passwörter nie im Klartext:** Weder im Code, noch in der Datenbank, noch im Chat mit der KI. Gespeichert wird nur ein Hash, aus dem sich das Passwort nicht zurückrechnen lässt.
 - **inline vs. inline-block:** Links (`<a>`) sind inline-Elemente. Gibt man ihnen einen Innenabstand oben und unten, werden sie grösser gezeichnet, schieben aber nichts weg. Als Button gestaltete Links brauchen deshalb `display: inline-block`.
 - **Daten in JavaScript-Attributen:** `htmlspecialchars` schützt HTML, aber nicht JavaScript in Attributen wie `onsubmit`, weil der Browser die Zeichen vorher zurückverwandelt. Daten deshalb über `data-*`-Attribute übergeben.
+- **Einem Upload nie trauen:** Dateiname und Endung kann jeder frei wählen. Ob eine Datei wirklich ein Bild ist, zeigt erst ein Blick in ihren Inhalt (`finfo`). Hochgeladene Dateien bekommen ausserdem immer einen eigenen, neuen Namen.
+- **EXIF-Orientierung:** Ein Foto kann im Fotoprogramm richtig aussehen und trotzdem „falsch herum“ gespeichert sein. Wer Bilder auf dem Server bearbeitet, muss den Dreh-Vermerk selbst auswerten.
+- **Datenbank und Dateien getrennt denken:** Die Datenbank speichert nur den Pfad zu einem Bild. Löscht sie einen Eintrag (auch automatisch per CASCADE), bleibt die Datei auf dem Server liegen, wenn man sie nicht selbst löscht.
 - **SQL-Injection:** Werte, die von aussen kommen (z. B. aus der Adresse), dürfen nie direkt in einen SQL-Befehl geklebt werden. Prepared Statements mit Platzhaltern (`?`) trennen Befehl und Daten sauber.
 - **Elemente mittig ausrichten:** `space-between` zentriert das mittlere Element nur, wenn die äusseren gleich breit sind. Ein Grid mit `1fr auto 1fr` zentriert zuverlässig.
 

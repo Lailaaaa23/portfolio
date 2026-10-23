@@ -1,7 +1,8 @@
 /* =========================================================
    PORTFOLIO – JavaScript nur für die DETAILSEITE (projekt.html)
    1. Video-Link in eine Einbettungs-Adresse umwandeln
-   2. Projekt aus der Datenbank laden und anzeigen
+   2. Seitenverhältnis für die Galerie
+   3. Projekt aus der Datenbank laden und anzeigen
    ========================================================= */
 
 
@@ -36,7 +37,20 @@ function videoEinbettung(link) {
 }
 
 
-/* ---------- 2. PROJEKT LADEN UND ANZEIGEN ---------- */
+/* ---------- 2. SEITENVERHÄLTNIS FÜR DIE GALERIE ----------
+   In der Galerie haben alle Bilder einer Reihe dieselbe Höhe
+   (siehe .gallery-grid in style.css). Dafür muss die CSS wissen, wie
+   breit jedes Bild im Verhältnis zu seiner Höhe ist: 1.5 bei einem
+   Querformat 3:2, 0.5625 bei einem Hochformat 9:16 usw.
+   Diese Zahl erfährt man erst, wenn das Bild geladen ist. */
+function setzeVerhaeltnis(figur, breite, hoehe) {
+  if (breite > 0 && hoehe > 0) {
+    figur.style.setProperty("--verhaeltnis", breite / hoehe);
+  }
+}
+
+
+/* ---------- 3. PROJEKT LADEN UND ANZEIGEN ---------- */
 async function ladeProjekt() {
   const titel = document.querySelector("#projekt-titel");
 
@@ -59,7 +73,7 @@ async function ladeProjekt() {
 
     // ----- Texte einsetzen (immer textContent, siehe startseite.js) -----
     document.title = `${projekt.titel} – Laila Keller`;
-    titel.textContent = projekt.titel;
+    setzeTitel(titel, projekt.titel);   // mit Umbruchstellen, siehe main.js
     document.querySelector("#projekt-kategorie").textContent = projekt.kategorie;
     document.querySelector("#projekt-rolle").textContent = projekt.rolle;
     document.querySelector("#projekt-rahmen").textContent = projekt.rahmen;
@@ -92,17 +106,40 @@ async function ladeProjekt() {
       link.hidden = false;
     }
 
-    // ----- Weitere Bilder (nur wenn vorhanden) -----
+    // ----- Weitere Bilder und Videos (nur wenn vorhanden) -----
     if (projekt.bilder.length > 0) {
       const raster = document.querySelector("#galerie-raster");
 
       projekt.bilder.forEach((eintrag) => {
         const figur = document.createElement("figure");
-        const bild = document.createElement("img");
-        bild.src = eintrag.pfad;
-        bild.alt = eintrag.beschreibung;
-        bild.loading = "lazy";
-        figur.append(bild);
+        let medium;
+
+        // Videos erkennt man an der Endung .mp4
+        if (eintrag.pfad.endsWith(".mp4")) {
+          medium = document.createElement("video");
+          medium.src = eintrag.pfad;
+          medium.controls = true;       // Play-Knopf, Lautstärke usw.
+          medium.playsInline = true;    // auf dem iPhone nicht automatisch im Vollbild
+          medium.preload = "metadata";  // erst beim Abspielen das ganze Video laden
+          // Für Screenreader: Videos haben kein alt, dafür ein aria-label
+          medium.setAttribute("aria-label", eintrag.beschreibung || "Video");
+          figur.classList.add("is-video");
+
+          // Sobald das Video weiss, wie gross es ist: Seitenverhältnis merken
+          medium.addEventListener("loadedmetadata", () => {
+            setzeVerhaeltnis(figur, medium.videoWidth, medium.videoHeight);
+          });
+        } else {
+          medium = document.createElement("img");
+          medium.src = eintrag.pfad;
+          medium.alt = eintrag.beschreibung;
+          medium.loading = "lazy";
+
+          medium.addEventListener("load", () => {
+            setzeVerhaeltnis(figur, medium.naturalWidth, medium.naturalHeight);
+          });
+        }
+        figur.append(medium);
 
         // Bildunterschrift nur, wenn eine Beschreibung eingetragen ist
         if (eintrag.beschreibung) {
