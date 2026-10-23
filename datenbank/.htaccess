@@ -1,0 +1,3 @@
+# Diesen Ordner darf niemand direkt im Browser aufrufen.
+# PHP-Dateien können ihn trotzdem einbinden.
+Require all denied

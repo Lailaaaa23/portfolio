@@ -9,7 +9,8 @@
    6. Projekte
    7. About & Skills
    8. Kontakt / Footer
-   9. Mobile Anpassungen
+   9. Projekt-Detailseite (projekt.html)
+   10. Mobile Anpassungen
    ========================================================= */
 
 
@@ -59,6 +60,12 @@ a {
 
 ul {
   list-style: none;
+}
+
+/* Elemente mit dem Attribut "hidden" sicher ausblenden,
+   auch wenn sie in dieser Datei ein eigenes display haben */
+[hidden] {
+  display: none !important;
 }
 
 button {
@@ -691,7 +698,145 @@ button {
 }
 
 
-/* ---------- 9. MOBILE ANPASSUNGEN ----------
+/* ---------- 9. PROJEKT-DETAILSEITE (projekt.html) ---------- */
+.project-head {
+  padding: 64px var(--gutter) 80px;
+}
+
+/* Kleiner Link "← Alle Projekte" */
+.project-back {
+  display: inline-block;
+  margin-bottom: 56px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.project-back:hover {
+  color: var(--color-accent);
+}
+
+.project-head .eyebrow {
+  margin-bottom: 24px;
+}
+
+/* Rolle und Rahmen nebeneinander, mit Linie darüber */
+.project-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1.5px solid var(--color-line);
+}
+
+.project-facts dt {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.project-facts dd {
+  font-size: 20px;
+}
+
+/* Grosses Bild oder Video über die ganze Breite */
+.project-media {
+  margin: 0 var(--gutter);
+  background: var(--color-dark);
+}
+
+.project-media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  max-height: 85vh;
+  object-fit: cover;
+}
+
+/* Video-Player im Format 16:9 */
+.project-media.is-video {
+  aspect-ratio: 16 / 9;
+}
+
+.project-media iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.project-text {
+  max-width: 900px;
+  padding: 96px var(--gutter);
+}
+
+.project-text .lead {
+  font-size: clamp(22px, 2.2vw, 32px);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Runder Rahmen-Button für den externen Link */
+.project-link {
+  display: inline-block;
+  margin-top: 48px;
+  padding: 16px 32px;
+  border: 1.5px solid var(--color-dark);
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.project-link:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* Weitere Bilder: zwei Spalten, wie die Projektkarten schwarz-weiss */
+.project-gallery {
+  padding: 0 var(--gutter) var(--section-space);
+}
+
+.project-gallery .eyebrow {
+  padding-top: 24px;
+  margin-bottom: 40px;
+  border-top: 1.5px solid var(--color-line);
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.gallery-grid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  filter: grayscale(1);
+  transition: filter 0.4s;
+}
+
+.gallery-grid figure:hover img {
+  filter: grayscale(0);
+}
+
+.gallery-grid figcaption {
+  margin-top: 12px;
+  font-size: 15px;
+}
+
+
+/* ---------- 10. MOBILE ANPASSUNGEN ----------
    Alles hier drin gilt nur für Bildschirme bis 900px Breite. */
 @media (max-width: 900px) {
 
@@ -854,5 +999,30 @@ button {
   .contact-bottom {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  /* Detailseite: alles untereinander */
+  .project-head {
+    padding: 40px var(--gutter) 56px;
+  }
+
+  .project-back {
+    margin-bottom: 32px;
+  }
+
+  /* Lange Titel wie "Nulltoleranz" mit Bindestrich umbrechen */
+  .project-head .headline {
+    font-size: 11vw;
+    hyphens: auto;
+    overflow-wrap: break-word;
+  }
+
+  .project-facts,
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-text {
+    padding: 56px var(--gutter);
   }
 }

@@ -1,0 +1,4 @@
+# Zugangsdaten nie im Browser ausliefern
+<Files "config.php">
+  Require all denied
+</Files>

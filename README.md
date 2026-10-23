@@ -19,14 +19,20 @@ _Folgt: Kurzbeschreibung des Projekts (500–1000 Zeichen)._
 ```
 portfolio/
 ├── index.html           Startseite (One-Pager)
-├── css/style.css        Gestaltung
-├── js/main.js           Interaktionen
+├── projekt.html         Detailseite eines Projekts (projekt.html?id=3)
+├── css/style.css        Gestaltung (alle Seiten)
+├── css/admin.css        Zusätzliche Gestaltung fürs CMS
+├── js/main.js           Navigation (alle Seiten)
+├── js/startseite.js     Hero-Animation, Karussell, Projekte laden
+├── js/projekt.js        Detailseite: Projekt laden, Video einbetten
 ├── images/              Bilder der Webseite
 ├── api/                 Schnittstelle: liefert Inhalte als JSON
 ├── includes/db.php      Verbindung zur Datenbank (von api/ und admin/ genutzt)
+├── includes/admin.php   CMS-Grundlagen: Session, Login-Prüfung, CSRF-Schutz
 ├── admin/               CMS (Login, Inhalte verwalten)
+├── .htaccess            sperrt config.php für den Browser
 ├── uploads/             Bilder aus dem CMS (nicht im Repo)
-├── datenbank/           SQL-Datei: Tabellen und Startinhalte
+├── datenbank/           SQL-Dateien: Tabellen, Startinhalte, Updates
 └── config.example.php   Vorlage für die Zugangsdaten
 ```
 
@@ -34,9 +40,10 @@ portfolio/
 
 1. Repository klonen
 2. MAMP installieren und das Stammverzeichnis auf den Projektordner setzen
-3. In phpMyAdmin (`http://localhost:8888/phpMyAdmin5/`) eine leere Datenbank `efanahiw_portfolio` mit Kollation `utf8mb4_unicode_ci` anlegen und `datenbank/portfolio.sql` importieren
+3. In phpMyAdmin (`http://localhost:8888/phpMyAdmin5/`) eine leere Datenbank `efanahiw_portfolio` mit Kollation `utf8mb4_unicode_ci` anlegen und die Dateien aus `datenbank/` der Reihe nach importieren: zuerst `portfolio.sql`, dann `update_01_video_und_bilder.sql`
 4. `config.example.php` kopieren, in `config.php` umbenennen und Zugangsdaten eintragen
 5. `http://localhost:8888` öffnen
+6. Einmalig unter `http://localhost:8888/admin/einrichten.php` den eigenen CMS-Zugang anlegen, danach Login unter `admin/login.php`
 
 ## Umsetzungsprozess
 
@@ -102,6 +109,29 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Fehlerfall:** Antwortet der Server mit einem Fehler oder ist er nicht erreichbar, erscheint ein Hinweis statt einer leeren Fläche (`try` / `catch`).
 - Die Pfeil-Links der Karten zeigen jetzt auf `projekt.html?id=…`. Die Detailseite folgt im nächsten Schritt.
 
+### 20.10.2026 – Detailseite für Projekte
+- **Datenbank erweitert** (`datenbank/update_01_video_und_bilder.sql`):
+  - neues Feld `video` in `projekte` für einen YouTube- oder Vimeo-Link
+  - neue Tabelle `projekt_bilder` für beliebig viele weitere Bilder pro Projekt (z. B. Behind the Scenes). Das ist eine **1:n-Beziehung**: Ein Projekt hat n Bilder. Jedes Bild verweist über `projekt_id` auf sein Projekt. Ein **Fremdschlüssel** stellt sicher, dass es dieses Projekt wirklich gibt, und `ON DELETE CASCADE` löscht die Bilder mit, wenn das Projekt gelöscht wird.
+  - Die Erweiterung ist eine eigene Datei statt einer Änderung an `portfolio.sql`, weil die Datenbank schon Inhalte hat. So lässt sich die bestehende Datenbank (lokal und später online) ergänzen, ohne sie neu aufzusetzen.
+- **Schnittstelle:** `api/projekte.php?id=…` liefert jetzt zusätzlich `video` und eine Liste `bilder`.
+- **`projekt.html`:** grosser Titel, Rolle und Rahmen, dann Video oder Vorschaubild, Beschreibung, optionaler Link (z. B. Spotify) und weitere Bilder. Abschnitte ohne Inhalt werden ausgeblendet (`hidden`). Die Seite liest die Projektnummer aus der Adresse (`URLSearchParams`) und lädt das Projekt per `fetch`.
+- **Video einbetten:** Im CMS wird später der normale YouTube- oder Vimeo-Link eingetragen. `projekt.js` wandelt ihn in die Adresse für den eingebetteten Player um. Für YouTube wird `youtube-nocookie.com` verwendet, für Vimeo `dnt=1`: Beides reduziert das Tracking der Besucherinnen und Besucher.
+- **JavaScript aufgeteilt:** `main.js` enthält nur noch, was alle Seiten brauchen (Navigation). Hero-Animation und Karussell stehen in `startseite.js`, die Detailseite hat `projekt.js`. Sonst würde der Code auf der Detailseite nach Elementen suchen, die es dort nicht gibt, und mit Fehlern abbrechen.
+- **Getestet:** echtes Projekt, Projekt mit (simuliertem) Video, Link und Galerie, unbekannte ID (`?id=99` zeigt „Projekt nicht gefunden“), Handy-Ansicht.
+
+### 20.10.2026 – CMS: Login
+- **Erster Zugang über `admin/einrichten.php`:** Ein Formular, das nur funktioniert, solange es noch keinen Benutzer gibt. Danach sperrt es sich selbst (403). So steht mein Passwort nie im Code oder in einer SQL-Datei, und niemand kann später über diese Seite einen eigenen Zugang anlegen.
+- **Passwörter:** Gespeichert wird nur der Hash von `password_hash()` (Verfahren bcrypt). Beim Login vergleicht `password_verify()` das eingegebene Passwort mit diesem Hash. Mindestlänge 12 Zeichen.
+- **Login mit Session:** Nach erfolgreichem Login merkt sich der Server in der Session die Benutzer-ID. Jede geschützte Seite ruft `loginErforderlich()` auf und schickt alle ohne Login zur Login-Seite. Nach dem Login wird die Session-Nummer erneuert (`session_regenerate_id`), beim Logout wird die Session vollständig gelöscht.
+- **Sicherheit, zusammengefasst in `includes/admin.php`:**
+  - **CSRF-Token:** Jedes Formular im CMS enthält ein geheimes Zufalls-Token. Formulare ohne gültiges Token werden abgelehnt. Das verhindert, dass eine fremde Webseite heimlich Aktionen in meinem CMS auslöst.
+  - **Ausgabe mit `e()`:** Alle Texte aus Datenbank oder Formular werden mit `htmlspecialchars` entschärft, bevor sie im HTML landen (Schutz vor XSS).
+  - **Session-Cookie** nur für den Server lesbar (`httponly`), nicht bei Anfragen von fremden Seiten (`samesite`), online nur über https (`secure`).
+  - Bei falschem Login wird nicht verraten, ob Name oder Passwort falsch war, und die Antwort kommt eine Sekunde verzögert. Das bremst automatisches Durchprobieren.
+- **Ordner gesperrt mit `.htaccess`:** `config.php`, `includes/` und `datenbank/` liefern im Browser „403 Verboten“. PHP-Dateien können sie trotzdem einbinden.
+- **Getestet:** Anlegen ohne Token (abgelehnt), zu kurzes Passwort, Anlegen, Einrichten danach gesperrt, falsches und richtiges Passwort, CMS nach Login erreichbar, Abmelden, CMS danach wieder gesperrt.
+
 ## Learnings und Schwierigkeiten
 
 - **PHP braucht einen Server:** HTML, CSS und JavaScript laufen direkt im Browser, PHP dagegen nur auf einem Server. Deshalb braucht es lokal MAMP.
@@ -113,6 +143,8 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Flex-Elemente wachsen mit dem Inhalt:** Ein Element in einem Flexbox ist standardmässig mindestens so breit wie sein längstes Wort. `min-width: 0` hebt das auf.
 - **Browser-Cache:** Nach einer Änderung an JavaScript oder CSS zeigt der Browser manchmal noch die alte Version an, weil er die Datei zwischengespeichert hat. Abhilfe schafft ein harter Reload mit cmd + shift + R.
 - **fetch braucht einen Server:** Öffnet man `index.html` direkt als Datei (Doppelklick), kann `fetch()` die Schnittstelle nicht erreichen und die Projekte fehlen. Die Seite muss über `localhost:8888` (MAMP) oder online aufgerufen werden.
+- **Datenbank nachträglich ändern:** Ist eine Datenbank schon in Gebrauch, ändert man sie mit `ALTER TABLE` in einer eigenen Update-Datei, statt sie neu aufzusetzen. Sonst gehen die vorhandenen Inhalte verloren.
+- **Passwörter nie im Klartext:** Weder im Code, noch in der Datenbank, noch im Chat mit der KI. Gespeichert wird nur ein Hash, aus dem sich das Passwort nicht zurückrechnen lässt.
 - **SQL-Injection:** Werte, die von aussen kommen (z. B. aus der Adresse), dürfen nie direkt in einen SQL-Befehl geklebt werden. Prepared Statements mit Platzhaltern (`?`) trennen Befehl und Daten sauber.
 - **Elemente mittig ausrichten:** `space-between` zentriert das mittlere Element nur, wenn die äusseren gleich breit sind. Ein Grid mit `1fr auto 1fr` zentriert zuverlässig.
 

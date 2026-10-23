@@ -32,7 +32,7 @@ try {
         // Die Datenbank setzt die id selbst ein, so kann niemand
         // über die Adresse eigenen SQL-Code einschleusen (SQL-Injection).
         $abfrage = $db->prepare(
-            'SELECT id, titel, kategorie, rolle, rahmen, beschreibung, bild, link
+            'SELECT id, titel, kategorie, rolle, rahmen, beschreibung, bild, video, link
              FROM projekte
              WHERE id = ? AND sichtbar = 1'
         );
@@ -44,6 +44,17 @@ try {
             echo json_encode(['fehler' => 'Projekt nicht gefunden'], JSON_UNESCAPED_UNICODE);
             exit;
         }
+
+        // Weitere Bilder dieses Projekts aus der zweiten Tabelle holen
+        // und als Liste unter "bilder" ans Projekt anhängen
+        $bilderAbfrage = $db->prepare(
+            'SELECT pfad, beschreibung
+             FROM projekt_bilder
+             WHERE projekt_id = ?
+             ORDER BY reihenfolge, id'
+        );
+        $bilderAbfrage->execute([$id]);
+        $projekt['bilder'] = $bilderAbfrage->fetchAll();
 
         echo json_encode($projekt, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 

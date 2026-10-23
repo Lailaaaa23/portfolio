@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Der Titel wird von projekt.js durch den Projektnamen ersetzt -->
+  <title>Projekt – Laila Keller</title>
+  <meta name="description" content="Projekt aus dem Portfolio von Laila Keller.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===================== HEADER =====================
+       Gleich wie auf der Startseite, aber die Links führen
+       zurück zu index.html statt nur zu einem Abschnitt -->
+  <header class="site-header">
+    <div class="header-bar">
+      <a href="index.html" class="logo" aria-label="Zur Startseite">LK<span>.</span></a>
+
+      <button class="nav-toggle" aria-label="Menü öffnen" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+
+      <nav class="main-nav">
+        <a href="index.html#projekte">Projekte</a>
+        <a href="index.html#about">Über mich</a>
+        <a href="index.html#kontakt">Kontakt</a>
+      </nav>
+
+      <p class="status"><span class="status-dot"></span>Available for projects</p>
+    </div>
+  </header>
+
+  <main id="top" class="project">
+
+    <!-- ===================== KOPF DES PROJEKTS ===================== -->
+    <section class="project-head">
+      <a href="index.html#projekte" class="project-back">&larr; Alle Projekte</a>
+      <p class="eyebrow" id="projekt-kategorie"></p>
+      <h1 class="headline" id="projekt-titel">Projekt wird geladen …</h1>
+
+      <!-- Rolle und Rahmen nebeneinander -->
+      <dl class="project-facts">
+        <div>
+          <dt>Meine Rolle</dt>
+          <dd id="projekt-rolle"></dd>
+        </div>
+        <div>
+          <dt>Rahmen</dt>
+          <dd id="projekt-rahmen"></dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- ===================== VIDEO ODER BILD =====================
+         projekt.js setzt hier entweder einen Video-Player oder das Vorschaubild ein -->
+    <div class="project-media" id="projekt-medien"></div>
+
+    <!-- ===================== BESCHREIBUNG ===================== -->
+    <section class="project-text">
+      <p class="lead" id="projekt-beschreibung"></p>
+      <!-- Nur sichtbar, wenn das Projekt einen Link hat (z. B. zu Spotify) -->
+      <a href="" class="project-link" id="projekt-link" target="_blank" rel="noopener" hidden>Projekt ansehen ↗</a>
+    </section>
+
+    <!-- ===================== WEITERE BILDER =====================
+         Nur sichtbar, wenn es zu diesem Projekt weitere Bilder gibt -->
+    <section class="project-gallery" id="projekt-galerie" hidden>
+      <p class="eyebrow">Behind the scenes</p>
+      <div class="gallery-grid" id="galerie-raster"></div>
+    </section>
+
+  </main>
+
+  <!-- ===================== KONTAKT / FOOTER ===================== -->
+  <footer class="contact" id="kontakt">
+    <div class="contact-top">
+      <p class="eyebrow">Let's collaborate</p>
+      <p class="eyebrow">Have a story in mind?</p>
+    </div>
+
+    <a href="mailto:laila.keller@silverfish.ch" class="contact-cta">
+      <span class="contact-title">Get in<br>touch</span>
+      <span class="contact-arrow" aria-hidden="true">&rarr;</span>
+    </a>
+
+    <div class="contact-bottom">
+      <p>Based in Switzerland · Working everywhere</p>
+      <div class="contact-links">
+        <a href="mailto:laila.keller@silverfish.ch">Email ↗</a>
+        <a href="https://www.linkedin.com/in/laila-keller-3611502a5" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/projekt.js"></script>
+</body>
+</html>
