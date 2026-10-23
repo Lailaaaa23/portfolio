@@ -59,8 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta name="robots" content="noindex">
   <title>CMS einrichten – Laila Keller</title>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/admin.css">
+  <!-- ?v=… ist das Datum der letzten Änderung der Datei. Ändert sich die CSS,
+       ändert sich die Adresse, und der Browser lädt die neue Version statt
+       einer alten aus seinem Zwischenspeicher (Cache). -->
+  <link rel="stylesheet" href="../css/style.css?v=<?= filemtime(__DIR__ . '/../css/style.css') ?>">
+  <link rel="stylesheet" href="../css/admin.css?v=<?= filemtime(__DIR__ . '/../css/admin.css') ?>">
 </head>
 <body class="admin admin-login">
 

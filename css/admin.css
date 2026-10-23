@@ -6,6 +6,7 @@
    2. Login-Seite
    3. Formulare
    4. Meldungen
+   5. Projekt-Kacheln
    ========================================================= */
 
 
@@ -52,6 +53,8 @@
 }
 
 .admin-main {
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 64px var(--gutter);
 }
 
@@ -135,7 +138,10 @@
   outline-offset: 2px;
 }
 
+/* inline-block: Ein Link ist sonst ein inline-Element. Dort zählt padding
+   oben/unten nicht fürs Layout, der Button würde in den Text darunter ragen. */
 .admin-button {
+  display: inline-block;
   margin-top: 32px;
   padding: 16px 32px;
   background: var(--color-dark);
@@ -173,4 +179,171 @@
 .admin-success {
   border-color: var(--color-accent);
   background: #efebfd;
+}
+
+
+/* ---------- 5. PROJEKT-KACHELN ---------- */
+
+/* Kopf der Seite: links Titel und Hinweis, rechts der Button */
+.admin-title-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.admin-title-row .admin-hint {
+  margin-bottom: 0;
+}
+
+/* Überschrift im CMS: gleicher Stil wie auf der Webseite, aber kleiner */
+.admin-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  text-transform: uppercase;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.admin-title-row .admin-button {
+  margin-top: 0;
+}
+
+/* Raster: so viele Kacheln nebeneinander, wie mit mindestens 260 px Platz haben.
+   auto-fill + minmax passt die Anzahl Spalten automatisch an die Bildschirmbreite an. */
+.admin-tiles {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.admin-tile {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-card);
+}
+
+/* Versteckte Projekte blasser darstellen */
+.admin-tile.is-hidden .admin-tile-image img,
+.admin-tile.is-hidden .admin-tile-text {
+  opacity: 0.45;
+}
+
+.admin-tile-image {
+  position: relative;
+}
+
+.admin-tile-image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+/* Label "Versteckt" oben links auf dem Bild */
+.admin-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  background: var(--color-dark);
+  color: var(--color-light);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.admin-tile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 16px 0;
+}
+
+.admin-tile-nr {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.admin-tile-text strong {
+  font-size: 20px;
+  line-height: 1.3;
+}
+
+.admin-tile-text span:last-child {
+  font-size: 15px;
+}
+
+/* Knöpfe am Ende der Kachel. margin-top: auto schiebt sie nach unten,
+   damit sie in allen Kacheln einer Reihe auf gleicher Höhe stehen. */
+.admin-tile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  padding: 16px;
+}
+
+.admin-tile-row {
+  display: flex;
+  gap: 8px;
+}
+
+/* Schiebt "Löschen" ganz nach rechts */
+.admin-push-right {
+  margin-left: auto;
+}
+
+/* Untere Reihe: beide Knöpfe teilen sich die Breite gleichmässig */
+.admin-tile-row.is-main > * {
+  flex: 1;
+}
+
+.admin-tile-row.is-main .admin-small-button {
+  width: 100%;
+  text-align: center;
+}
+
+/* Kleine Knöpfe in den Kacheln */
+.admin-small-button,
+.admin-icon-button {
+  display: inline-block;
+  padding: 8px 12px;
+  border: 1.5px solid var(--color-dark);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.admin-icon-button {
+  width: 40px;
+  padding: 8px 0;
+  text-align: center;
+}
+
+.admin-small-button:hover,
+.admin-icon-button:hover:not(:disabled) {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.admin-small-button.is-danger:hover {
+  background: #c0392b;
+  border-color: #c0392b;
+  color: #fff;
+}
+
+/* Knopf, der gerade nichts tun kann (z. B. erstes Projekt nach vorne) */
+.admin-icon-button:disabled {
+  opacity: 0.25;
+  cursor: default;
 }

@@ -28,7 +28,8 @@ portfolio/
 ├── images/              Bilder der Webseite
 ├── api/                 Schnittstelle: liefert Inhalte als JSON
 ├── includes/db.php      Verbindung zur Datenbank (von api/ und admin/ genutzt)
-├── includes/admin.php   CMS-Grundlagen: Session, Login-Prüfung, CSRF-Schutz
+├── includes/admin.php   CMS-Grundlagen: Session, Login-Prüfung, CSRF-Schutz, Meldungen
+├── includes/admin-kopf.php / admin-fuss.php   gemeinsamer Rahmen aller CMS-Seiten
 ├── admin/               CMS (Login, Inhalte verwalten)
 ├── .htaccess            sperrt config.php für den Browser
 ├── uploads/             Bilder aus dem CMS (nicht im Repo)
@@ -132,6 +133,19 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Ordner gesperrt mit `.htaccess`:** `config.php`, `includes/` und `datenbank/` liefern im Browser „403 Verboten“. PHP-Dateien können sie trotzdem einbinden.
 - **Getestet:** Anlegen ohne Token (abgelehnt), zu kurzes Passwort, Anlegen, Einrichten danach gesperrt, falsches und richtiges Passwort, CMS nach Login erreichbar, Abmelden, CMS danach wieder gesperrt.
 
+### 23.10.2026 – CMS: Projekt-Übersicht
+- **`admin/index.php`** zeigt nach dem Login alle Projekte, auch die versteckten, in derselben Reihenfolge wie im Karussell. Pro Projekt gibt es die Knöpfe ← / → (Reihenfolge), Löschen, Bearbeiten und Verstecken bzw. Zeigen.
+- **Kacheln statt Liste:** Die erste Version war eine Liste über die ganze Bildschirmbreite, das wirkte zu wuchtig. Jetzt sind die Projekte Kacheln in einem Raster: `grid-template-columns: repeat(auto-fill, minmax(260px, 1fr))` setzt so viele Kacheln nebeneinander, wie mit mindestens 260 px Platz haben. Die Knöpfe stehen dank `margin-top: auto` in allen Kacheln einer Reihe auf gleicher Höhe.
+- **Überlappender Button:** „+ Neues Projekt“ ragte in den Text darunter. Ursache: Ein Link ist ein inline-Element, bei dem `padding` oben und unten nicht fürs Layout zählt. Gelöst mit `display: inline-block`.
+- **`admin/projekt-aktion.php`** führt die Aktionen aus und leitet danach zurück zur Übersicht. Jeder Knopf ist ein kleines Formular (POST) mit CSRF-Token, Projekt-ID und Aktion. Aktionen, die etwas verändern, gehen bewusst nie über einen einfachen Link (GET).
+- **Reihenfolge ändern:** Das Projekt tauscht seinen Platz (`reihenfolge`) mit dem direkten Nachbarn. Beide Änderungen laufen in einer **Transaktion**: Entweder klappen beide oder keine, so können nie zwei Projekte auf demselben Platz landen.
+- **Verstecken statt löschen:** `sichtbar` wird zwischen 1 und 0 umgeschaltet. Die öffentliche Schnittstelle liefert nur sichtbare Projekte, das CMS zeigt alle (versteckte blasser und mit Label).
+- **Löschen** nur nach Rückfrage im Browser (`confirm`). Die zugehörigen Einträge in `projekt_bilder` löscht die Datenbank automatisch mit (`ON DELETE CASCADE`).
+- **Meldungen** wie „„Somedia“ ist jetzt versteckt.“ werden kurz in der Session gespeichert, damit sie nach der Weiterleitung noch angezeigt werden können, und danach gelöscht.
+- **Gemeinsamer Rahmen:** Kopf und Fuss aller CMS-Seiten stehen in `includes/admin-kopf.php` und `includes/admin-fuss.php`, damit sie nicht in jeder Datei wiederholt werden.
+- **Sicherheitslücke beim eigenen Code gefunden:** Der Projekttitel stand zuerst direkt im JavaScript der Lösch-Rückfrage. Ein Titel mit Apostroph (z. B. „O'Brien“) hätte den Code kaputt gemacht oder sogar fremden Code einschleusen können, weil der Browser `&#039;` vor dem Ausführen wieder in `'` zurückverwandelt. Gelöst, indem der Titel über ein `data-titel`-Attribut übergeben und in JavaScript mit `this.dataset.titel` gelesen wird.
+- **Getestet** mit einem vorübergehenden Test-Zugang und Test-Projekt (danach gelöscht): Reihenfolge hoch/runter, erstes Projekt kann nicht weiter nach oben, Verstecken (API liefert dann ein Projekt weniger), Zeigen, Löschen, Aktion ohne Token (400), Aktion ohne Login (Umleitung zum Login), Titel mit Sonderzeichen wird sicher angezeigt.
+
 ## Learnings und Schwierigkeiten
 
 - **PHP braucht einen Server:** HTML, CSS und JavaScript laufen direkt im Browser, PHP dagegen nur auf einem Server. Deshalb braucht es lokal MAMP.
@@ -141,10 +155,12 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Git und iCloud vertragen sich nicht:** iCloud kann Dateien jederzeit auslagern oder gleichzeitig synchronisieren, während Git sie bearbeitet. Code-Projekte gehören deshalb in einen Ordner ohne Cloud-Sync. Als Backup dient GitHub.
 - **Bilder fürs Web:** Bilder direkt aus der Kamera oder aus InDesign sind oft viel zu gross. Für eine Webseite reichen etwa 1600 px Breite, sonst lädt die Seite unnötig lange. PDFs können nicht als Bild eingebunden werden.
 - **Flex-Elemente wachsen mit dem Inhalt:** Ein Element in einem Flexbox ist standardmässig mindestens so breit wie sein längstes Wort. `min-width: 0` hebt das auf.
-- **Browser-Cache:** Nach einer Änderung an JavaScript oder CSS zeigt der Browser manchmal noch die alte Version an, weil er die Datei zwischengespeichert hat. Abhilfe schafft ein harter Reload mit cmd + shift + R.
+- **Browser-Cache:** Nach einer Änderung an JavaScript oder CSS zeigt der Browser manchmal noch die alte Version an, weil er die Datei zwischengespeichert hat. Abhilfe schafft ein harter Reload mit cmd + shift + R. Im CMS ist das dauerhaft gelöst: PHP hängt an die CSS-Adresse das Änderungsdatum der Datei an (`admin.css?v=…`, mit `filemtime`). Ändert sich die Datei, ändert sich die Adresse, und der Browser muss die neue Version laden („Cache Busting“).
 - **fetch braucht einen Server:** Öffnet man `index.html` direkt als Datei (Doppelklick), kann `fetch()` die Schnittstelle nicht erreichen und die Projekte fehlen. Die Seite muss über `localhost:8888` (MAMP) oder online aufgerufen werden.
 - **Datenbank nachträglich ändern:** Ist eine Datenbank schon in Gebrauch, ändert man sie mit `ALTER TABLE` in einer eigenen Update-Datei, statt sie neu aufzusetzen. Sonst gehen die vorhandenen Inhalte verloren.
 - **Passwörter nie im Klartext:** Weder im Code, noch in der Datenbank, noch im Chat mit der KI. Gespeichert wird nur ein Hash, aus dem sich das Passwort nicht zurückrechnen lässt.
+- **inline vs. inline-block:** Links (`<a>`) sind inline-Elemente. Gibt man ihnen einen Innenabstand oben und unten, werden sie grösser gezeichnet, schieben aber nichts weg. Als Button gestaltete Links brauchen deshalb `display: inline-block`.
+- **Daten in JavaScript-Attributen:** `htmlspecialchars` schützt HTML, aber nicht JavaScript in Attributen wie `onsubmit`, weil der Browser die Zeichen vorher zurückverwandelt. Daten deshalb über `data-*`-Attribute übergeben.
 - **SQL-Injection:** Werte, die von aussen kommen (z. B. aus der Adresse), dürfen nie direkt in einen SQL-Befehl geklebt werden. Prepared Statements mit Platzhaltern (`?`) trennen Befehl und Daten sauber.
 - **Elemente mittig ausrichten:** `space-between` zentriert das mittlere Element nur, wenn die äusseren gleich breit sind. Ein Grid mit `1fr auto 1fr` zentriert zuverlässig.
 

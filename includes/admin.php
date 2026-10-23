@@ -10,6 +10,7 @@
  * 2. Login prüfen
  * 3. Schutz vor gefälschten Formularen (CSRF)
  * 4. Text sicher ausgeben
+ * 5. Meldungen nach einer Aktion ("Projekt gespeichert.")
  */
 
 require __DIR__ . '/db.php';
@@ -89,4 +90,25 @@ function pruefeCsrf(): void
 function e(?string $text): string
 {
     return htmlspecialchars($text ?? '', ENT_QUOTES, 'UTF-8');
+}
+
+
+/* ---------- 5. MELDUNGEN NACH EINER AKTION ----------
+   Nach dem Speichern leitet das CMS auf eine andere Seite weiter.
+   Damit die Meldung ("Projekt gespeichert.") dort noch ankommt,
+   wird sie kurz in der Session zwischengespeichert und nach dem
+   Anzeigen sofort wieder gelöscht. */
+
+function meldungSetzen(string $text): void
+{
+    $_SESSION['meldung'] = $text;
+}
+
+// Gibt die Meldung zurück (oder null) und löscht sie,
+// damit sie beim nächsten Neuladen nicht nochmals erscheint
+function meldungHolen(): ?string
+{
+    $text = $_SESSION['meldung'] ?? null;
+    unset($_SESSION['meldung']);
+    return $text;
 }
