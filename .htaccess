@@ -2,3 +2,13 @@
 <Files "config.php">
   Require all denied
 </Files>
+
+# HTML, CSS und JavaScript: Der Browser darf sie zwischenspeichern, muss aber
+# vor jeder Verwendung beim Server nachfragen, ob es eine neuere Version gibt
+# ("no-cache"). Ist nichts neu, antwortet der Server nur kurz mit
+# "304 Not Modified". So sieht man Änderungen immer sofort.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|css|js)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>

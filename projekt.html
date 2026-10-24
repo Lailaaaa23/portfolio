@@ -72,10 +72,32 @@
          Nur sichtbar, wenn es zu diesem Projekt weitere Bilder gibt -->
     <section class="project-gallery" id="projekt-galerie" hidden>
       <p class="eyebrow">Behind the scenes</p>
-      <div class="gallery-grid" id="galerie-raster"></div>
+      <!-- Drei Bereiche, jeder mit eigener Reihenhöhe:
+           Querformate, darunter Hochformate (höher, damit sie nicht kleiner
+           wirken als die Querformate), zuunterst die Videos.
+           Leere Bereiche werden nicht angezeigt. -->
+      <div class="gallery-grid gallery-landscape" id="galerie-quer"></div>
+      <div class="gallery-grid gallery-portrait" id="galerie-hoch"></div>
+      <div class="gallery-grid gallery-videos" id="galerie-videos"></div>
     </section>
 
   </main>
+
+  <!-- ===================== BILD ODER VIDEO VERGRÖSSERT (Lightbox) =====================
+       <dialog> ist ein eingebautes HTML-Element für Fenster über der Seite.
+       Es ist versteckt, bis projekt.js es mit showModal() öffnet.
+       Die Esc-Taste schliesst es automatisch. -->
+  <dialog class="lightbox" id="lightbox" aria-label="Bild oder Video vergrössert">
+    <button class="lightbox-close" id="lightbox-schliessen" aria-label="Schliessen">&times;</button>
+    <button class="lightbox-nav" id="lightbox-zurueck" aria-label="Vorheriges">&larr;</button>
+    <figure class="lightbox-figure">
+      <img id="lightbox-bild" src="" alt="">
+      <!-- Für Videos: gross, mit Play-Leiste (controls) und in Schleife -->
+      <video id="lightbox-video" controls loop playsinline hidden></video>
+      <figcaption id="lightbox-text"></figcaption>
+    </figure>
+    <button class="lightbox-nav" id="lightbox-weiter" aria-label="Nächstes">&rarr;</button>
+  </dialog>
 
   <!-- ===================== KONTAKT / FOOTER ===================== -->
   <footer class="contact" id="kontakt">

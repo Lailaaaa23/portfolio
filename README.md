@@ -32,7 +32,7 @@ portfolio/
 ├── includes/admin-kopf.php / admin-fuss.php   gemeinsamer Rahmen aller CMS-Seiten
 ├── includes/bild-upload.php   Bilder und Videos prüfen und speichern
 ├── admin/               CMS (Login, Inhalte verwalten)
-├── .htaccess            sperrt config.php für den Browser
+├── .htaccess            sperrt config.php, Browser-Cache für HTML/CSS/JS
 ├── uploads/             Bilder aus dem CMS (nicht im Repo)
 ├── datenbank/           SQL-Dateien: Tabellen, Startinhalte, Updates
 └── config.example.php   Vorlage für die Zugangsdaten
@@ -189,6 +189,39 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Galerie kleiner und ruhiger:** Hoch- und Querformate in zwei grossen Spalten wirkten unruhig (z. B. beim Berlin-Film). Neu ist die Galerie wie ein Kontaktabzug aufgebaut: Alle Bilder einer Reihe sind gleich hoch (260 px, auf dem Handy 150 px), Querformate werden breit und Hochformate schmal. Umsetzung mit Flexbox: Jedes Bild bekommt als Startbreite „Seitenverhältnis × Reihenhöhe“, übrig bleibender Platz wird im Verhältnis der Seitenverhältnisse verteilt (`flex-grow`). Das Seitenverhältnis setzt `projekt.js` als CSS-Variable `--verhaeltnis`, sobald ein Bild oder Video geladen ist. Ein unsichtbarer Platzhalter am Ende verhindert, dass ein einzelnes Bild in der letzten Reihe riesig wird.
 - **Getestet:** Bilder und Video gemischt hochladen, gefälschte und zu grosse MP4 (verständliche Meldung), Video im Browser abspielbar und vorspulbar, Galerie mit 3, 5 und gemischten Einträgen am Desktop und auf dem Handy.
 
+### 23.10.2026 – Bilder vergrössern, Cache-Problem dauerhaft gelöst
+- **Problem:** Nach den letzten Änderungen zeigte der Browser weiterhin die alten Versionen von `projekt.js` und `style.css`: Videos luden nicht (das alte Skript kannte keine Videos) und die Plakate waren noch beschnitten. Ursache: Der Server sagte dem Browser nicht, wie lange er CSS und JavaScript zwischenspeichern darf, also hat der Browser das selbst geschätzt.
+- **Lösung in `.htaccess`:** `Cache-Control: no-cache` für HTML, CSS und JavaScript. Der Browser darf die Dateien behalten, muss aber vor jeder Verwendung beim Server nachfragen. Ist nichts neu, antwortet der Server nur mit „304 Not Modified“, das geht sehr schnell. Bilder und Videos dürfen weiterhin normal zwischengespeichert werden: Neu hochgeladene Dateien bekommen sowieso immer einen neuen Namen.
+- **Bilder vergrössern (Lightbox):** Ein Klick auf ein BTS-Bild öffnet es gross und in Farbe über der Seite, mit Bildunterschrift. Mit ← / → (Knöpfe oder Pfeiltasten) blättert man durch alle Bilder des Projekts, nach dem letzten geht es wieder beim ersten los. Schliessen mit ×, Esc oder Klick auf den dunklen Hintergrund. Videos öffnen sich nicht in der Lightbox, sie haben ihren eigenen Vollbild-Knopf.
+- **Umsetzung mit `<dialog>`:** Das eingebaute HTML-Element für Fenster über der Seite. `showModal()` öffnet es, der Browser legt automatisch einen Hintergrund (`::backdrop`) dahinter, die Esc-Taste schliesst es, und die Tastatur bleibt im Dialog, solange er offen ist.
+- **Barrierefreiheit:** Jedes Bild steckt in einem `<button>`, damit es auch mit der Tastatur (Tab und Enter) geöffnet werden kann. Mit Tab angewählte Bilder bekommen einen sichtbaren lila Rahmen.
+
+### 23.10.2026 – Videos in eigener Reihe, automatisches Abspielen
+- **Zwei Bereiche in der Galerie:** zuerst alle Bilder, darunter die Videos in einer eigenen Reihe (`#galerie-raster` und `#galerie-videos`). Die Reihenfolge aus dem CMS gilt innerhalb der Bilder und innerhalb der Videos. Ein leerer Bereich wird mit `:empty` ausgeblendet.
+- **Automatisch abspielen beim Scrollen:** Browser erlauben automatisches Abspielen nur ohne Ton. Die Videos laufen deshalb stumm, in Schleife und ohne Play-Leiste. Ein **IntersectionObserver** meldet, wenn ein Video ins Bild kommt: dann startet es, beim Wegscrollen pausiert es. Das spart Akku und Datenvolumen.
+- **Bewegung reduzieren:** Wer das im Betriebssystem eingestellt hat (`prefers-reduced-motion`), sieht nur das erste Bild des Videos, nichts startet von selbst.
+
+### 24.10.2026 – Galerie grösser, Videos in der Lightbox
+- **Grösser:** Die Reihen der Galerie sind jetzt 360 px hoch (Handy 200 px), die Video-Reihe 480 px (Handy 280 px), weil Hochformat-Videos sonst sehr schmal wären.
+- **Videos starteten zu spät:** Ein Video startete erst, wenn es zur Hälfte sichtbar war (`threshold: 0.5`), und lud das eigentliche Video erst beim Start (`preload="metadata"`). Neu startet es, sobald ein Fünftel sichtbar ist (`threshold: 0.2`), und die kurzen Clips werden vollständig vorgeladen (`preload="auto"`).
+- **Ton-Knopf entfernt:** Die Clips haben keinen Ton.
+- **Videos gross ansehen:** Videos öffnen sich jetzt wie Bilder in der Lightbox, dort gross mit Play-Leiste. Man blättert durch Bilder und Videos in derselben Reihenfolge wie auf der Seite. Die Lightbox enthält dafür ein `<img>` und ein `<video>`, je nach Eintrag wird eines davon gezeigt. Beim Weiterblättern zu einem Bild und beim Schliessen wird das Video angehalten (Ereignis `close` des Dialogs).
+- **Getestet:** Grössen gemessen (Bilder 288 × 360 px, Videos 270 × 480 px), alle Videos laufen ohne Hovern, Video in der Lightbox mittig, spielt und passt in den Bildschirm, Blättern zwischen Bild und Video, Video nach dem Schliessen pausiert.
+
+### 24.10.2026 – Eigene Reihen für Hoch- und Querformate
+- **Problem:** In einer Reihe sind alle Bilder gleich hoch. Ein Hochformat neben einem Querformat wirkt dadurch viel kleiner (z. B. beim Berlin-Film).
+- **Lösung:** Die Galerie hat jetzt drei Bereiche mit eigener Reihenhöhe: Querformate (400 px), Hochformate (480 px) und Videos (480 px), auf dem Handy 200 / 280 / 280 px. So haben hohe und breite Bilder ungefähr dieselbe Fläche. Hat ein Projekt nur eine Sorte, gibt es nur diesen Bereich.
+- **Hoch oder quer?** Das weiss der Browser erst, wenn ein Bild geladen ist. Deshalb kommen zunächst alle Bilder in den Bereich für Querformate, und `projekt.js` verschiebt ein Bild beim Ereignis `load` in den Bereich für Hochformate, wenn es höher als breit ist. Die Reihenfolge aus dem CMS bleibt erhalten, weil jedes Bild seine Position als CSS-Eigenschaft `order` mitbekommt.
+- **Lightbox:** Die Reihenfolge zum Blättern wird erst beim Öffnen aus der Seite abgelesen (Bereich für Bereich, innerhalb nach `order`). So entspricht sie immer dem, was man sieht.
+- **Fehler beim Testen gefunden:** Der unsichtbare Platzhalter am Ende jeder Reihe (`::after`), der verhindert, dass das letzte Bild riesig wird, hatte selbst kein `order` und galt deshalb als 0. Durch die neue Sortierung rutschte er nach vorne, und das letzte Bild bei Medienmacher:innen wurde 1364 px breit. Gelöst mit `order: 999999` für den Platzhalter.
+- **Gemessen** in allen Projekten mit BTS-Bildern, z. B. Berlin: Querformat 600 × 400, Hochformate 320 × 480. Medienmacher:innen: zwei Reihen mit je zwei Bildern (674 × 450), das fünfte 600 × 400.
+
+### 24.10.2026 – Gleich grosse Galerie-Bilder in allen Projekten
+- **Problem:** Bei Medienmacher:innen waren die Bilder grösser (674 × 450) als bei anderen Projekten (600 × 400). Ursache: Jede Reihe wurde auf die volle Breite gestreckt (`flex-grow`). Passten zwei Bilder in eine Reihe, aber kein drittes, wurde der übrige Platz auf die beiden verteilt. Die Grösse hing also davon ab, wie viele Bilder zufällig in eine Reihe passen.
+- **Lösung Desktop:** Reihen werden nicht mehr gestreckt (`flex-grow: 0`). Jedes Bild ist genau so hoch wie seine Reihe: Querformate 400 px, Hochformate und Videos 480 px, in allen Projekten gleich. Der rechte Rand einer Reihe ist dafür nicht ganz bündig.
+- **Lösung Handy:** Feste, einfache Regeln statt Strecken: Querformate eines pro Reihe über die volle Breite, Hochformate und Videos immer zwei nebeneinander (`flex: 0 0 calc(50% - 4px)`).
+- **Gemessen:** Desktop in allen Projekten Querformate 400 px und Hochformate 480 px hoch. Handy: alle Hochformate und Videos 168 px breit.
+
 ## Learnings und Schwierigkeiten
 
 - **PHP braucht einen Server:** HTML, CSS und JavaScript laufen direkt im Browser, PHP dagegen nur auf einem Server. Deshalb braucht es lokal MAMP.
@@ -198,13 +231,14 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Git und iCloud vertragen sich nicht:** iCloud kann Dateien jederzeit auslagern oder gleichzeitig synchronisieren, während Git sie bearbeitet. Code-Projekte gehören deshalb in einen Ordner ohne Cloud-Sync. Als Backup dient GitHub.
 - **Bilder fürs Web:** Bilder direkt aus der Kamera oder aus InDesign sind oft viel zu gross. Für eine Webseite reichen etwa 1600 px Breite, sonst lädt die Seite unnötig lange. PDFs können nicht als Bild eingebunden werden.
 - **Flex-Elemente wachsen mit dem Inhalt:** Ein Element in einem Flexbox ist standardmässig mindestens so breit wie sein längstes Wort. `min-width: 0` hebt das auf.
-- **Browser-Cache:** Nach einer Änderung an JavaScript oder CSS zeigt der Browser manchmal noch die alte Version an, weil er die Datei zwischengespeichert hat. Abhilfe schafft ein harter Reload mit cmd + shift + R. Im CMS ist das dauerhaft gelöst: PHP hängt an die CSS-Adresse das Änderungsdatum der Datei an (`admin.css?v=…`, mit `filemtime`). Ändert sich die Datei, ändert sich die Adresse, und der Browser muss die neue Version laden („Cache Busting“).
+- **Browser-Cache:** Nach einer Änderung an JavaScript oder CSS zeigt der Browser manchmal noch die alte Version an, weil er die Datei zwischengespeichert hat. Abhilfe schafft ein harter Reload mit cmd + shift + R. Im CMS ist das dauerhaft gelöst: PHP hängt an die CSS-Adresse das Änderungsdatum der Datei an (`admin.css?v=…`, mit `filemtime`). Ändert sich die Datei, ändert sich die Adresse, und der Browser muss die neue Version laden („Cache Busting“). Für die ganze Seite sorgt zusätzlich `Cache-Control: no-cache` in der `.htaccess` dafür, dass der Browser bei HTML, CSS und JavaScript immer nachfragt, ob es eine neue Version gibt.
 - **fetch braucht einen Server:** Öffnet man `index.html` direkt als Datei (Doppelklick), kann `fetch()` die Schnittstelle nicht erreichen und die Projekte fehlen. Die Seite muss über `localhost:8888` (MAMP) oder online aufgerufen werden.
 - **Datenbank nachträglich ändern:** Ist eine Datenbank schon in Gebrauch, ändert man sie mit `ALTER TABLE` in einer eigenen Update-Datei, statt sie neu aufzusetzen. Sonst gehen die vorhandenen Inhalte verloren.
 - **Passwörter nie im Klartext:** Weder im Code, noch in der Datenbank, noch im Chat mit der KI. Gespeichert wird nur ein Hash, aus dem sich das Passwort nicht zurückrechnen lässt.
 - **inline vs. inline-block:** Links (`<a>`) sind inline-Elemente. Gibt man ihnen einen Innenabstand oben und unten, werden sie grösser gezeichnet, schieben aber nichts weg. Als Button gestaltete Links brauchen deshalb `display: inline-block`.
 - **Daten in JavaScript-Attributen:** `htmlspecialchars` schützt HTML, aber nicht JavaScript in Attributen wie `onsubmit`, weil der Browser die Zeichen vorher zurückverwandelt. Daten deshalb über `data-*`-Attribute übergeben.
 - **Einem Upload nie trauen:** Dateiname und Endung kann jeder frei wählen. Ob eine Datei wirklich ein Bild ist, zeigt erst ein Blick in ihren Inhalt (`finfo`). Hochgeladene Dateien bekommen ausserdem immer einen eigenen, neuen Namen.
+- **Gleichmässig vs. bündig:** Ein Raster kann entweder alle Bilder gleich gross machen oder jede Reihe genau auf die volle Breite füllen, beides zusammen geht bei unterschiedlichen Formaten nicht. Für ein Portfolio mit mehreren Projekten ist die gleiche Grösse wichtiger.
 - **EXIF-Orientierung:** Ein Foto kann im Fotoprogramm richtig aussehen und trotzdem „falsch herum“ gespeichert sein. Wer Bilder auf dem Server bearbeitet, muss den Dreh-Vermerk selbst auswerten.
 - **Datenbank und Dateien getrennt denken:** Die Datenbank speichert nur den Pfad zu einem Bild. Löscht sie einen Eintrag (auch automatisch per CASCADE), bleibt die Datei auf dem Server liegen, wenn man sie nicht selbst löscht.
 - **SQL-Injection:** Werte, die von aussen kommen (z. B. aus der Adresse), dürfen nie direkt in einen SQL-Befehl geklebt werden. Prepared Statements mit Platzhaltern (`?`) trennen Befehl und Daten sauber.
