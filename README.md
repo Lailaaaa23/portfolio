@@ -26,7 +26,7 @@ portfolio/
 ├── js/startseite.js     Hero-Animation, Karussell, Projekte laden
 ├── js/projekt.js        Detailseite: Projekt laden, Video einbetten
 ├── images/              Bilder der Webseite
-├── api/                 Schnittstelle: liefert Inhalte als JSON
+├── api/                 Schnittstellen: projekte.php, skills.php, einstellungen.php (JSON)
 ├── includes/db.php      Verbindung zur Datenbank (von api/ und admin/ genutzt)
 ├── includes/admin.php   CMS-Grundlagen: Session, Login-Prüfung, CSRF-Schutz, Meldungen
 ├── includes/admin-kopf.php / admin-fuss.php   gemeinsamer Rahmen aller CMS-Seiten
@@ -222,6 +222,15 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Lösung Handy:** Feste, einfache Regeln statt Strecken: Querformate eines pro Reihe über die volle Breite, Hochformate und Videos immer zwei nebeneinander (`flex: 0 0 calc(50% - 4px)`).
 - **Gemessen:** Desktop in allen Projekten Querformate 400 px und Hochformate 480 px hoch. Handy: alle Hochformate und Videos 168 px breit.
 
+### 24.10.2026 – CMS: Über mich & Status
+- **Neue CMS-Seite `admin/ueber-mich.php`**, erreichbar über eine Navigation oben im CMS („Projekte“ / „Über mich & Status“). Die aktuelle Seite ist mit `aria-current="page"` markiert und lila unterstrichen.
+  - **Status:** Textfeld für den Text oben rechts im Header (höchstens 60 Zeichen). Leer = wird auf der Webseite ausgeblendet. Gespeichert mit `INSERT … ON DUPLICATE KEY UPDATE`: Ein Befehl legt die Zeile an, falls es sie noch nicht gibt, oder ändert sie.
+  - **Skills:** Name und Werkzeug direkt in der Liste bearbeiten, mit ↑ / ↓ sortieren (Platz mit dem Nachbarn tauschen, in einer Transaktion), löschen mit Rückfrage, neue Skills unten hinzufügen.
+  - Alle Formulare schicken ihre Daten an die Seite selbst, ein verstecktes Feld `aktion` sagt, was zu tun ist. Danach leitet die Seite auf sich selbst um, damit ein Neuladen nichts doppelt abschickt („Post/Redirect/Get“).
+- **Zwei neue Schnittstellen:** `api/skills.php` (Liste) und `api/einstellungen.php` (Objekt „Name → Wert“, mit `PDO::FETCH_KEY_PAIR`).
+- **Webseite:** Der Status im Header wird in `main.js` geladen, weil er auf jeder Seite steht. Die Skills lädt `startseite.js` über eine `<template>`-Vorlage, gleich wie die Projektkarten. Klappt das Laden nicht, bleibt beim Status der Standardtext stehen und die Skill-Liste wird ausgeblendet.
+- **Getestet** mit einem vorübergehenden Test-Zugang (danach gelöscht, alle Daten wiederhergestellt): Status ändern und leeren (verschwindet auf der Webseite, Navigation bleibt mittig), Skill hinzufügen, leeren Skill ablehnen, sortieren, ändern, löschen, Aktion ohne Token und ohne Login, Status und Skills auf Startseite und Detailseite.
+
 ## Learnings und Schwierigkeiten
 
 - **PHP braucht einen Server:** HTML, CSS und JavaScript laufen direkt im Browser, PHP dagegen nur auf einem Server. Deshalb braucht es lokal MAMP.
@@ -236,6 +245,7 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Datenbank nachträglich ändern:** Ist eine Datenbank schon in Gebrauch, ändert man sie mit `ALTER TABLE` in einer eigenen Update-Datei, statt sie neu aufzusetzen. Sonst gehen die vorhandenen Inhalte verloren.
 - **Passwörter nie im Klartext:** Weder im Code, noch in der Datenbank, noch im Chat mit der KI. Gespeichert wird nur ein Hash, aus dem sich das Passwort nicht zurückrechnen lässt.
 - **inline vs. inline-block:** Links (`<a>`) sind inline-Elemente. Gibt man ihnen einen Innenabstand oben und unten, werden sie grösser gezeichnet, schieben aber nichts weg. Als Button gestaltete Links brauchen deshalb `display: inline-block`.
+- **Post/Redirect/Get:** Nach dem Absenden eines Formulars auf eine normale Seite weiterleiten. Sonst fragt der Browser beim Neuladen, ob er das Formular nochmals senden soll, und eine Aktion würde doppelt ausgeführt.
 - **Daten in JavaScript-Attributen:** `htmlspecialchars` schützt HTML, aber nicht JavaScript in Attributen wie `onsubmit`, weil der Browser die Zeichen vorher zurückverwandelt. Daten deshalb über `data-*`-Attribute übergeben.
 - **Einem Upload nie trauen:** Dateiname und Endung kann jeder frei wählen. Ob eine Datei wirklich ein Bild ist, zeigt erst ein Blick in ihren Inhalt (`finfo`). Hochgeladene Dateien bekommen ausserdem immer einen eigenen, neuen Namen.
 - **Gleichmässig vs. bündig:** Ein Raster kann entweder alle Bilder gleich gross machen oder jede Reihe genau auf die volle Breite füllen, beides zusammen geht bei unterschiedlichen Formaten nicht. Für ein Portfolio mit mehreren Projekten ist die gleiche Grösse wichtiger.

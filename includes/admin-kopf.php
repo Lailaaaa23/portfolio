@@ -28,6 +28,19 @@
 
   <header class="admin-header">
     <a href="index.php" class="logo">LK<span>.</span> <small>CMS</small></a>
+
+    <?php
+    // Aktuelle Seite herausfinden, um ihren Menüpunkt hervorzuheben.
+    // basename() liefert nur den Dateinamen, z. B. "ueber-mich.php"
+    $aktuelleSeite = basename($_SERVER['SCRIPT_NAME']);
+    $projektSeite = in_array($aktuelleSeite, ['index.php', 'projekt-bearbeiten.php'], true);
+    ?>
+    <!-- aria-current="page" sagt Screenreadern und der CSS, wo man gerade ist -->
+    <nav class="admin-nav">
+      <a href="index.php" <?= $projektSeite ? 'aria-current="page"' : '' ?>>Projekte</a>
+      <a href="ueber-mich.php" <?= $aktuelleSeite === 'ueber-mich.php' ? 'aria-current="page"' : '' ?>>Über mich &amp; Status</a>
+    </nav>
+
     <div class="admin-header-right">
       <span>Eingeloggt als <strong><?= e($_SESSION['benutzer_name']) ?></strong></span>
       <a href="../index.html" target="_blank">Webseite ansehen ↗</a>

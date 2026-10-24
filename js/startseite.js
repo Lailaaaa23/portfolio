@@ -5,6 +5,7 @@
    3. Aus dem Punkt wird der Kreis
    4. Lila Kreis folgt der Maus
    5. Projekte aus der Datenbank laden
+   6. Skills aus der Datenbank laden
    ========================================================= */
 
 
@@ -212,3 +213,35 @@ async function ladeProjekte() {
 }
 
 ladeProjekte();
+
+
+/* ---------- 6. SKILLS AUS DER DATENBANK LADEN ----------
+   Gleiches Prinzip wie bei den Projekten: Schnittstelle abfragen,
+   Vorlage für jeden Skill kopieren, befüllen und einsetzen. */
+async function ladeSkills() {
+  const liste = document.querySelector("#skills-liste");
+  const vorlage = document.querySelector("#skill-vorlage");
+
+  try {
+    const antwort = await fetch("api/skills.php");
+    if (!antwort.ok) {
+      throw new Error(`Server antwortet mit ${antwort.status}`);
+    }
+    const skills = await antwort.json();
+
+    skills.forEach((skill, index) => {
+      const eintrag = vorlage.content.cloneNode(true);
+      eintrag.querySelector(".skill-nr").textContent = String(index + 1).padStart(2, "0");
+      eintrag.querySelector(".skill-name").textContent = skill.name;
+      eintrag.querySelector(".skill-tool").textContent = skill.werkzeug;
+      liste.append(eintrag);
+    });
+
+  } catch (fehler) {
+    // Ohne Skills ist die Seite trotzdem vollständig: Liste einfach ausblenden
+    console.error("Skills konnten nicht geladen werden:", fehler);
+    liste.hidden = true;
+  }
+}
+
+ladeSkills();

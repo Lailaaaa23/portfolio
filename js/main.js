@@ -2,6 +2,7 @@
    PORTFOLIO – JavaScript für ALLE Seiten
    1. Mobile Navigation (Hamburger)
    2. Titel mit Umbruchstellen einsetzen
+   3. Status im Header aus dem CMS laden
 
    Was nur auf einer bestimmten Seite gebraucht wird, steht in
    einer eigenen Datei: startseite.js und projekt.js
@@ -53,3 +54,30 @@ function setzeTitel(element, text) {
     }
   });
 }
+
+
+/* ---------- 3. STATUS IM HEADER AUS DEM CMS LADEN ----------
+   Der Text neben dem pulsierenden Punkt, z. B. "Available for projects".
+   Er steht auf jeder Seite, darum wird er hier in main.js geladen.
+   Ist der Status im CMS leer, wird er auf der Webseite ausgeblendet. */
+async function ladeStatus() {
+  const status = document.querySelector(".status");
+  if (!status) return;
+
+  try {
+    const antwort = await fetch("api/einstellungen.php");
+    if (!antwort.ok) return;   // bei einem Fehler einfach den Standardtext stehen lassen
+    const einstellungen = await antwort.json();
+
+    const text = (einstellungen.status || "").trim();
+    if (text) {
+      status.querySelector(".status-text").textContent = text;
+    } else {
+      status.hidden = true;
+    }
+  } catch (fehler) {
+    // Server nicht erreichbar: Standardtext bleibt stehen, das ist kein Problem
+  }
+}
+
+ladeStatus();

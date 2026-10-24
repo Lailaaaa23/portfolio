@@ -31,7 +31,8 @@
         <a href="#kontakt">Kontakt</a>
       </nav>
 
-      <p class="status"><span class="status-dot"></span>Available for projects</p>
+      <!-- Der Text kommt aus dem CMS (main.js lädt ihn). Bis dahin steht dieser Standardtext da. -->
+      <p class="status"><span class="status-dot"></span><span class="status-text">Available for projects</span></p>
     </div>
     <p class="header-subline">Multimedia Production &amp; Journalism</p>
   </header>
@@ -129,11 +130,13 @@
         </div>
       </div>
 
-      <ul class="skills">
-        <li><span class="skill-nr">01</span><span class="skill-name">Video Editing</span><span class="skill-tool">Premiere Pro</span></li>
-        <li><span class="skill-nr">02</span><span class="skill-name">Audio</span><span class="skill-tool">Audition</span></li>
-        <li><span class="skill-nr">03</span><span class="skill-name">Editorial Design</span><span class="skill-tool">InDesign</span></li>
-              </ul>
+      <!-- Die Skills kommen aus der Datenbank: startseite.js lädt sie über api/skills.php -->
+      <ul class="skills" id="skills-liste"></ul>
+
+      <!-- Vorlage für EINEN Skill (wird für jeden Skill kopiert und befüllt) -->
+      <template id="skill-vorlage">
+        <li><span class="skill-nr"></span><span class="skill-name"></span><span class="skill-tool"></span></li>
+      </template>
     </section>
 
   </main>

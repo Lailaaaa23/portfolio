@@ -9,6 +9,7 @@
    5. Projekt-Kacheln
    6. Projekt-Formular
    7. Weitere Bilder (BTS)
+   8. Navigation, Über mich & Status
    ========================================================= */
 
 
@@ -549,4 +550,102 @@
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+
+/* ---------- 8. NAVIGATION, ÜBER MICH & STATUS ---------- */
+.admin-nav {
+  display: flex;
+  gap: 32px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.admin-nav a {
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+}
+
+.admin-nav a:hover {
+  color: var(--color-accent);
+}
+
+/* Aktuelle Seite: lila Unterstrich */
+.admin-nav a[aria-current="page"] {
+  border-bottom-color: var(--color-accent);
+}
+
+.admin-section {
+  max-width: 900px;
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1.5px solid var(--color-line);
+}
+
+/* Feld und Knopf in einer Zeile */
+.admin-inline-form,
+.skill-admin-new {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.admin-inline-form input,
+.skill-admin-edit input,
+.skill-admin-new input {
+  flex: 1;
+  min-width: 180px;
+  font: inherit;
+  padding: 10px 12px;
+  border: 1.5px solid var(--color-dark);
+  background: #fff;
+}
+
+.skill-admin-list {
+  list-style: none;
+  margin-top: 24px;
+}
+
+/* Eine Zeile: Nummer | Felder + Speichern | Pfeile + Löschen */
+.skill-admin-row {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(18, 18, 18, 0.2);
+}
+
+.skill-admin-nr {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.skill-admin-edit,
+.skill-admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.skill-admin-new {
+  margin-top: 24px;
+}
+
+.skill-admin-new input {
+  border-style: dashed;
+}
+
+@media (max-width: 900px) {
+  .skill-admin-row {
+    grid-template-columns: 32px 1fr;
+  }
+
+  .skill-admin-actions {
+    grid-column: 2;
+  }
 }
