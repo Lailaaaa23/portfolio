@@ -231,6 +231,19 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Webseite:** Der Status im Header wird in `main.js` geladen, weil er auf jeder Seite steht. Die Skills lädt `startseite.js` über eine `<template>`-Vorlage, gleich wie die Projektkarten. Klappt das Laden nicht, bleibt beim Status der Standardtext stehen und die Skill-Liste wird ausgeblendet.
 - **Getestet** mit einem vorübergehenden Test-Zugang (danach gelöscht, alle Daten wiederhergestellt): Status ändern und leeren (verschwindet auf der Webseite, Navigation bleibt mittig), Skill hinzufügen, leeren Skill ablehnen, sortieren, ändern, löschen, Aktion ohne Token und ohne Login, Status und Skills auf Startseite und Detailseite.
 
+### 24.10.2026 – Claim „Geschichten mit Gesicht“ und Texte auf Deutsch
+- **Ausgangslage:** Die Texte beschrieben, *was* ich mache (Formate, Medien), aber nicht, *wie* und *warum*. Mein Unterschied: Themen und Menschen hinter einer Geschichte greifbar machen, nah rangehen und so erzählen, dass es ankommt.
+- **Claim:** „Geschichten mit Gesicht.“ – kurz, die Alliteration bleibt im Gedächtnis. „Ein Gesicht geben“ ist bewusst breit gemeint: nicht nur Menschen, auch Themen werden greifbar (z. B. die Nulltoleranz-Kampagne oder eine Radiosendung).
+- **Der Claim zieht sich durch die Seite:**
+  - Seitentitel und Beschreibung (Google, Teilen in sozialen Medien): „Laila Keller – Geschichten mit Gesicht“
+  - Hero: „Geschichten mit Gesicht.“ + „Ich mache greifbar, was bewegt – in Bild, Ton und Gestaltung.“
+  - Laufband: „Geschichten mit Gesicht“ zwischen den Formaten
+  - Projekte: „Viele Formate. Ein Anspruch.“, Hinweis „Genauer hinsehen“: Der Schwarz-weiss-zu-Farbe-Effekt der Bilder passt zum Claim, Geschichten bekommen Farbe, wenn man genau hinschaut.
+  - Über mich: „Nah dran. Klar erzählt.“
+  - Kontakt: „Erzähl mir davon.“ / „Welche Geschichte willst du erzählen?“ – lädt ein und zeigt meine Rolle als jemand, der zuerst zuhört.
+- **Deutsch als Hauptsprache:** Bisher waren die Überschriften englisch und die Texte deutsch. Da ich im deutschsprachigen Raum arbeite und der Claim auf Deutsch mehr Wärme hat, ist jetzt alles deutsch („Ausgewählte Projekte“, „Hinter den Kulissen“, „Nach oben“ …). Die Berufsbezeichnung unter dem Logo lautet neu „Multimedia Production, Journalismus & Moderation“: „Multimedia Production“ bleibt, weil es dem Studiengang entspricht, die Moderation kommt dazu, weil sie in vielen Projekten (TV, Radio, Reportage) eine zentrale Rolle spielt.
+- **Längere deutsche Wörter auf dem Handy:** „ANSPRUCH.“, der Skill „Redaktionelles Texten“ und „Erzähl mir davon.“ samt Pfeil waren breiter als ein Handy-Bildschirm und haben die ganze Seite seitlich verschoben. Gelöst, indem die grossen Überschriften auf dem Handy an die Bildschirmbreite gekoppelt sind (`10.5vw` bzw. `13vw`) und Skill-Namen umbrechen dürfen. Gefunden mit einem kleinen Skript, das alle Elemente auflistet, die über den rechten Rand hinausragen.
+
 ## Learnings und Schwierigkeiten
 
 - **PHP braucht einen Server:** HTML, CSS und JavaScript laufen direkt im Browser, PHP dagegen nur auf einem Server. Deshalb braucht es lokal MAMP.

@@ -58,6 +58,11 @@ a {
   text-decoration: none;
 }
 
+/* Wörter, die nicht auseinandergerissen werden sollen */
+.nowrap {
+  white-space: nowrap;
+}
+
 ul {
   list-style: none;
 }
@@ -355,7 +360,7 @@ button {
   position: absolute;
   right: var(--gutter);
   bottom: 10%;
-  max-width: 280px;
+  max-width: 340px;
   padding-top: 24px;
   border-top: 3px solid var(--color-accent);
   color: var(--color-dark);
@@ -363,6 +368,20 @@ button {
   line-height: 1.5;
 }
 
+
+/* Der Claim "Geschichten mit Gesicht." in der breiten Headline-Schrift,
+   darunter der erklärende Satz in normaler Schrift */
+.hero-claim-title {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  text-transform: uppercase;
+  font-size: clamp(20px, 1.8vw, 28px);
+  line-height: 1.1;
+}
 
 /* --- Laufband zwischen Hero und Projekten ---
    Der Text steht zweimal hintereinander. Die Animation schiebt die Reihe
@@ -1010,6 +1029,24 @@ button {
 
   body {
     font-size: 16px;
+  }
+
+  /* Grosse Überschriften an die Bildschirmbreite koppeln (vw = % der Breite).
+     Mit dem bisherigen Minimum von 48px war z. B. "ANSPRUCH." breiter als ein Handy. */
+  .headline {
+    font-size: 10.5vw;
+  }
+
+  /* "ERZÄHL MIR" und der Pfeil müssen nebeneinander Platz haben */
+  .contact-title {
+    font-size: 13vw;
+  }
+
+  /* Lange Skill-Namen wie "Redaktionelles Texten" dürfen umbrechen */
+  .skill-name {
+    min-width: 0;
+    hyphens: auto;
+    overflow-wrap: break-word;
   }
 
   /* Auf dem Handy zurück zu Flexbox: Logo links, Hamburger rechts,

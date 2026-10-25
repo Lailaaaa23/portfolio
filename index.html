@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Laila Keller – Multimedia Production & Journalism</title>
-  <meta name="description" content="Portfolio von Laila Keller: Video, TV, Radio, Podcast und Design.">
+  <title>Laila Keller – Geschichten mit Gesicht</title>
+  <meta name="description" content="Geschichten mit Gesicht: Portfolio von Laila Keller, Multimedia Production, Journalismus &amp; Moderation. Reportage, TV, Radio, Podcast und Design.">
 
   <!-- Schriften von Google Fonts: Archivo (Headlines) und DM Sans (Fliesstext) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,9 +32,11 @@
       </nav>
 
       <!-- Der Text kommt aus dem CMS (main.js lädt ihn). Bis dahin steht dieser Standardtext da. -->
-      <p class="status"><span class="status-dot"></span><span class="status-text">Available for projects</span></p>
+      <p class="status"><span class="status-dot"></span><span class="status-text">Offen für Projekte</span></p>
     </div>
-    <p class="header-subline">Multimedia Production &amp; Journalism</p>
+    <!-- Die zwei Teile bleiben je zusammen (white-space: nowrap). Ist zu wenig Platz,
+         bricht die Zeile nach dem Komma um statt mitten in "Journalismus & Moderation". -->
+    <p class="header-subline"><span class="nowrap">Multimedia Production,</span> <span class="nowrap">Journalismus &amp; Moderation</span></p>
   </header>
 
   <main id="top">
@@ -54,7 +56,11 @@
 
       <h1 class="hero-name">Laila Keller</h1>
 
-      <p class="hero-claim">Ich erzähle Geschichten<br>in Bild, Ton &amp; Raum.</p>
+      <!-- Der Claim, der sich durch die ganze Seite zieht -->
+      <p class="hero-claim">
+        <strong class="hero-claim-title">Geschichten<br>mit Gesicht.</strong>
+        Ich mache greifbar, was bewegt – in Bild, Ton und Gestaltung.
+      </p>
     </section>
 
     <!-- ===================== LAUFBAND ===================== -->
@@ -62,8 +68,8 @@
          Für Screenreader ausgeblendet, weil es nur Dekoration ist. -->
     <div class="ticker" aria-hidden="true">
       <div class="ticker-track">
-        <span>Video * TV * Radio * Podcast * Design * Reportage * Moderation *&nbsp;</span>
-        <span>Video * TV * Radio * Podcast * Design * Reportage * Moderation *&nbsp;</span>
+        <span>Geschichten mit Gesicht * Video * TV * Radio * Podcast * Reportage * Moderation * Design *&nbsp;</span>
+        <span>Geschichten mit Gesicht * Video * TV * Radio * Podcast * Reportage * Moderation * Design *&nbsp;</span>
       </div>
     </div>
 
@@ -71,11 +77,12 @@
     <section class="work" id="projekte">
       <div class="work-head">
         <div>
-          <p class="eyebrow">01 / Selected Work</p>
-          <h2 class="headline">Stories across<br>formats.</h2>
+          <p class="eyebrow">01 / Ausgewählte Projekte</p>
+          <h2 class="headline">Viele Formate.<br>Ein Anspruch.</h2>
         </div>
         <div class="work-controls">
-          <p class="hint">Hover to<br>reveal color</p>
+          <!-- Passt zum Claim: Die Bilder bekommen Farbe, wenn man genau hinschaut -->
+          <p class="hint">Genauer<br>hinsehen</p>
           <button class="round-btn" data-dir="-1" aria-label="Vorheriges Projekt">&larr;</button>
           <button class="round-btn" data-dir="1" aria-label="Nächstes Projekt">&rarr;</button>
         </div>
@@ -108,11 +115,11 @@
 
     <!-- ===================== ABOUT & SKILLS ===================== -->
     <section class="about" id="about">
-      <p class="eyebrow">02 / About &amp; Skills</p>
+      <p class="eyebrow">02 / Über mich &amp; Skills</p>
 
       <div class="about-grid">
         <h2 class="headline">
-          Curious<br>mind.<br>Clear<br>stories.
+          Nah<br>dran.<br>Klar<br>erzählt.
           <svg class="asterisk" viewBox="0 0 100 100" aria-hidden="true">
             <rect x="40" y="0" width="20" height="100" rx="3" />
             <rect x="40" y="0" width="20" height="100" rx="3" transform="rotate(60 50 50)" />
@@ -144,22 +151,22 @@
   <!-- ===================== KONTAKT / FOOTER ===================== -->
   <footer class="contact" id="kontakt">
     <div class="contact-top">
-      <p class="eyebrow">03 / Let's collaborate</p>
-      <p class="eyebrow">Have a story in mind?</p>
+      <p class="eyebrow">03 / Zusammenarbeiten</p>
+      <p class="eyebrow">Welche Geschichte willst du erzählen?</p>
     </div>
 
     <a href="mailto:laila.keller@silverfish.ch" class="contact-cta">
-      <span class="contact-title">Get in<br>touch</span>
+      <span class="contact-title">Erzähl mir<br>davon.</span>
       <span class="contact-arrow" aria-hidden="true">&rarr;</span>
     </a>
 
     <div class="contact-bottom">
-      <p>Based in Switzerland · Working everywhere</p>
+      <p>In der Schweiz zuhause, unterwegs für Geschichten</p>
       <div class="contact-links">
-        <a href="mailto:laila.keller@silverfish.ch">Email ↗</a>
+        <a href="mailto:laila.keller@silverfish.ch">E-Mail ↗</a>
         <a href="https://www.linkedin.com/in/laila-keller-3611502a5" target="_blank" rel="noopener">LinkedIn ↗</a>
       </div>
-      <a href="#top">Back to top ↑</a>
+      <a href="#top">Nach oben ↑</a>
     </div>
   </footer>
 
