@@ -6,10 +6,11 @@
   <title>Laila Keller – Geschichten mit Gesicht</title>
   <meta name="description" content="Geschichten mit Gesicht: Portfolio von Laila Keller, Multimedia Production, Journalismus &amp; Moderation. Reportage, TV, Radio, Podcast und Design.">
 
-  <!-- Schriften von Google Fonts: Archivo (Headlines) und DM Sans (Fliesstext) -->
+  <!-- Schriften von Google Fonts: Archivo (Headlines), DM Sans (Fliesstext)
+       und Instrument Serif kursiv (Akzent in zweiten Zeilen von Überschriften) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=DM+Sans:opsz,wght@9..40,400..700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -58,7 +59,7 @@
 
       <!-- Der Claim, der sich durch die ganze Seite zieht -->
       <p class="hero-claim">
-        <strong class="hero-claim-title">Geschichten<br>mit Gesicht.</strong>
+        <strong class="hero-claim-title">Geschichten<span class="headline-accent">mit Gesicht.</span></strong>
         Ich mache greifbar, was bewegt – in Bild, Ton und Gestaltung.
       </p>
     </section>
@@ -78,7 +79,7 @@
       <div class="work-head">
         <div>
           <p class="eyebrow">01 / Ausgewählte Projekte</p>
-          <h2 class="headline">Viele Formate.<br>Ein Anspruch.</h2>
+          <h2 class="headline">Viele Formate.<span class="headline-accent">Ein Anspruch.</span></h2>
         </div>
         <div class="work-controls">
           <!-- Passt zum Claim: Die Bilder bekommen Farbe, wenn man genau hinschaut -->
@@ -119,7 +120,7 @@
 
       <div class="about-grid">
         <h2 class="headline">
-          Nah<br>dran.<br>Klar<br>erzählt.
+          Nah<br>dran.<span class="headline-accent">Klar erzählt.</span>
           <svg class="asterisk" viewBox="0 0 100 100" aria-hidden="true">
             <rect x="40" y="0" width="20" height="100" rx="3" />
             <rect x="40" y="0" width="20" height="100" rx="3" transform="rotate(60 50 50)" />
@@ -132,10 +133,12 @@
           <figure class="about-photo">
             <img src="images/portrait.jpg" alt="Porträt von Laila Keller" width="1280" height="853">
           </figure>
-          <p class="lead">Ich bin Multimedia Producerin und Journalistin mit einem Blick für starke Bilder und einem Ohr für gute Geschichten.</p>
-          <p>Von der ersten Recherche bis zum finalen Schnitt verbinde ich journalistische Präzision mit visueller Neugier. Ich arbeite gern nah an Menschen, Themen und den Details, die eine Geschichte unverwechselbar machen.</p>
+          <p class="lead">Ich bin Laila Keller: Multimedia Producerin, Journalistin oder Moderatorin – je nachdem, was deine Geschichte braucht. Ich habe ein Ohr für bewegende Geschichten, ein Gespür für starke Aussagen und einen Blick für gute Bilder.</p>
+          <p>Von der ersten Recherche bis zum finalen Schnitt verbinde ich journalistische Präzision mit visueller Neugier, ob vor der Kamera, auf der Bühne oder im Aufnahmestudio. Ich gehe nah ran an Menschen und Themen und suche die Details, die eine Geschichte unverwechselbar machen. Damit man sie nicht nur sieht, sondern spürt.</p>
         </div>
       </div>
+
+      <h3 class="skills-title">Was ich mitbringe</h3>
 
       <!-- Die Skills kommen aus der Datenbank: startseite.js lädt sie über api/skills.php -->
       <ul class="skills" id="skills-liste"></ul>
@@ -156,7 +159,7 @@
     </div>
 
     <a href="mailto:laila.keller@silverfish.ch" class="contact-cta">
-      <span class="contact-title">Erzähl mir<br>davon.</span>
+      <span class="contact-title">Erzähl mir<span class="headline-accent">davon.</span></span>
       <span class="contact-arrow" aria-hidden="true">&rarr;</span>
     </a>
 

@@ -244,6 +244,17 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Deutsch als Hauptsprache:** Bisher waren die Überschriften englisch und die Texte deutsch. Da ich im deutschsprachigen Raum arbeite und der Claim auf Deutsch mehr Wärme hat, ist jetzt alles deutsch („Ausgewählte Projekte“, „Hinter den Kulissen“, „Nach oben“ …). Die Berufsbezeichnung unter dem Logo lautet neu „Multimedia Production, Journalismus & Moderation“: „Multimedia Production“ bleibt, weil es dem Studiengang entspricht, die Moderation kommt dazu, weil sie in vielen Projekten (TV, Radio, Reportage) eine zentrale Rolle spielt.
 - **Längere deutsche Wörter auf dem Handy:** „ANSPRUCH.“, der Skill „Redaktionelles Texten“ und „Erzähl mir davon.“ samt Pfeil waren breiter als ein Handy-Bildschirm und haben die ganze Seite seitlich verschoben. Gelöst, indem die grossen Überschriften auf dem Handy an die Bildschirmbreite gekoppelt sind (`10.5vw` bzw. `13vw`) und Skill-Namen umbrechen dürfen. Gefunden mit einem kleinen Skript, das alle Elemente auflistet, die über den rechten Rand hinausragen.
 
+### 25.10.2026 – Text „Über mich“ und Titel über den Skills
+- **Text überarbeitet:** Der neue Text nennt alle drei Rollen (Multimedia Producerin, Journalistin, Moderatorin) und stellt die Geschichte ins Zentrum („je nachdem, was deine Geschichte braucht“). Er endet mit dem Gedanken, der hinter dem Claim steht: „Damit man sie nicht nur sieht, sondern spürt.“
+- **Titel über den Skills:** „Was ich mitbringe“, ohne direkte Anrede. So stellt sich die Frage „dir oder euch“ gar nicht. Wo die Seite jemanden anspricht, ist es durchgehend „du“ („Erzähl mir davon“, „Welche Geschichte willst du erzählen?“).
+
+### 25.10.2026 – Zweite Schrift als Akzent
+- **Problem:** Zweizeilige Überschriften ganz in der fetten, breiten Archivo („Viele Formate. Ein Anspruch.“, „Nah dran. Klar erzählt.“) wirkten zu laut.
+- **Lösung:** Die zweite Zeile steht in **Instrument Serif kursiv**, einer feinen, klassischen Serifenschrift. Der Kontrast aus fetter Grotesk und feiner Kursive ist ein typischer Magazin-Look und passt zum Journalismus. Vier Varianten wurden verglichen (Archivo leicht, Archivo kursiv, Instrument Serif, Fraunces).
+- **Eingesetzt an vier Stellen:** „mit Gesicht.“ im Hero-Claim, „Ein Anspruch.“ (auf dunklem Grund in Lavendel), „Klar erzählt.“ und „davon.“ im Kontakt-Teil. Bewusst sparsam, damit der Akzent seine Wirkung behält.
+- **Kontakt ruhiger:** „Erzähl mir davon.“ war riesig, in Grossbuchstaben und ganz in Lavendel und wirkte erschlagend. Jetzt ist „ERZÄHL MIR“ fett in Hell und „davon.“ kursiv in Lavendel, gleich wie „Ein Anspruch.“ im dunklen Projekt-Teil. Die Schrift ist etwas kleiner (höchstens 180 statt 220 px). Der Schriftwechsel mitten im Satz betont das Wort „davon“, also die Geschichte der anderen Person.
+- **Umsetzung:** Die Klasse `.headline-accent` setzt Schrift, Kursive und normale Gross-/Kleinschreibung. Weil eine Serifenschrift bei gleicher Grösse kleiner wirkt, ist sie mit `1.2em` etwas grösser. Von Google Fonts wird nur die kursive Variante geladen, weil jede zusätzliche Schriftdatei die Seite langsamer macht.
+
 ## Learnings und Schwierigkeiten
 
 - **PHP braucht einen Server:** HTML, CSS und JavaScript laufen direkt im Browser, PHP dagegen nur auf einem Server. Deshalb braucht es lokal MAMP.
@@ -269,6 +280,6 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 
 ## Ressourcen und Hilfsmittel
 
-- Schriften: Archivo und DM Sans (Google Fonts)
+- Schriften: Archivo, DM Sans und Instrument Serif (Google Fonts)
 - Design-Entwurf: Figma Make
 - KI-Unterstützung: Claude (Anthropic) für Code und Erklärungen

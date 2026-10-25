@@ -25,6 +25,7 @@
 
   --font-display: "Archivo", "Arial Black", sans-serif;
   --font-body: "DM Sans", Arial, sans-serif;
+  --font-accent: "Instrument Serif", Georgia, serif;   /* nur kursiv, als Kontrast */
 
   --gutter: clamp(16px, 2.5vw, 48px);   /* Seitenrand links und rechts */
   --section-space: clamp(80px, 10vw, 180px);
@@ -102,6 +103,23 @@ button {
   line-height: 0.92;
   letter-spacing: -0.02em;
   font-size: clamp(48px, 7.5vw, 140px);
+}
+
+/* Akzent in Überschriften: die zweite Zeile in feiner, kursiver Serifenschrift.
+   Der Kontrast zur fetten, breiten Archivo macht die Überschrift ruhiger
+   (Magazin-Look). Sparsam einsetzen, sonst verliert er seine Wirkung.
+   Eine Serifenschrift wirkt bei gleicher Grösse kleiner, darum 1.2em. */
+.headline-accent {
+  display: block;
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 400;
+  font-stretch: normal;
+  font-variation-settings: normal;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  font-size: 1.2em;
+  line-height: 0.95;
 }
 
 /* Runder Pfeil-Button */
@@ -436,6 +454,11 @@ button {
   margin-bottom: 48px;
 }
 
+/* Auf dunklem Grund ist der Akzent lavendel */
+.work-head .headline-accent {
+  color: var(--color-accent);
+}
+
 .work-controls {
   display: flex;
   align-items: center;
@@ -611,6 +634,15 @@ button {
   line-height: 2;
 }
 
+/* Titel über der Skill-Liste, im Stil der kleinen Überschriften (eyebrow) */
+.skills-title {
+  margin-bottom: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
 .skills {
   border-top: 2px solid var(--color-line);
 }
@@ -676,15 +708,23 @@ button {
   color: var(--color-accent);
 }
 
+/* "ERZÄHL MIR" fett in Hell, "davon." kursiv in Lavendel:
+   gleiches Muster wie die anderen Überschriften, Lavendel nur als Akzent */
 .contact-title {
+  color: var(--color-light);
   font-family: var(--font-display);
   font-weight: 900;
   font-stretch: 125%;
   font-variation-settings: "wdth" 125;
   text-transform: uppercase;
-  font-size: clamp(64px, 12vw, 220px);
+  font-size: clamp(64px, 10vw, 180px);
   line-height: 0.88;
   letter-spacing: -0.03em;
+}
+
+.contact-title .headline-accent {
+  color: var(--color-accent);
+  margin-top: 0.08em;   /* etwas Luft zwischen den beiden Schriften */
 }
 
 .contact-arrow {
