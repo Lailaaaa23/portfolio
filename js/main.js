@@ -3,6 +3,7 @@
    1. Mobile Navigation (Hamburger)
    2. Titel mit Umbruchstellen einsetzen
    3. Status im Header aus dem CMS laden
+   4. Aktuelles Jahr in der Fusszeile
 
    Was nur auf einer bestimmten Seite gebraucht wird, steht in
    einer eigenen Datei: startseite.js und projekt.js
@@ -81,3 +82,12 @@ async function ladeStatus() {
 }
 
 ladeStatus();
+
+
+/* ---------- 4. AKTUELLES JAHR IN DER FUSSZEILE ----------
+   Im HTML steht eine feste Jahreszahl (falls JavaScript nicht läuft).
+   Hier wird sie durch das aktuelle Jahr ersetzt, damit "© 2026" nicht
+   im nächsten Jahr veraltet ist. */
+document.querySelectorAll(".aktuelles-jahr").forEach((element) => {
+  element.textContent = new Date().getFullYear();
+});

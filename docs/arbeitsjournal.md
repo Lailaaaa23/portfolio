@@ -249,6 +249,11 @@ Ausführliches Protokoll der Umsetzung: was wann gemacht wurde, welche Entscheid
 - **Auf dem iPhone-Home-Bildschirm** (wenn jemand die Seite dort ablegt) erscheint dagegen das „LK.“-Logo in 180 × 180 px, wo es gross genug ist. iOS rundet die Ecken selbst, darum ist das Bild ein volles Quadrat.
 - **Dateien:** `images/favicon.svg` (Vektor, für moderne Browser), `images/favicon-32.png` (Ersatz für Browser ohne SVG-Favicon), `favicon.ico` im Hauptordner (manche Browser fragen dort automatisch nach) und `images/apple-touch-icon.png`. Der Stern im SVG hat dieselben Koordinaten wie der Stern im Hero. Das LK.-Symbol wurde mit der echten Logo-Schrift Archivo gerendert.
 
+### 28.10.2026 – Fusszeile
+- „In der Schweiz zuhause, unterwegs für Geschichten“ ersetzt durch „© 2026 Laila Keller · Geschichten mit Gesicht“. Direkt darüber steht schon viel Persönliches („Erzähl mir davon.“), ganz unten darf es sachlich werden, und der Claim rundet die Seite als letzte Zeile ab.
+- Das Jahr setzt `main.js` automatisch auf das aktuelle Jahr, damit die Angabe nicht veraltet. Im HTML steht eine feste Zahl als Ersatz, falls JavaScript nicht läuft.
+- Auf dem Handy bricht die Zeile nach dem Punkt um (`white-space: nowrap` für beide Teile) und nicht mitten im Claim.
+
 ## Entwicklung in Bildern
 
 Arbeitsstände, die während der Umsetzung zum Testen festgehalten wurden (deshalb in kleiner Auflösung).
