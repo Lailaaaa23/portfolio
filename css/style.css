@@ -476,9 +476,17 @@ button {
 }
 
 /* Horizontale Reihe mit Karten, die man seitlich scrollt */
+/* Die Karten stehen in einem gemeinsamen Raster nebeneinander (eine Spalte
+   pro Karte). Die vier Zeilen des Rasters (Kopf, Bild, Rahmen, Titel) teilen
+   sich alle Karten über "subgrid" (siehe .card). So ist z. B. die Kopfzeile
+   in jeder Karte so hoch wie die längste, und alle Titel beginnen auf
+   derselben Höhe, egal wie viel Text darüber steht. */
 .work-track {
-  display: flex;
-  gap: 32px;
+  display: grid;
+  grid-auto-flow: column;                    /* neue Karten kommen rechts dazu */
+  grid-auto-columns: min(64vw, 1080px);      /* Breite einer Karte */
+  grid-template-rows: auto auto auto 1fr;    /* Kopf, Bild, Rahmen, Titel */
+  column-gap: 32px;
   padding: 0 var(--gutter);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -491,9 +499,9 @@ button {
 }
 
 .card {
-  flex: 0 0 min(64vw, 1080px);
-  display: flex;
-  flex-direction: column;
+  grid-row: span 4;               /* jede Karte belegt alle vier Zeilen */
+  display: grid;
+  grid-template-rows: subgrid;    /* ... und übernimmt deren Höhen */
   padding: 40px;
   background: var(--color-card);
   color: var(--color-dark);
@@ -549,9 +557,12 @@ button {
   margin-bottom: 8px;
 }
 
+/* Titel und Pfeil oben ausrichten (flex-start): So beginnen alle Titel auf
+   derselben Höhe, egal ob sie eine oder zwei Zeilen haben. Mit flex-end
+   rutschten einzeilige Titel nach unten, weil der runde Button höher ist. */
 .card-bottom {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 24px;
 }
@@ -572,6 +583,14 @@ button {
 .round-btn.dark {
   width: 84px;
   height: 84px;
+}
+
+/* Pfeil unten in der Titelzeile: Die Titelzeile ist dank subgrid in allen
+   Karten gleich hoch (so hoch wie der längste Titel). Am unteren Rand steht
+   der Pfeil deshalb überall auf derselben Höhe, bündig zur letzten Zeile
+   der zweizeiligen Titel. (Oben ausrichten wäre: align-self: flex-start) */
+.card-bottom .round-btn.dark {
+  align-self: flex-end;
 }
 
 
@@ -1182,9 +1201,19 @@ button {
     display: none;
   }
 
+  .work-track {
+    grid-auto-columns: 85vw;
+  }
+
   .card {
-    flex-basis: 85vw;
     padding: 24px;
+  }
+
+  /* Auf dem Handy den Pfeil unter den Titel, damit der Titel die volle
+     Breite hat (daneben wurde z. B. "AMYGDALA" getrennt) */
+  .card-bottom {
+    flex-direction: column;
+    gap: 16px;
   }
 
   /* Kategorie und Rolle untereinander statt nebeneinander */
@@ -1196,8 +1225,11 @@ button {
 
   /* Lange Titel wie "Nulltoleranz" dürfen mit Bindestrich umbrechen,
      sonst wird die ganze Karte breiter als die anderen */
+  /* 6vw = 6 % der Bildschirmbreite (22.5px auf einem iPhone): So passen auch
+     "Nulltoleranz" und "Medienmacher:" ohne Trennung auf eine Zeile,
+     und die Grösse wächst mit, wenn das Handy breiter ist. */
   .card h3 {
-    font-size: 26px;
+    font-size: 6vw;
     hyphens: auto;
     overflow-wrap: break-word;
     min-width: 0;

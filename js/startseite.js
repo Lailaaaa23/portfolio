@@ -20,7 +20,8 @@ arrowButtons.forEach((button) => {
 
     // Eine Karte + Abstand weiter scrollen
     const card = track.querySelector(".card");
-    const gap = parseFloat(getComputedStyle(track).gap);
+    // columnGap: Abstand zwischen den Karten (Spalten des Rasters)
+    const gap = parseFloat(getComputedStyle(track).columnGap);
     const distance = card.offsetWidth + gap;
 
     track.scrollBy({ left: direction * distance, behavior: "smooth" });

@@ -226,6 +226,20 @@ Ausführliches Protokoll der Umsetzung: was wann gemacht wurde, welche Entscheid
 - **Arbeitsweise ab jetzt:** Inhalte werden nur noch im Online-CMS gepflegt, die lokale Datenbank ist eine Testkopie. Code-Änderungen werden lokal entwickelt und getestet, committet und die geänderten Dateien per FTP hochgeladen.
 
 
+### 28.10.2026 – Eigene Domain lailakeller.ch
+- Domain bei Hostpoint registriert und dem bestehenden Webhosting zugewiesen. Bewusst ohne Zusatzangebote (Webhosting, E-Mail, kostenpflichtiges SSL, Domain Shield): Das Hosting gibt es schon, und FreeSSL von Let's Encrypt ist kostenlos.
+- `lailakeller.ch` und `www.lailakeller.ch` als **Aliase** der bestehenden Website eingetragen. Beide Adressen zeigen auf denselben Ordner, es musste nichts neu hochgeladen und am Code nichts geändert werden, weil alle Pfade relativ sind.
+- **„Nicht sicher“ im Browser:** Zuerst lieferte der Server für die neue Domain nur ein allgemeines Zertifikat von Hostpoint, weil das eigene FreeSSL-Zertifikat erst für die Testadresse galt. Nach einigen Minuten hat Hostpoint das Zertifikat um die Aliase erweitert. „SSL forcieren“ leitet `http://` automatisch auf `https://` um.
+- **Eine Hauptadresse:** Eine Regel in der `.htaccess` leitet `www.lailakeller.ch` und die alte Testadresse dauerhaft (301) auf `https://lailakeller.ch` um, mit demselben Pfad. Gut für Suchmaschinen und Links. `localhost` ist bewusst ausgenommen.
+
+### 28.10.2026 – Projekttitel auf gleicher Höhe
+- **Problem:** Einzeilige Titel der Projektkarten standen tiefer als zweizeilige. Titel und runder Pfeil-Button waren unten ausgerichtet (`flex-end`), und der Button ist höher als eine Titelzeile. Auf dem Handy kam dazu, dass die Texte über dem Titel je nach Projekt unterschiedlich viele Zeilen haben.
+- **Lösung:** Die Karten teilen sich jetzt ein gemeinsames Raster mit **`subgrid`**: Das Karussell ist ein Grid mit vier Zeilen (Kopf, Bild, Rahmen, Titel), jede Karte übernimmt diese Zeilen. So ist jede Zeile in allen Karten so hoch wie die längste, und alle Titel beginnen auf derselben Höhe. Titel und Pfeil sind oben ausgerichtet (`flex-start`).
+- **Handy:** Der Pfeil steht unter dem Titel, und die Titelgrösse richtet sich nach der Bildschirmbreite (`6vw`). So passen „Nulltoleranz“ und „Medienmacher:“ ohne Trennung auf eine Zeile.
+- Weil das Karussell jetzt ein Grid ist, liest `startseite.js` den Abstand zwischen den Karten über `columnGap` statt `gap` (bei einem Grid enthält `gap` zwei Werte).
+- **Gemessen:** Desktop und Handy, alle sieben Titel beginnen in jeder Karte auf derselben Höhe.
+- **Pfeil-Button:** Oben ausgerichtet stand er zwar überall gleich hoch, war aber mit 84 px höher als eine Titelzeile (54 px) und passte so optisch zu keiner Zeile. Jetzt steht er unten in der Titelzeile (`align-self: flex-end`): in allen Karten auf derselben Höhe, bündig zur letzten Zeile der zweizeiligen Titel.
+
 ## Entwicklung in Bildern
 
 Arbeitsstände, die während der Umsetzung zum Testen festgehalten wurden (deshalb in kleiner Auflösung).

@@ -2,7 +2,7 @@
 
 Persönliche Portfolio-Webseite mit eigenem CMS, umgesetzt im Modul Interaktive Medien 5 (HS26, FHGR).
 
-**Live:** https://efanahiw.myhostpoint.ch
+**Live:** https://lailakeller.ch
 
 ## Projektbeschreibung
 

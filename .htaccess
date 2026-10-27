@@ -12,3 +12,13 @@
     Header set Cache-Control "no-cache"
   </FilesMatch>
 </IfModule>
+
+# Eine Hauptadresse: www.lailakeller.ch und die alte Testadresse leiten
+# dauerhaft (301) auf https://lailakeller.ch weiter, mit demselben Pfad
+# (z. B. /projekt.html?id=3 bleibt erhalten).
+# Nur diese zwei Adressen sind aufgeführt, damit localhost (MAMP) nicht umleitet.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^(www\.lailakeller\.ch|efanahiw\.myhostpoint\.ch)$ [NC]
+  RewriteRule ^ https://lailakeller.ch%{REQUEST_URI} [R=301,L]
+</IfModule>
