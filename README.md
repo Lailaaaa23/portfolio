@@ -14,6 +14,10 @@ Dieses Portfolio zeigt meine Arbeit als Multimedia Producerin, Journalistin und 
 |---|---|
 | ![Startseite mit animiertem Namen, lila Kreis und Claim](docs/screenshots/01-startseite.jpg) | ![Detailseite des Projekts Nulltoleranz](docs/screenshots/02-detailseite.jpg) |
 
+**CMS:** Projekt-Übersicht mit Reihenfolge, Bearbeiten, Verstecken und Löschen
+
+![CMS mit den Projekten als Kacheln](docs/screenshots/05-cms.jpg)
+
 | Handy: Startseite | Handy: Galerie mit Bildern und Videos |
 |---|---|
 | <img src="docs/screenshots/03-handy-startseite.jpg" alt="Startseite auf dem Handy" width="280"> | <img src="docs/screenshots/04-handy-galerie.jpg" alt="Galerie hinter den Kulissen auf dem Handy" width="280"> |
