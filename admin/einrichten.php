@@ -58,6 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex">
   <title>CMS einrichten – Laila Keller</title>
+  <!-- Favicon: lila Stern im Browser-Tab (SVG für moderne Browser, PNG als Ersatz).
+       Auf dem iPhone-Home-Bildschirm erscheint stattdessen das LK.-Logo. -->
+  <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../images/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Laila Keller">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet">
   <!-- ?v=… ist das Datum der letzten Änderung der Datei. Ändert sich die CSS,
        ändert sich die Adresse, und der Browser lädt die neue Version statt

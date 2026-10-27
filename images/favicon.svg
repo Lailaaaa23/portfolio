@@ -1,0 +1,8 @@
+<!-- Favicon: der lila Stern aus dem Hero auf dunklem, abgerundetem Quadrat.
+     Gleiche Stern-Koordinaten wie in index.html, Farben wie in style.css. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#121212"/>
+  <svg x="9" y="9" width="46" height="46" viewBox="0 0 100 100">
+    <polygon fill="#b4a5f5" points="50,0 57,38 95,20 64,46 100,55 62,60 75,98 50,68 25,98 38,60 0,55 36,46 5,20 43,38"/>
+  </svg>
+</svg>

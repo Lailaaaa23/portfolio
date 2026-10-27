@@ -244,6 +244,11 @@ Ausführliches Protokoll der Umsetzung: was wann gemacht wurde, welche Entscheid
 - **Pfeile als Emoji:** Das Zeichen ↗ (bei E-Mail, LinkedIn, „Projekt ansehen“) erschien auf dem iPhone als farbiges Emoji. Manche Zeichen gibt es als Text- und als Emoji-Variante, und iOS wählt hier von sich aus das Emoji. Lösung: Hinter das Zeichen kommt das unsichtbare Steuerzeichen `&#xFE0E;` („Variation Selector 15“), es verlangt die Textdarstellung.
 - **Laufband stockte und hatte Lücken:** Nur in Safari auf dem iPhone. Vermutete Ursache: Die ganze Laufband-Reihe (doppelter Text) wurde als ein bewegtes Bild in den Grafikspeicher gemalt und war bei dreifacher Pixeldichte zu breit dafür. Safari zerlegt so ein Bild in Kacheln und malt sie verspätet nach. Lösung: Statt der ganzen Reihe bewegt sich jede der beiden Texthälften einzeln (je halb so breit), mit `translate3d` und `will-change: transform`. Geprüft, dass das Band weiterhin nahtlos läuft: Jede Hälfte ist breiter als der Bildschirm, und am Ende einer Runde steht alles genau wie am Anfang.
 
+### 28.10.2026 – Favicon und iPhone-Symbol
+- **Im Browser-Tab** erscheint der lila Stern aus dem Hero auf dunklem, abgerundetem Quadrat. Drei Varianten wurden in Originalgrösse (16 px) verglichen: Stern auf Dunkel, „LK.“ wie das Logo und Stern ohne Hintergrund. Bei 16 px ist ein einfaches Zeichen am besten erkennbar. Beim „LK.“ wäre der lila Punkt kaum mehr zu sehen gewesen, und der dunkle Hintergrund sorgt dafür, dass der Stern in hellen und dunklen Tabs gleich gut wirkt.
+- **Auf dem iPhone-Home-Bildschirm** (wenn jemand die Seite dort ablegt) erscheint dagegen das „LK.“-Logo in 180 × 180 px, wo es gross genug ist. iOS rundet die Ecken selbst, darum ist das Bild ein volles Quadrat.
+- **Dateien:** `images/favicon.svg` (Vektor, für moderne Browser), `images/favicon-32.png` (Ersatz für Browser ohne SVG-Favicon), `favicon.ico` im Hauptordner (manche Browser fragen dort automatisch nach) und `images/apple-touch-icon.png`. Der Stern im SVG hat dieselben Koordinaten wie der Stern im Hero. Das LK.-Symbol wurde mit der echten Logo-Schrift Archivo gerendert.
+
 ## Entwicklung in Bildern
 
 Arbeitsstände, die während der Umsetzung zum Testen festgehalten wurden (deshalb in kleiner Auflösung).
