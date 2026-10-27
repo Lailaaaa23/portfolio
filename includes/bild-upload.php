@@ -69,10 +69,12 @@ function speichereBild(array $datei, string $unterordner): string
         // Beide Seiten mit demselben Faktor verkleinern, damit nichts verzerrt wird
         $faktor = BILD_MAX_SEITE / $laengsteSeite;
         $bild = imagescale($original, (int) round($breite * $faktor), (int) round($hoehe * $faktor), IMG_BICUBIC);
-        imagedestroy($original);
     } else {
         $bild = $original;
     }
+
+    // (Früher musste man Bilder mit imagedestroy() aus dem Speicher löschen.
+    //  Seit PHP 8 macht PHP das selbst, ab PHP 8.5 gilt die Funktion als veraltet.)
 
     // ---------- 4. Als JPG speichern ----------
     // PNGs können durchsichtige Stellen haben. JPG kennt das nicht,
@@ -80,7 +82,6 @@ function speichereBild(array $datei, string $unterordner): string
     $leinwand = imagecreatetruecolor(imagesx($bild), imagesy($bild));
     imagefill($leinwand, 0, 0, imagecolorallocate($leinwand, 246, 246, 242));
     imagecopy($leinwand, $bild, 0, 0, 0, 0, imagesx($bild), imagesy($bild));
-    imagedestroy($bild);
 
     // Ordner anlegen, falls es ihn noch nicht gibt
     $ordner = __DIR__ . '/../uploads/' . $unterordner;
@@ -95,7 +96,6 @@ function speichereBild(array $datei, string $unterordner): string
 
     // 82 = JPG-Qualität: kaum sichtbarer Unterschied, deutlich kleinere Datei
     imagejpeg($leinwand, $ordner . '/' . $dateiname, 82);
-    imagedestroy($leinwand);
 
     // Pfad so zurückgeben, wie er in der Datenbank steht (von der Webseite aus gesehen)
     return 'uploads/' . $unterordner . '/' . $dateiname;
@@ -184,9 +184,7 @@ function richtigDrehen(GdImage $bild, string $datei): GdImage
         default => 0,
     };
     if ($winkel !== 0) {
-        $gedreht = imagerotate($bild, $winkel, 0);
-        imagedestroy($bild);
-        $bild = $gedreht;
+        $bild = imagerotate($bild, $winkel, 0);
     }
 
     return $bild;

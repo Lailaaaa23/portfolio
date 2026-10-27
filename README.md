@@ -47,6 +47,14 @@ portfolio/
 5. `http://localhost:8888` öffnen
 6. Einmalig unter `http://localhost:8888/admin/einrichten.php` den eigenen CMS-Zugang anlegen, danach Login unter `admin/login.php`
 
+## Online stellen (Hostpoint)
+
+1. In phpMyAdmin von Hostpoint die Inhalte in die Datenbank `efanahiw_portfolio` importieren (Export der lokalen Datenbank, Tabelle `benutzer` ohne Inhalt)
+2. `config.php` mit den Online-Zugangsdaten anlegen (Host `efanahiw.mysql.db.internal`)
+3. Per FTP alle Dateien ausser `.git`, `README.md`, `datenbank/` und der lokalen `config.php` hochladen, inklusive der versteckten `.htaccess`-Dateien und des Ordners `uploads/`
+4. PHP-Version mindestens 8.1 (getestet mit 8.3 und 8.5)
+5. Unter `/admin/einrichten.php` einen eigenen CMS-Zugang mit einem anderen Passwort als lokal anlegen
+
 ## Umsetzungsprozess
 
 Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidungen dahinterstehen.
@@ -255,6 +263,25 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Kontakt ruhiger:** „Erzähl mir davon.“ war riesig, in Grossbuchstaben und ganz in Lavendel und wirkte erschlagend. Jetzt ist „ERZÄHL MIR“ fett in Hell und „davon.“ kursiv in Lavendel, gleich wie „Ein Anspruch.“ im dunklen Projekt-Teil. Die Schrift ist etwas kleiner (höchstens 180 statt 220 px). Der Schriftwechsel mitten im Satz betont das Wort „davon“, also die Geschichte der anderen Person.
 - **Umsetzung:** Die Klasse `.headline-accent` setzt Schrift, Kursive und normale Gross-/Kleinschreibung. Weil eine Serifenschrift bei gleicher Grösse kleiner wirkt, ist sie mit `1.2em` etwas grösser. Von Google Fonts wird nur die kursive Variante geladen, weil jede zusätzliche Schriftdatei die Seite langsamer macht.
 
+### 25.10.2026 – Vorbereitung für Hostpoint
+- **Aufgeräumt:** Die Originaldateien der Nulltoleranz-Kampagne (drei MP4-Videos, drei Feed-Bilder) und ein ungenutztes Projektbild lagen in `images/` und waren mit auf GitHub gelandet, zusammen rund 14 MB. Gebraucht werden sie nicht, weil die Inhalte über das CMS hochgeladen sind. Vorher geprüft, dass weder Datenbank noch Code darauf verweisen, dann aus dem Projekt verschoben.
+- **Inhalte übertragen:** Alles, was im CMS eingetragen wurde, liegt nur in der lokalen Datenbank. Mit `mysqldump` wurde ein Export erstellt: alle Tabellen mit Inhalt, nur die Tabelle `benutzer` leer, weil online ein eigener Zugang mit anderem Passwort angelegt wird. Zwei Eigenheiten von MySQL 8, die MariaDB nicht kennt, wurden aus dem Export entfernt. Der Export wurde in einer Test-Datenbank zweimal hintereinander importiert, beide Male ohne Fehler.
+- **Upload-Ordner:** Ausserhalb des Projekts (damit nichts davon auf GitHub landet) liegt ein Ordner mit genau den Dateien für den Server, inklusive `uploads/` und der versteckten `.htaccess`-Dateien, dazu eine `config.php`-Vorlage mit dem Online-Datenbank-Host.
+- **Testdomain geprüft:** Sie zeigte nur die Platzhalterseite von Hostpoint, es wird also nichts überschrieben. HTTPS ist aktiv, was für das sichere Session-Cookie des CMS (`secure`) nötig ist.
+
+### 27.10.2026 – Kompatibilität mit PHP 8.5
+- Auf Hostpoint läuft **PHP 8.5**, lokal wurde mit 8.3 entwickelt. Alle PHP-Dateien mit PHP 8.5 geprüft, mit allen Warnungen eingeschaltet.
+- **Gefunden:** `imagedestroy()` gilt ab PHP 8.5 als veraltet („deprecated“), weil PHP Bilder seit Version 8 selbst aus dem Speicher räumt. Die Warnung hätte beim Bild-Upload vor der Weiterleitung ausgegeben werden und diese stören können („headers already sent“). Alle Aufrufe entfernt.
+- Danach Bild-Upload, Drehen, Verkleinern und alle drei Schnittstellen mit PHP 8.5 getestet: keine Warnungen mehr.
+
+### 27.10.2026 – Online auf Hostpoint
+- **Datenbank:** Export in phpMyAdmin von Hostpoint in `efanahiw_portfolio` importiert (5 Tabellen, alle Inhalte, ohne Benutzer).
+- **Zugangsdaten:** `config.php` mit Host `efanahiw.mysql.db.internal` und dem Datenbank-Benutzer, nur auf dem Server, nie im Repository.
+- **Dateien:** Mit Cyberduck über verschlüsseltes FTP (FTP über TLS) hochgeladen. Dafür einen eigenen FTP-Account angelegt, der nur den Ordner der Webseite (`www/efanahiw.myhostpoint.ch`) sieht. So lässt sich nichts anderes auf dem Server versehentlich verändern. Die versteckten `.htaccess`-Dateien mussten im Finder (cmd + shift + .) und in Cyberduck extra eingeblendet werden, damit sie mit hochgeladen werden.
+- **CMS-Zugang** online über `admin/einrichten.php` neu angelegt, mit einem anderen Passwort als lokal. Die Seite hat sich danach selbst gesperrt.
+- **Von aussen geprüft:** `config.php`, `includes/` und `einrichten.php` liefern 403, CMS-Seiten ohne Login leiten zum Login um, alle Seiten, Schnittstellen und hochgeladenen Medien laufen, Fehlerfälle der Schnittstelle antworten mit 400 bzw. 404, das Session-Cookie ist `secure`, `HttpOnly` und `SameSite=Lax`.
+- **Arbeitsweise ab jetzt:** Inhalte werden nur noch im Online-CMS gepflegt, die lokale Datenbank ist eine Testkopie. Code-Änderungen werden lokal entwickelt und getestet, committet und die geänderten Dateien per FTP hochgeladen.
+
 ## Learnings und Schwierigkeiten
 
 - **PHP braucht einen Server:** HTML, CSS und JavaScript laufen direkt im Browser, PHP dagegen nur auf einem Server. Deshalb braucht es lokal MAMP.
@@ -267,6 +294,8 @@ Das Arbeitsjournal hält fest, was wann umgesetzt wurde und welche Entscheidunge
 - **Browser-Cache:** Nach einer Änderung an JavaScript oder CSS zeigt der Browser manchmal noch die alte Version an, weil er die Datei zwischengespeichert hat. Abhilfe schafft ein harter Reload mit cmd + shift + R. Im CMS ist das dauerhaft gelöst: PHP hängt an die CSS-Adresse das Änderungsdatum der Datei an (`admin.css?v=…`, mit `filemtime`). Ändert sich die Datei, ändert sich die Adresse, und der Browser muss die neue Version laden („Cache Busting“). Für die ganze Seite sorgt zusätzlich `Cache-Control: no-cache` in der `.htaccess` dafür, dass der Browser bei HTML, CSS und JavaScript immer nachfragt, ob es eine neue Version gibt.
 - **fetch braucht einen Server:** Öffnet man `index.html` direkt als Datei (Doppelklick), kann `fetch()` die Schnittstelle nicht erreichen und die Projekte fehlen. Die Seite muss über `localhost:8888` (MAMP) oder online aufgerufen werden.
 - **Datenbank nachträglich ändern:** Ist eine Datenbank schon in Gebrauch, ändert man sie mit `ALTER TABLE` in einer eigenen Update-Datei, statt sie neu aufzusetzen. Sonst gehen die vorhandenen Inhalte verloren.
+- **Zwei Datenbanken:** Lokal und online sind getrennte Datenbanken. Nach dem Hochladen muss klar sein, wo die Inhalte gepflegt werden, sonst gehen Änderungen verloren.
+- **Server-Version prüfen:** Die PHP-Version auf dem Server kann neuer sein als die lokale. Vor dem Hochladen mit derselben Version testen, am besten mit allen Warnungen eingeschaltet.
 - **Passwörter nie im Klartext:** Weder im Code, noch in der Datenbank, noch im Chat mit der KI. Gespeichert wird nur ein Hash, aus dem sich das Passwort nicht zurückrechnen lässt.
 - **inline vs. inline-block:** Links (`<a>`) sind inline-Elemente. Gibt man ihnen einen Innenabstand oben und unten, werden sie grösser gezeichnet, schieben aber nichts weg. Als Button gestaltete Links brauchen deshalb `display: inline-block`.
 - **Post/Redirect/Get:** Nach dem Absenden eines Formulars auf eine normale Seite weiterleiten. Sonst fragt der Browser beim Neuladen, ob er das Formular nochmals senden soll, und eine Aktion würde doppelt ausgeführt.
