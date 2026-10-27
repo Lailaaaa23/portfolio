@@ -240,6 +240,10 @@ Ausführliches Protokoll der Umsetzung: was wann gemacht wurde, welche Entscheid
 - **Gemessen:** Desktop und Handy, alle sieben Titel beginnen in jeder Karte auf derselben Höhe.
 - **Pfeil-Button:** Oben ausgerichtet stand er zwar überall gleich hoch, war aber mit 84 px höher als eine Titelzeile (54 px) und passte so optisch zu keiner Zeile. Jetzt steht er unten in der Titelzeile (`align-self: flex-end`): in allen Karten auf derselben Höhe, bündig zur letzten Zeile der zweizeiligen Titel.
 
+### 28.10.2026 – Korrekturen für das iPhone
+- **Pfeile als Emoji:** Das Zeichen ↗ (bei E-Mail, LinkedIn, „Projekt ansehen“) erschien auf dem iPhone als farbiges Emoji. Manche Zeichen gibt es als Text- und als Emoji-Variante, und iOS wählt hier von sich aus das Emoji. Lösung: Hinter das Zeichen kommt das unsichtbare Steuerzeichen `&#xFE0E;` („Variation Selector 15“), es verlangt die Textdarstellung.
+- **Laufband stockte und hatte Lücken:** Nur in Safari auf dem iPhone. Vermutete Ursache: Die ganze Laufband-Reihe (doppelter Text) wurde als ein bewegtes Bild in den Grafikspeicher gemalt und war bei dreifacher Pixeldichte zu breit dafür. Safari zerlegt so ein Bild in Kacheln und malt sie verspätet nach. Lösung: Statt der ganzen Reihe bewegt sich jede der beiden Texthälften einzeln (je halb so breit), mit `translate3d` und `will-change: transform`. Geprüft, dass das Band weiterhin nahtlos läuft: Jede Hälfte ist breiter als der Bildschirm, und am Ende einer Runde steht alles genau wie am Anfang.
+
 ## Entwicklung in Bildern
 
 Arbeitsstände, die während der Umsetzung zum Testen festgehalten wurden (deshalb in kleiner Auflösung).

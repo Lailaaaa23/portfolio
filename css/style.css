@@ -340,7 +340,7 @@ button {
   .hero-name .letter,
   .hero-label,
   .hero-claim,
-  .ticker-track {
+  .ticker span {
     animation: none;
     transform: none;
     opacity: 1;
@@ -402,9 +402,16 @@ button {
 }
 
 /* --- Laufband zwischen Hero und Projekten ---
-   Der Text steht zweimal hintereinander. Die Animation schiebt die Reihe
-   um genau die Hälfte nach links. Dann steht der zweite Text dort, wo der
-   erste begonnen hat, und die Animation beginnt unbemerkt von vorn. */
+   Der Text steht zweimal hintereinander (zwei gleiche <span>). Beide Spans
+   rutschen gleichzeitig um ihre eigene Breite nach links. In diesem Moment
+   steht der zweite Text genau dort, wo der erste begonnen hat, und die
+   Animation beginnt unbemerkt von vorn.
+
+   Warum jeder Span einzeln animiert wird und nicht die ganze Reihe:
+   Safari auf dem iPhone malt ein bewegtes Element als Bild in den
+   Grafikspeicher. Die ganze Reihe war bei dreifacher Pixeldichte zu breit
+   dafür. Safari hat sie dann in Kacheln zerlegt und zu spät gemalt, das
+   gab Lücken und Ruckeln. Einzeln ist jedes Stück nur halb so breit. */
 .ticker {
   overflow: hidden;
   background: var(--color-accent);
@@ -415,10 +422,10 @@ button {
 .ticker-track {
   display: flex;
   width: max-content;   /* so breit wie der ganze Text, nicht wie der Bildschirm */
-  animation: ticker 30s linear infinite;
 }
 
 .ticker span {
+  flex-shrink: 0;
   font-family: var(--font-display);
   font-weight: 900;
   font-stretch: 125%;
@@ -427,10 +434,15 @@ button {
   font-size: clamp(18px, 2vw, 28px);
   letter-spacing: 0.04em;
   white-space: nowrap;
+  animation: ticker 30s linear infinite;
+  will-change: transform;   /* dem Browser vorher sagen, dass sich das bewegt */
 }
 
+/* translate3d statt translateX: sorgt dafür, dass die Grafikkarte die
+   Bewegung übernimmt, das läuft flüssiger */
 @keyframes ticker {
-  to { transform: translateX(-50%); }
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-100%, 0, 0); }
 }
 
 

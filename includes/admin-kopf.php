@@ -43,7 +43,7 @@
 
     <div class="admin-header-right">
       <span>Eingeloggt als <strong><?= e($_SESSION['benutzer_name']) ?></strong></span>
-      <a href="../index.html" target="_blank">Webseite ansehen ↗</a>
+      <a href="../index.html" target="_blank">Webseite ansehen ↗&#xFE0E;</a>
       <form method="post" action="logout.php">
         <?= csrfFeld() ?>
         <button type="submit" class="admin-link-button">Abmelden</button>
