@@ -264,6 +264,7 @@ Ausführliches Protokoll der Umsetzung: was wann gemacht wurde, welche Entscheid
 - Auch kompakter wirkte der Hero auf dem Handy mit grossem Kreis, drehendem Stern und Laufband noch unruhig. Ausserdem hat der Kreis dort keine Aufgabe: Am Desktop folgt er der Maus, auf dem Handy gibt es keine Maus.
 - **Lösung:** Auf dem Handy ist der Kreis ausgeblendet (`display: none`). Der lila Punkt ploppt hinter „Keller“ auf und bleibt stehen, wie beim Logo „LK.“. `startseite.js` fragt mit der Funktion `kreisSichtbar()` nach, ob die CSS den Kreis anzeigt, und verwandelt den Punkt nur dann in den Kreis. So entscheidet allein die CSS.
 - Weil der Kreis vorher für den Abstand gesorgt hatte, hat der Name auf dem Handy jetzt einen eigenen Abstand oben und unten.
+- **Name optisch zentriert:** Der Punkt hängt direkt an „Keller“ und wurde beim Zentrieren mitgezählt. „Keller“ stand dadurch 6,7 px links von „Laila“. Ein negativer Abstand rechts am Punkt (`margin-right: -0.24em`, also Breite plus Abstand links) nimmt ihn aus der Berechnung heraus, ohne dass er verschwindet. Jetzt stehen beide Wörter exakt übereinander, auch am Desktop ist der Name genau mittig.
 
 ## Entwicklung in Bildern
 

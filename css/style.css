@@ -323,6 +323,10 @@ button {
   width: 0.18em;
   height: 0.18em;
   margin-left: 0.06em;
+  /* Negativer Abstand rechts = Breite + Abstand links (0.18em + 0.06em).
+     So zählt der Punkt beim Zentrieren nicht mit, und "Keller" steht genau
+     unter "Laila". Gezeichnet wird er trotzdem ganz normal hinter dem Wort. */
+  margin-right: -0.24em;
   border-radius: 50%;
   background: var(--color-accent);
   scale: 0;
