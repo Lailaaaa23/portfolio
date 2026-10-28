@@ -207,7 +207,7 @@ async function ladeProjekt() {
     const projekt = await antwort.json();
 
     // ----- Texte einsetzen (immer textContent, siehe startseite.js) -----
-    document.title = `${projekt.titel} – Laila Keller`;
+    document.title = `${projekt.titel} · Laila Keller`;
     setzeTitel(titel, projekt.titel);   // mit Umbruchstellen, siehe main.js
     document.querySelector("#projekt-kategorie").textContent = projekt.kategorie;
     document.querySelector("#projekt-rolle").textContent = projekt.rolle;
@@ -303,7 +303,7 @@ async function ladeProjekt() {
   } catch (fehler) {
     // Keine ID, unbekannte ID oder Server-Problem: freundlicher Hinweis
     console.error("Projekt konnte nicht geladen werden:", fehler);
-    document.title = "Projekt nicht gefunden – Laila Keller";
+    document.title = "Projekt nicht gefunden · Laila Keller";
     titel.textContent = "Projekt nicht gefunden.";
     document.querySelector("#projekt-beschreibung").textContent =
       "Dieses Projekt gibt es nicht (mehr). Zurück zu allen Projekten geht es oben links.";

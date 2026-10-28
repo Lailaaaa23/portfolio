@@ -78,12 +78,26 @@ const hero = document.querySelector(".hero");
 const circle = document.querySelector(".hero-circle");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+// Auf dem Handy blendet die CSS den Kreis aus (display: none): Dort gibt es
+// keine Maus, der er folgen könnte. Dann bleibt der Punkt hinter dem Namen
+// stehen, wie beim Logo "LK.". Ob der Kreis sichtbar ist, entscheidet also
+// allein die CSS, das JavaScript fragt nur nach.
+function kreisSichtbar() {
+  return getComputedStyle(circle).display !== "none";
+}
+
 if (!reduceMotion) {
   // Der Kreis ist am Anfang unsichtbar, nur der kleine Punkt ploppt auf
   circle.style.opacity = "0";
 
   // Sobald der Punkt fertig aufgeploppt ist (Ende seiner CSS-Animation) ...
   dot.addEventListener("animationend", () => {
+    // Kein Kreis (Handy)? Dann bleibt der Punkt einfach stehen.
+    if (!kreisSichtbar()) {
+      circle.style.opacity = "1";   // falls das Handy später gedreht und breiter wird
+      return;
+    }
+
     // ... messen wir, wo Punkt und Kreis gerade auf dem Bildschirm sind
     const dotBox = dot.getBoundingClientRect();
     const circleBox = circle.getBoundingClientRect();
@@ -117,8 +131,9 @@ if (!reduceMotion) {
       { duration: 1600, easing: "cubic-bezier(0.65, 0, 0.35, 1)" }
     );
   });
-} else {
+} else if (kreisSichtbar()) {
   // Ohne Animation gibt es keinen Punkt, nur den fertigen Kreis
+  // (auf dem Handy dagegen bleibt der Punkt, siehe oben)
   dot.remove();
 }
 

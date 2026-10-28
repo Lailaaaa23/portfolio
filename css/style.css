@@ -597,6 +597,28 @@ button {
   height: 84px;
 }
 
+/* Ganze Karte klickbar: Der Link am Pfeil bekommt eine unsichtbare Fläche
+   (::after), die sich über die ganze Karte legt. So bleibt es ein einziger
+   Link pro Karte (gut für Screenreader und Tastatur), aber man kann überall
+   auf die Karte klicken bzw. tippen. Die Karte ist der Bezugsrahmen dafür
+   (position: relative), der Pfeil-Knopf selbst ist nicht positioniert. */
+.card {
+  position: relative;
+  cursor: pointer;
+}
+
+.card-bottom .round-btn.dark::after {
+  content: "";
+  position: absolute;
+  inset: 0;   /* oben, rechts, unten, links = 0: deckt die ganze Karte ab */
+}
+
+/* Beim Darüberfahren über die Karte reagiert auch der Pfeil */
+.card:hover .round-btn.dark {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
 /* Pfeil unten in der Titelzeile: Die Titelzeile ist dank subgrid in allen
    Karten gleich hoch (so hoch wie der längste Titel). Am unteren Rand steht
    der Pfeil deshalb überall auf derselben Höhe, bündig zur letzten Zeile
@@ -653,16 +675,16 @@ button {
   filter: grayscale(0);
 }
 
-.about-text .lead {
-  font-size: clamp(22px, 2.2vw, 34px);
-  font-weight: 500;
-  line-height: 1.4;
-  margin-bottom: 56px;
+/* Beide Absätze gleich gesetzt: Vorher war der erste grösser, fetter und
+   enger als der zweite, das wirkte wie zwei verschiedene Schriften. */
+.about-text p {
+  font-size: clamp(18px, 1.6vw, 24px);
+  font-weight: 400;
+  line-height: 1.6;
 }
 
-.about-text p:not(.lead) {
-  font-size: 20px;
-  line-height: 2;
+.about-text .lead {
+  margin-bottom: 1.2em;   /* Abstand zum zweiten Absatz, wächst mit der Schrift */
 }
 
 /* Titel über der Skill-Liste, im Stil der kleinen Überschriften (eyebrow) */
@@ -1176,31 +1198,60 @@ button {
     font-size: 12px;
   }
 
+  /* Hero auf dem Handy: Statt frei über die Fläche verteilt stehen die Teile
+     kompakt untereinander in einem Raster mit drei Zeilen. Der Kreis liegt
+     in derselben Zeile wie der Name und ist darin genau zentriert. */
   .hero {
-    min-height: 70vh;
+    display: grid;
+    grid-template-areas:
+      "label"
+      "name"
+      "claim";
+    justify-items: center;
+    min-height: 0;
+    padding: 32px var(--gutter) 48px;
   }
 
-  /* Auf dem Handy steht der Name zweizeilig in der Mitte,
-     darum den Kreis ebenfalls mittig setzen */
-  .hero-circle {
-    --size: 260px;
-    left: calc(55% - var(--size) / 2);
+  .hero-label {
+    grid-area: label;
+    justify-self: start;
+    position: static;
+    gap: 16px;
+    font-size: 18px;
+    margin-bottom: 8px;
   }
 
+  .hero-label .star {
+    width: 36px;
+  }
+
+  /* Abstand oben und unten: Ohne den Kreis rückte der Name sonst zu nah
+     an "Mein Portfolio" und an den Claim */
   .hero-name {
+    grid-area: name;
+    align-self: center;
+    margin: 40px 0 32px;
     white-space: normal;
     line-height: 0.95;
   }
 
-  .hero-label {
-    top: 12%;
-    left: var(--gutter);
+  /* Kein Kreis auf dem Handy: Ohne Maus hat er keine Aufgabe, und zusammen
+     mit Stern und Laufband wirkte der Hero überladen. Der lila Punkt hinter
+     dem Namen bleibt stehen (siehe startseite.js, kreisSichtbar). */
+  .hero-circle {
+    display: none;
   }
 
+  /* Claim ohne lila Linie darüber (sie lief auf dem Handy durch den Kreis) */
   .hero-claim {
+    grid-area: claim;
+    justify-self: start;
+    position: static;
+    max-width: none;
+    margin-top: 24px;
+    padding-top: 0;
+    border-top: 0;
     font-size: 16px;
-    left: var(--gutter);
-    right: auto;
   }
 
   .work-head {
@@ -1261,9 +1312,8 @@ button {
     margin: 56px 0 80px;
   }
 
-  .about-text p:not(.lead) {
-    font-size: 17px;
-    line-height: 1.8;
+  .about-text p {
+    font-size: 18px;
   }
 
   .skills li {
@@ -1365,5 +1415,16 @@ button {
 
   .project-text {
     padding: 56px var(--gutter);
+  }
+}
+
+
+/* Handy mit "Bewegung reduzieren": Der Punkt erscheint sofort, ohne
+   Aufploppen (sonst wäre er dort ganz ausgeblendet, siehe oben) */
+@media (max-width: 900px) and (prefers-reduced-motion: reduce) {
+  .hero-name .dot {
+    display: inline-block;
+    animation: none;
+    scale: 1;
   }
 }

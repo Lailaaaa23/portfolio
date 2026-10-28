@@ -254,6 +254,17 @@ Ausführliches Protokoll der Umsetzung: was wann gemacht wurde, welche Entscheid
 - Das Jahr setzt `main.js` automatisch auf das aktuelle Jahr, damit die Angabe nicht veraltet. Im HTML steht eine feste Zahl als Ersatz, falls JavaScript nicht läuft.
 - Auf dem Handy bricht die Zeile nach dem Punkt um (`white-space: nowrap` für beide Teile) und nicht mitten im Claim.
 
+### 28.10.2026 – Feedback von Freunden: Handy-Ansicht und Details
+- **Startseite auf dem Handy zu überladen:** Stern, Kreis, zwei Linien und viel Leerraum über „Mein Portfolio“. Auf dem Handy stehen die Teile jetzt kompakt untereinander in einem Raster mit drei Zeilen (Label, Name, Claim). Der Kreis liegt in derselben Rasterzeile wie der Name und ist darin genau zentriert (`grid-area`), statt frei positioniert zu sein. Die lila Linie über dem Claim, die durch den Kreis lief, ist auf dem Handy weg. Der Hero ist dadurch rund 490 statt 650 px hoch, das Laufband ist schon auf dem ersten Bildschirm sichtbar. Der Desktop bleibt unverändert.
+- **Gedankenstriche entfernt:** Der lange Strich „–“ wirkt schnell nach KI-Text. Umformuliert: „Ich mache in Bild, Ton und Gestaltung greifbar, was bewegt.“ und „…oder Moderatorin, je nachdem, was deine Geschichte braucht.“ Auch in den Seitentiteln im Browser-Tab steht jetzt „·“ statt „–“.
+- **Ganze Projektkarte klickbar:** Vorher musste man genau den Pfeil treffen. Der Link am Pfeil bekommt jetzt eine unsichtbare Fläche (`::after` mit `position: absolute; inset: 0`), die sich über die ganze Karte legt. So bleibt es ein einziger Link pro Karte, was für Screenreader und Tastatur wichtig ist. Geprüft: Klick auf Bild, Titel, Kategorie und Ecke führen zum Projekt.
+- **„Zwei Schriften“ bei Über mich:** Es war dieselbe Schrift, aber der erste Absatz war grösser, fetter und enger gesetzt als der zweite. Beide Absätze sind jetzt gleich (DM Sans, normal, gleicher Zeilenabstand).
+
+### 28.10.2026 – Kein Kreis auf dem Handy
+- Auch kompakter wirkte der Hero auf dem Handy mit grossem Kreis, drehendem Stern und Laufband noch unruhig. Ausserdem hat der Kreis dort keine Aufgabe: Am Desktop folgt er der Maus, auf dem Handy gibt es keine Maus.
+- **Lösung:** Auf dem Handy ist der Kreis ausgeblendet (`display: none`). Der lila Punkt ploppt hinter „Keller“ auf und bleibt stehen, wie beim Logo „LK.“. `startseite.js` fragt mit der Funktion `kreisSichtbar()` nach, ob die CSS den Kreis anzeigt, und verwandelt den Punkt nur dann in den Kreis. So entscheidet allein die CSS.
+- Weil der Kreis vorher für den Abstand gesorgt hatte, hat der Name auf dem Handy jetzt einen eigenen Abstand oben und unten.
+
 ## Entwicklung in Bildern
 
 Arbeitsstände, die während der Umsetzung zum Testen festgehalten wurden (deshalb in kleiner Auflösung).
