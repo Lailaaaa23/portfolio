@@ -287,6 +287,10 @@ Nach dem Online-Gang die Seite bewusst kritisch angeschaut. Daraus vier Verbesse
 - **Eckiger Punkt:** Der Schrift-Punkt der fetten Archivo ist quadratisch. Wie im Hero ist der lila Punkt deshalb ein Kreis aus CSS (`border-radius: 50%`), der in `em` mit der Schriftgrösse mitwächst.
 - **Getestet:** falsche Adresse, tief verschachtelte Adresse, `config.php` und `includes/db.php` zeigen die Seite mit dem richtigen Code (404 bzw. 403), am Desktop und auf dem Handy.
 
+### 29.10.2026 – Bei Google angemeldet
+- Webseite in der **Google Search Console** eingetragen (Property „URL-Präfix“ `https://lailakeller.ch/`). Bestätigt mit einer HTML-Datei von Google, die im Hauptordner auf dem Server liegt. Sie gehört nicht ins Repository und muss auf dem Server bleiben, sonst geht die Bestätigung verloren.
+- Sitemap `sitemap.php` eingereicht: Status „Erfolgreich“, 9 erkannte Seiten (Startseite, Impressum & Datenschutz, 7 Projekte). Das heisst erst, dass Google die Adressen kennt. In die Suche kommen die Seiten nach und nach („indexieren“), Kontrolle über den Bericht „Seiten“ oder die Suche `site:lailakeller.ch`.
+
 ## Entwicklung in Bildern
 
 Arbeitsstände, die während der Umsetzung zum Testen festgehalten wurden (deshalb in kleiner Auflösung).
