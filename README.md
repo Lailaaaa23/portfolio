@@ -34,7 +34,10 @@ Dieses Portfolio zeigt meine Arbeit als Multimedia Producerin, Journalistin und 
 ```
 portfolio/
 ├── index.html, projekt.html   Startseite (One-Pager) und Detailseite (projekt.html?id=3)
-├── css/                       style.css (Webseite), admin.css (CMS)
+├── datenschutz.html           Impressum & Datenschutz
+├── sitemap.php, robots.txt    für Suchmaschinen (Sitemap mit allen Projekten aus der Datenbank)
+├── css/                       style.css (Webseite), admin.css (CMS), schriften.css
+├── fonts/                     Schriftdateien, vom eigenen Server statt von Google
 ├── js/                        main.js (alle Seiten), startseite.js, projekt.js
 ├── api/                       Schnittstellen: projekte.php, skills.php, einstellungen.php
 ├── admin/                     CMS: Login, Projekte, Bilder und Videos, Über mich & Status
@@ -98,7 +101,7 @@ Alle Learnings im Detail stehen am Ende des [Arbeitsjournals](docs/arbeitsjourna
 
 ## Ressourcen und Hilfsmittel
 
-- **Schriften:** Archivo, DM Sans und Instrument Serif (Google Fonts)
+- **Schriften:** Archivo, DM Sans und Instrument Serif (von Google Fonts, selbst gehostet, SIL Open Font License)
 - **Entwurf:** Figma Make
 - **Werkzeuge:** VS Code, MAMP, phpMyAdmin, GitHub, Cyberduck
 - **Dokumentation:** Hostpoint Support Center (FTP, Domains, SSL)

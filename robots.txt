@@ -1,0 +1,9 @@
+# Anweisungen für Suchmaschinen wie Google.
+# Alles darf in die Suche, ausser dem CMS.
+# Die Schnittstellen (api/) bleiben offen: Google führt das JavaScript
+# der Seite aus und braucht sie, um die Projekte überhaupt zu sehen.
+User-agent: *
+Disallow: /admin/
+
+# Liste aller Seiten, inklusive der Projekte aus der Datenbank
+Sitemap: https://lailakeller.ch/sitemap.php

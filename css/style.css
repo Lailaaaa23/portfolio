@@ -1124,6 +1124,59 @@ button {
 }
 
 
+/* ---------- IMPRESSUM & DATENSCHUTZ (datenschutz.html) ----------
+   Ruhige Textseite: gleiche Überschrift wie überall, darunter
+   Abschnitte mit Linie darüber, wie bei der Galerie. Der Text ist
+   schmal gehalten (max. ca. 70 Zeichen pro Zeile), damit er gut lesbar ist. */
+.legal {
+  padding: 64px var(--gutter) var(--section-space);
+}
+
+.legal .headline {
+  margin-bottom: 80px;
+}
+
+.legal-block {
+  max-width: 760px;
+  padding-top: 24px;
+  margin-bottom: 64px;
+  border-top: 1.5px solid var(--color-line);
+}
+
+.legal-block .eyebrow {
+  margin-bottom: 32px;
+}
+
+.legal-block h3 {
+  margin: 40px 0 8px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.legal-block p {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.legal-block p + p {
+  margin-top: 1em;
+}
+
+/* Links im Text erkennbar machen */
+.legal-block a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.legal-block a:hover {
+  color: var(--color-accent);
+}
+
+.legal-block .legal-stand {
+  margin-top: 40px;
+  font-size: 15px;
+}
+
 /* Nächstes Projekt: Abschluss der Detailseite, wie ein kleiner
    Kontaktbereich. Der ganze Bereich ist ein Link. */
 .next-project {
@@ -1424,6 +1477,19 @@ button {
   /* Detailseite: alles untereinander */
   .project-head {
     padding: 40px var(--gutter) 56px;
+  }
+
+  .legal {
+    padding-top: 40px;
+  }
+
+  .legal .headline {
+    margin-bottom: 56px;
+    font-size: 11vw;
+  }
+
+  .legal-block p {
+    font-size: 16px;
   }
 
   .project-back {

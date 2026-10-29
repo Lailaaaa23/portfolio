@@ -23,7 +23,7 @@
   <link rel="icon" href="../images/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
   <meta name="apple-mobile-web-app-title" content="Laila Keller">
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/schriften.css">
   <!-- ?v=… ist das Datum der letzten Änderung der Datei. Ändert sich die CSS,
        ändert sich die Adresse, und der Browser lädt die neue Version statt
        einer alten aus seinem Zwischenspeicher (Cache). -->
