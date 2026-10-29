@@ -291,6 +291,11 @@ Nach dem Online-Gang die Seite bewusst kritisch angeschaut. Daraus vier Verbesse
 - Webseite in der **Google Search Console** eingetragen (Property „URL-Präfix“ `https://lailakeller.ch/`). Bestätigt mit einer HTML-Datei von Google, die im Hauptordner auf dem Server liegt. Sie gehört nicht ins Repository und muss auf dem Server bleiben, sonst geht die Bestätigung verloren.
 - Sitemap `sitemap.php` eingereicht: Status „Erfolgreich“, 9 erkannte Seiten (Startseite, Impressum & Datenschutz, 7 Projekte). Das heisst erst, dass Google die Adressen kennt. In die Suche kommen die Seiten nach und nach („indexieren“), Kontrolle über den Bericht „Seiten“ oder die Suche `site:lailakeller.ch`.
 
+### 29.10.2026 – Erstes Backup
+- Seit dem Online-Gang gibt es die Inhalte nur noch in der Online-Datenbank. Darum ein Backup in zwei Teilen: Export der Datenbank aus phpMyAdmin und Download des Ordners `uploads/` per Cyberduck. Die Datenbank speichert nur die Pfade zu den Bildern, ohne den Ordner wäre das Backup nur halb.
+- **Geprüft:** alle 5 Tabellen vorhanden, 7 Projekte, 20 Bilder und Videos, 6 Skills, genau wie online. Alle 21 Dateien, auf die die Datenbank verweist, liegen im Backup. Die 6 Titelbilder aus den Startinhalten (`images/projekte/`) sind im Repository und damit auf GitHub gesichert.
+- Die Backups liegen ausserhalb des Projekts, weil der Export auch die Tabelle `benutzer` enthält. Die Anleitung für die nächsten Backups und fürs Zurückspielen steht neben dem Upload-Ordner.
+
 ## Entwicklung in Bildern
 
 Arbeitsstände, die während der Umsetzung zum Testen festgehalten wurden (deshalb in kleiner Auflösung).
