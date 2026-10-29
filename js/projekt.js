@@ -5,6 +5,7 @@
    3. Bild oder Video vergrössern (Lightbox)
    4. Videos: automatisch abspielen beim Scrollen
    5. Projekt aus der Datenbank laden und anzeigen
+   6. Link zum nächsten Projekt
    ========================================================= */
 
 
@@ -266,6 +267,9 @@ async function ladeProjekt() {
           medium.alt = eintrag.beschreibung;
           medium.loading = "lazy";
 
+          // Auf dem Handy: farbig, wenn das Bild in der Mitte ist (main.js)
+          farbeImFokus(figur);
+
           // Zuerst in den Bereich für Querformate. Ob das Bild hoch oder
           // quer ist, weiss man erst, wenn es geladen ist.
           quer.append(figur);
@@ -300,6 +304,9 @@ async function ladeProjekt() {
       document.querySelector("#projekt-galerie").hidden = false;
     }
 
+    // ----- Link zum nächsten Projekt am Ende der Seite -----
+    ladeNaechstesProjekt(projekt.id);
+
   } catch (fehler) {
     // Keine ID, unbekannte ID oder Server-Problem: freundlicher Hinweis
     console.error("Projekt konnte nicht geladen werden:", fehler);
@@ -312,3 +319,35 @@ async function ladeProjekt() {
 }
 
 ladeProjekt();
+
+
+/* ---------- 6. NÄCHSTES PROJEKT ----------
+   Damit die Detailseite keine Sackgasse ist, steht am Ende ein Link
+   zum nächsten Projekt. Dazu wird die Liste aller Projekte geladen
+   (dieselbe wie für das Karussell) und das Projekt danach gesucht.
+   Nach dem letzten Projekt geht es wieder beim ersten los. */
+async function ladeNaechstesProjekt(aktuelleId) {
+  try {
+    const antwort = await fetch("api/projekte.php");
+    if (!antwort.ok) return;
+    const projekte = await antwort.json();
+
+    // An welcher Stelle der Liste steht das aktuelle Projekt?
+    const stelle = projekte.findIndex((p) => String(p.id) === String(aktuelleId));
+    if (stelle === -1 || projekte.length < 2) return;
+
+    // % (Modulo) sorgt für den Sprung vom letzten zum ersten Projekt:
+    // bei 7 Projekten ist (6 + 1) % 7 = 0, also wieder das erste
+    const naechstes = projekte[(stelle + 1) % projekte.length];
+
+    const link = document.querySelector("#naechstes-link");
+    link.href = `projekt.html?id=${naechstes.id}`;
+    setzeTitel(document.querySelector("#naechstes-titel"), naechstes.titel);
+
+    const bereich = document.querySelector("#naechstes-projekt");
+    bereich.hidden = false;
+    einblenden(link);   // main.js
+  } catch (fehler) {
+    // Ohne den Link ist die Seite trotzdem vollständig
+  }
+}

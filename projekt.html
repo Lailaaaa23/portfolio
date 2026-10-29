@@ -12,6 +12,20 @@
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <meta name="apple-mobile-web-app-title" content="Laila Keller">
   <meta name="description" content="Projekt aus dem Portfolio von Laila Keller: Geschichten mit Gesicht.">
+  <!-- Vorschau beim Teilen (WhatsApp, LinkedIn, Signal, Slack …): "Open Graph".
+       Diese Dienste lesen nur das HTML, kein JavaScript. Bild und Adresse
+       deshalb vollständig mit https://lailakeller.ch angeben. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Laila Keller">
+  <meta property="og:locale" content="de_CH">
+  <meta property="og:title" content="Projekt · Laila Keller">
+  <meta property="og:description" content="Ein Projekt aus dem Portfolio von Laila Keller: Geschichten mit Gesicht.">
+  <meta property="og:url" content="https://lailakeller.ch/">
+  <meta property="og:image" content="https://lailakeller.ch/images/og-bild.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Laila Keller, Geschichten mit Gesicht">
+  <meta name="twitter:card" content="summary_large_image">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,6 +100,19 @@
       <div class="gallery-grid gallery-landscape" id="galerie-quer"></div>
       <div class="gallery-grid gallery-portrait" id="galerie-hoch"></div>
       <div class="gallery-grid gallery-videos" id="galerie-videos"></div>
+    </section>
+
+    <!-- ===================== NÄCHSTES PROJEKT =====================
+         Damit die Seite keine Sackgasse ist. projekt.js setzt Titel und
+         Link ein und zeigt den Bereich erst dann an. -->
+    <section class="next-project" id="naechstes-projekt" hidden>
+      <a href="" class="next-link" id="naechstes-link">
+        <span class="eyebrow">Nächstes Projekt</span>
+        <span class="next-row">
+          <span class="next-title" id="naechstes-titel"></span>
+          <span class="next-arrow" aria-hidden="true">&rarr;</span>
+        </span>
+      </a>
     </section>
 
   </main>

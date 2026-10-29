@@ -562,8 +562,10 @@ button {
 }
 
 /* "Hover to reveal color": beim Darüberfahren wird das Bild farbig
-   und zoomt ganz leicht heran */
-.card:hover .card-visual img {
+   und zoomt ganz leicht heran. Auf dem Handy (ohne Maus) passiert das,
+   wenn die Karte durch die Bildschirmmitte scrollt (Klasse von main.js). */
+.card:hover .card-visual img,
+.card.im-fokus .card-visual img {
   filter: grayscale(0);
   transform: scale(1.03);
 }
@@ -675,7 +677,8 @@ button {
   transition: filter 0.4s;
 }
 
-.about-photo:hover img {
+.about-photo:hover img,
+.about-photo.im-fokus img {
   filter: grayscale(0);
 }
 
@@ -1027,6 +1030,7 @@ button {
 }
 
 .gallery-grid figure:hover img,
+.gallery-grid figure.im-fokus img,
 .gallery-open:focus-visible img {
   filter: grayscale(0);
 }
@@ -1117,6 +1121,70 @@ button {
   right: 24px;
   font-size: 30px;
   z-index: 1;
+}
+
+
+/* Nächstes Projekt: Abschluss der Detailseite, wie ein kleiner
+   Kontaktbereich. Der ganze Bereich ist ein Link. */
+.next-project {
+  padding: 0 var(--gutter) var(--section-space);
+}
+
+.next-link {
+  display: block;
+  padding-top: 24px;
+  border-top: 1.5px solid var(--color-line);
+}
+
+.next-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.next-title {
+  min-width: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  text-transform: uppercase;
+  font-size: clamp(36px, 6vw, 96px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  hyphens: auto;
+  transition: color 0.3s;
+}
+
+.next-arrow {
+  flex-shrink: 0;
+  font-size: clamp(40px, 5vw, 80px);
+  transition: transform 0.3s;
+}
+
+.next-link:hover .next-title,
+.next-link:focus-visible .next-title {
+  color: var(--color-accent);
+}
+
+.next-link:hover .next-arrow {
+  transform: translateX(16px);
+}
+
+
+/* ---------- SANFT EINBLENDEN BEIM SCROLLEN ----------
+   main.js gibt Elementen die Klasse "einblenden" (unsichtbar) und,
+   sobald sie ins Bild kommen, zusätzlich "sichtbar". Dann läuft
+   dieselbe Animation wie bei Stern und Claim im Hero (fade-up).
+   "backwards" hält das Element während der Verzögerung unsichtbar. */
+.einblenden:not(.sichtbar) {
+  opacity: 0;
+}
+
+.einblenden.sichtbar {
+  animation: fade-up 0.8s ease-out var(--verzoegerung, 0s) backwards;
 }
 
 
@@ -1295,6 +1363,15 @@ button {
   /* 6vw = 6 % der Bildschirmbreite (22.5px auf einem iPhone): So passen auch
      "Nulltoleranz" und "Medienmacher:" ohne Trennung auf eine Zeile,
      und die Grösse wächst mit, wenn das Handy breiter ist. */
+  /* Gleiche Grösse wie die Kartentitel, damit lange Titel ganz bleiben */
+  .next-title {
+    font-size: 6vw;
+  }
+
+  .next-row {
+    margin-top: 20px;
+  }
+
   .card h3 {
     font-size: 6vw;
     hyphens: auto;

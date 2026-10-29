@@ -6,6 +6,7 @@
    4. Lila Kreis folgt der Maus
    5. Projekte aus der Datenbank laden
    6. Skills aus der Datenbank laden
+   7. Sanft einblenden und Farbe auf dem Handy
    ========================================================= */
 
 
@@ -213,6 +214,9 @@ async function ladeProjekte() {
       link.href = `projekt.html?id=${projekt.id}`;
       link.setAttribute("aria-label", `Projekt ${projekt.titel} ansehen`);
 
+      // Auf dem Handy: farbig, wenn die Karte in der Mitte ist (main.js)
+      farbeImFokus(karte.querySelector(".card"));
+
       // Fertige Karte ins Karussell einfügen
       track.append(karte);
     });
@@ -250,6 +254,8 @@ async function ladeSkills() {
       eintrag.querySelector(".skill-nr").textContent = String(index + 1).padStart(2, "0");
       eintrag.querySelector(".skill-name").textContent = skill.name;
       eintrag.querySelector(".skill-tool").textContent = skill.werkzeug;
+      // Die Skills erscheinen kurz nacheinander (je 0.08 s später, main.js)
+      einblenden(eintrag.querySelector("li"), index * 0.08);
       liste.append(eintrag);
     });
 
@@ -261,3 +267,16 @@ async function ladeSkills() {
 }
 
 ladeSkills();
+
+
+/* ---------- 7. SANFT EINBLENDEN UND FARBE AUF DEM HANDY ----------
+   Die Funktionen einblenden() und farbeImFokus() stehen in main.js. */
+einblenden(document.querySelector(".work-head"));
+einblenden(document.querySelector(".about .headline"));
+einblenden(document.querySelector(".about-photo"));
+document.querySelectorAll(".about-text p").forEach((absatz, index) => {
+  einblenden(absatz, index * 0.15);
+});
+einblenden(document.querySelector(".skills-title"));
+
+farbeImFokus(document.querySelector(".about-photo"));
