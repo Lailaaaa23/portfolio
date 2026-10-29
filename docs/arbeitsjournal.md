@@ -280,6 +280,13 @@ Nach dem Online-Gang die Seite bewusst kritisch angeschaut. Daraus vier Verbesse
 - **Bei Google auffindbar:** `robots.txt` sagt Suchmaschinen, was sie lesen dürfen (alles ausser `/admin/`). `sitemap.php` erzeugt eine Liste aller Seiten im XML-Format, die Projekte direkt aus der Datenbank. Ein neues Projekt im CMS steht damit automatisch in der Sitemap. Auf der Startseite zeigt `<link rel="canonical">`, dass `/` und `/index.html` dieselbe Seite sind.
 - **Fehler knapp vermieden:** Zuerst war in `robots.txt` auch `/api/` gesperrt, um die Schnittstellen aus der Suche zu halten. Google führt aber das JavaScript der Seite aus und braucht die Schnittstellen, um die Projekte zu sehen. Mit der Sperre wären die Projektseiten für Google leer gewesen.
 
+### 29.10.2026 – Eigene Fehlerseite
+- **Wann sie erscheint:** bei jeder Adresse, die es nicht gibt (Tippfehler, alter Link), und bei gesperrten Dateien wie `config.php`. Vorher zeigte der Server seine graue Standardseite. Die Regel steht in der `.htaccess`: `ErrorDocument 404 /404.html` (und dasselbe für 403). Der Fehlercode bleibt erhalten, Google weiss also, dass es die Seite nicht gibt; zusätzlich steht `noindex` im Kopf. Nicht betroffen ist `projekt.html?id=99`: Diese Seite existiert, dort meldet schon `projekt.js` „Projekt nicht gefunden“.
+- **Gestaltung:** Ein grosses „404.“ wie der Name im Hero, darunter „Falsch *abgebogen.*“ im Stil der anderen Überschriften, ein kurzer Satz und zwei Knöpfe zur Startseite und zu den Projekten.
+- **Absolute Pfade:** Die Fehlerseite erscheint unter jeder beliebigen Adresse, z. B. `/ordner/tief/x.html`. Ein relativer Pfad wie `css/style.css` würde dort in `/ordner/tief/css/` gesucht und fehlen. Darum beginnen alle Pfade auf dieser Seite mit `/`. Aus demselben Grund lädt `main.js` den Status jetzt von `/api/einstellungen.php`.
+- **Eckiger Punkt:** Der Schrift-Punkt der fetten Archivo ist quadratisch. Wie im Hero ist der lila Punkt deshalb ein Kreis aus CSS (`border-radius: 50%`), der in `em` mit der Schriftgrösse mitwächst.
+- **Getestet:** falsche Adresse, tief verschachtelte Adresse, `config.php` und `includes/db.php` zeigen die Seite mit dem richtigen Code (404 bzw. 403), am Desktop und auf dem Handy.
+
 ## Entwicklung in Bildern
 
 Arbeitsstände, die während der Umsetzung zum Testen festgehalten wurden (deshalb in kleiner Auflösung).

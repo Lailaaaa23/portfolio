@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seite nicht gefunden · Laila Keller</title>
+  <!-- Fehlerseiten sollen nicht in der Google-Suche erscheinen -->
+  <meta name="robots" content="noindex">
+
+  <!-- WICHTIG: Alle Adressen auf dieser Seite beginnen mit "/".
+       Die Seite erscheint unter jeder falschen Adresse, z. B. auch unter
+       /ordner/gibts/nicht. Ein relativer Pfad wie "css/style.css" würde dort
+       im falschen Ordner gesucht, "/css/style.css" zeigt immer zum Hauptordner. -->
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/images/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <link rel="stylesheet" href="/css/schriften.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- ===================== HEADER (gleich wie auf der Detailseite) ===================== -->
+  <header class="site-header">
+    <div class="header-bar">
+      <a href="/" class="logo" aria-label="Zur Startseite">LK<span>.</span></a>
+
+      <button class="nav-toggle" aria-label="Menü öffnen" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+
+      <nav class="main-nav">
+        <a href="/#projekte">Projekte</a>
+        <a href="/#about">Über mich</a>
+        <a href="/#kontakt">Kontakt</a>
+      </nav>
+
+      <p class="status"><span class="status-dot"></span><span class="status-text">Offen für Projekte</span></p>
+    </div>
+  </header>
+
+  <!-- ===================== FEHLER 404 =====================
+       "404." wie der Name im Hero: gross, mit lila Punkt. Der Punkt ist
+       ein Kreis aus CSS, weil der Schrift-Punkt der Archivo eckig ist. -->
+  <main id="top" class="fehler">
+    <p class="fehler-zahl" aria-hidden="true">404<span class="fehler-punkt"></span></p>
+    <h1 class="headline">Falsch<span class="headline-accent">abgebogen.</span></h1>
+    <p class="fehler-text">Diese Seite gibt es nicht. Vielleicht ein Tippfehler in der Adresse oder ein alter Link. Meine Geschichten findest du hier:</p>
+    <div class="fehler-links">
+      <a href="/" class="project-link">Zur Startseite</a>
+      <a href="/#projekte" class="project-link">Alle Projekte</a>
+    </div>
+  </main>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

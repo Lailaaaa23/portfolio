@@ -68,7 +68,9 @@ async function ladeStatus() {
   if (!status) return;
 
   try {
-    const antwort = await fetch("api/einstellungen.php");
+    // Mit "/" am Anfang: So stimmt der Pfad auch auf der Fehlerseite (404.html),
+    // die unter jeder beliebigen Adresse erscheinen kann
+    const antwort = await fetch("/api/einstellungen.php");
     if (!antwort.ok) return;   // bei einem Fehler einfach den Standardtext stehen lassen
     const einstellungen = await antwort.json();
 

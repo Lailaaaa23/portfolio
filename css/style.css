@@ -1124,6 +1124,56 @@ button {
 }
 
 
+/* ---------- FEHLERSEITE (404.html) ----------
+   Erscheint bei jeder Adresse, die es nicht gibt (siehe .htaccess).
+   Die grosse "404." ist gebaut wie der Name im Hero: gleiche Schrift,
+   runder Punkt in Lavendel. Darunter die übliche Überschrift mit Akzent. */
+.fehler {
+  min-height: 70vh;
+  padding: 64px var(--gutter) var(--section-space);
+}
+
+.fehler-zahl {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(120px, 26vw, 400px);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  margin-bottom: 48px;
+}
+
+/* Runder Punkt wie hinter "Keller" im Hero (em = Schriftgrösse,
+   so wächst er mit der Zahl mit) */
+.fehler-punkt {
+  display: inline-block;
+  width: 0.17em;
+  height: 0.17em;
+  margin-left: 0.04em;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.fehler-text {
+  max-width: 560px;
+  margin-top: 40px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.fehler-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+/* Die Knöpfe haben von der Detailseite einen eigenen Abstand nach oben.
+   Hier regelt "gap" den Abstand, darum dort auf 0 setzen. */
+.fehler-links .project-link {
+  margin-top: 0;
+}
+
+
 /* ---------- IMPRESSUM & DATENSCHUTZ (datenschutz.html) ----------
    Ruhige Textseite: gleiche Überschrift wie überall, darunter
    Abschnitte mit Linie darüber, wie bei der Galerie. Der Text ist

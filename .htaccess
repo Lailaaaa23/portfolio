@@ -3,6 +3,13 @@
   Require all denied
 </Files>
 
+# Eigene Fehlerseite: Bei einer Adresse, die es nicht gibt (404), und bei
+# gesperrten Dateien wie config.php (403) zeigt der Server 404.html
+# statt seiner grauen Standardseite. Der Fehlercode bleibt trotzdem erhalten,
+# Google weiss also, dass es die Seite nicht gibt.
+ErrorDocument 404 /404.html
+ErrorDocument 403 /404.html
+
 # HTML, CSS und JavaScript: Der Browser darf sie zwischenspeichern, muss aber
 # vor jeder Verwendung beim Server nachfragen, ob es eine neuere Version gibt
 # ("no-cache"). Ist nichts neu, antwortet der Server nur kurz mit

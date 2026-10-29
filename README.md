@@ -35,6 +35,7 @@ Dieses Portfolio zeigt meine Arbeit als Multimedia Producerin, Journalistin und 
 portfolio/
 ├── index.html, projekt.html   Startseite (One-Pager) und Detailseite (projekt.html?id=3)
 ├── datenschutz.html           Impressum & Datenschutz
+├── 404.html                   eigene Fehlerseite (eingerichtet in der .htaccess)
 ├── sitemap.php, robots.txt    für Suchmaschinen (Sitemap mit allen Projekten aus der Datenbank)
 ├── css/                       style.css (Webseite), admin.css (CMS), schriften.css
 ├── fonts/                     Schriftdateien, vom eigenen Server statt von Google
